@@ -96,6 +96,9 @@
 
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
-  }
+  },
 }
