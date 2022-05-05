@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { getCompnaies } from "../controllers";
+import { getCompanies } from "../controllers";
 
 const companiesRouter = Router();
 
-companiesRouter.get("/companies", getCompnaies);
+companiesRouter.get("/companies", getCompanies);
 
 export default companiesRouter;
