@@ -1,3 +1,3 @@
-import { getCompnaies } from "./companies";
+import { getCompanies, createCompany } from "./companies";
 
-export { getCompnaies };
+export { getCompanies, createCompany };

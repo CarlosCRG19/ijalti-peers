@@ -1,3 +1,4 @@
 import Company from "./company";
+import JobOffer from "./jobOffer";
 
-export default [Company]
+export default [Company, JobOffer]
