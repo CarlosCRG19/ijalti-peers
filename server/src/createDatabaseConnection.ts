@@ -10,6 +10,7 @@ const createDatabaseConnection = async () => {
         password: "password",
         database: "ijalti_test",
         entities: models,
+        synchronize: true,
     });
 };
 
