@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, BaseEntity } from "typeorm";
 import Company from "./company";
 
 
 @Entity()
-class JobOffer{
+class JobOffer extends BaseEntity{
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
