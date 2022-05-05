@@ -20,7 +20,7 @@ class Company {
     address : string;
 
     @Column({ nullable: false })
-    phone1 : `$${number}`;
+    phone1 : `${number}`;
 
     @Column()
     phone2 : `${number}`;
