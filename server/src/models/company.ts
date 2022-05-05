@@ -1,27 +1,32 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import JobOffer from "./jobOffer";
+
 
 @Entity()
 class Company {
     @PrimaryGeneratedColumn("uuid")
-    id: string;
+    id : string;
 
     @Column()
-    name: string;
+    name : string;
 
     @Column()
-    vision: string;
+    vision : string;
 
     @Column({ nullable: false })
-    mision: string;
+    mision : string;
 
     @Column({ nullable: false })
-    address: string;
+    address : string;
 
     @Column({ nullable: false })
-    phone1: `$${number}`;
+    phone1 : `$${number}`;
 
     @Column()
-    phone2: `${number}`;
+    phone2 : `${number}`;
+
+    @OneToMany(()=>JobOffer, (jobOffer) => jobOffer.company)
+    jobOffers : JobOffer[];
 }
 
 export default Company;
