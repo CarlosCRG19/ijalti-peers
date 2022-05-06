@@ -7,7 +7,7 @@ class Company extends BaseEntity{
     @PrimaryGeneratedColumn("uuid")
     id : string;
 
-    @Column()
+    @Column({unique : true})
     name : string;
 
     @Column()
@@ -19,10 +19,10 @@ class Company extends BaseEntity{
     @Column({ nullable: false })
     address : string;
 
-    @Column({ nullable: false })
+    @Column({ nullable: false, type:"numeric"})
     phone1 : `${number}`;
 
-    @Column()
+    @Column({type:"numeric"})
     phone2 : `${number}`;
 
     @OneToMany(()=>JobOffer, (jobOffer) => jobOffer.company)
