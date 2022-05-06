@@ -24,7 +24,7 @@ export const createCompany = async (req: Request, res: Response): Promise<Respon
     return res.status(200).json({message: "Company created"});
 }
 
-export const getCompany = async (req: Request, res: Response): Promise<Response | void>  => {
+export const getCompany = async (req: Request, res: Response): Promise<Response> => {
     try{
         const company = await Company.findOneBy({id : req.params.id});
         
@@ -37,7 +37,7 @@ export const getCompany = async (req: Request, res: Response): Promise<Response 
     }
 }
 
-export const destroyCompany = async (req: Request, res: Response): Promise<Response | void>  => {
+export const destroyCompany = async (req: Request, res: Response): Promise<Response>  => {
     const company = await Company.findOneBy({id : req.params.id});
 
     if(!company) return res.status(409).send({message: "Company not found"});
@@ -51,4 +51,19 @@ export const destroyCompany = async (req: Request, res: Response): Promise<Respo
     }
     
     return res.status(200).send({ message:`Company ${req.params.id} removed`, company});
+}
+
+export const updateCompany = async (req: Request, res: Response): Promise<Response> => {
+    const company = await Company.findOneBy({id : req.params.id});
+    
+    if(!company) return res.status(409).send({message: "Company not found"});
+
+    Object.assign(company, req.body);
+    try{
+        await company.save();
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({message: "Something went wrong"});
+    }
+    return res.status(200).json({message : `Company ${company.id} updated`, company})
 }
