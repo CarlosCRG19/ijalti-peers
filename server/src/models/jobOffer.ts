@@ -14,7 +14,7 @@ class JobOffer extends BaseEntity{
     salary: `${number}`;
 
     @Column({ nullable: false })
-    address: string;
+    city: string;
 
     @Column({ nullable: false })
     description: string;

@@ -7,7 +7,7 @@ const createDatabaseConnection = async () => {
         host: "localhost",
         port: 5432,
         username: "postgres",
-        password: "password",
+        password: "Lulusholamperusho993",
         database: "ijalti_test",
         entities: models,
         synchronize: true,
