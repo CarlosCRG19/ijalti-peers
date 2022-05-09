@@ -4,6 +4,13 @@ import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
+import InputAdornment from '@mui/material/InputAdornment';
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import InfoIcon from '@mui/icons-material/Info';
+import HandymanIcon from '@mui/icons-material/Handyman';
+
 import axios from "axios"
 
 
@@ -37,10 +44,17 @@ const Form = () => {
 		})
 
 		console.log(jobOffer);
+	}
 
-
-		// setLoading(false);
-		// navigate("/");
+	const handleClean = () => {
+		setJobOffer({
+			title: "",
+			city: "",
+			salary: "",
+			description: "",
+			requiredAbilities: "",
+			suggestedAbilities: "",
+		})
 	}
 
 	return (
@@ -62,7 +76,13 @@ const Form = () => {
 								label="Título"
 								helperText="Requerido"
 								variant="filled"
-
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<BusinessCenterIcon />
+										</InputAdornment>
+									),
+								}}
 								name="title"
 								value={jobOffer.title}
 								onChange={handleChange}
@@ -75,7 +95,13 @@ const Form = () => {
 								label="Ubicación"
 								helperText="Requerido"
 								variant="filled"
-
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<LocationOnIcon />
+										</InputAdornment>
+									),
+								}}
 								name="city"
 								value={jobOffer.city}
 								onChange={handleChange}
@@ -88,7 +114,13 @@ const Form = () => {
 								label="Salario mensual"
 								helperText="Requerido"
 								variant="filled"
-
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<AttachMoneyIcon />
+										</InputAdornment>
+									),
+								}}
 								name="salary"
 								value={jobOffer.salary}
 								onChange={handleChange}
@@ -101,7 +133,13 @@ const Form = () => {
 								label="Descripción"
 								helperText="Requerido"
 								variant="filled"
-
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<InfoIcon />
+										</InputAdornment>
+									),
+								}}
 								name="description"
 								value={jobOffer.description}
 								onChange={handleChange}
@@ -114,7 +152,13 @@ const Form = () => {
 								label="Habilidades Requeridas"
 								helperText="Requerido"
 								variant="filled"
-
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<HandymanIcon />
+										</InputAdornment>
+									),
+								}}
 								name="requiredAbilities"
 								value={jobOffer.requiredAbilities}
 								onChange={handleChange}
@@ -127,7 +171,13 @@ const Form = () => {
 								label="Habilidades Sugeridas"
 								// helperText="Requerido"
 								variant="filled"
-
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<HandymanIcon />
+										</InputAdornment>
+									),
+								}}
 								name="suggestedAbilities"
 								value={jobOffer.suggestedAbilities}
 								onChange={handleChange}
@@ -136,7 +186,7 @@ const Form = () => {
 					</Grid>
 				</div>
 				<div className='job-offer-form-buttons'>
-					<Button variant="text">Borrar</Button>
+					<Button variant="text" onClick={handleClean}>Borrar</Button>
 					<Button variant="contained" sx={{ margin: "0 0 0 1rem" }} type="submit">Publicar</Button>
 				</div>
 			</form>
