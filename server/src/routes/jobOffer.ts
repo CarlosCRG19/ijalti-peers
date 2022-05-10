@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
     getOffersList,
     createOffer,
-    destroyJobOffer,
+    removeJobOffer,
     getOffer,
     updateOffer,
 } from "../controllers";
@@ -14,7 +14,7 @@ const jobOfferDetail = jobOfferRouter.route("/job-offers/:id");
 jobOfferList.get(getOffersList);
 jobOfferList.post(createOffer);
 
-jobOfferDetail.delete(destroyJobOffer);
+jobOfferDetail.delete(removeJobOffer);
 jobOfferDetail.get(getOffer);
 jobOfferDetail.put(updateOffer);
 

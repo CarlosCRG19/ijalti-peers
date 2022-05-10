@@ -33,7 +33,7 @@ export const createOffer = async (
 
 // Controlers for offer detail
 
-export const destroyJobOffer = async (
+export const removeJobOffer = async (
     req: Request,
     res: Response
 ): Promise<Response> => {
