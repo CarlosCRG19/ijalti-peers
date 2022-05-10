@@ -1,0 +1,29 @@
+
+.form {
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	border-radius: 10px;
+	max-width: 50%;
+}
+
+.form-title {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 88px;
+	background-color: #F4F7FA;
+	color: #0862B9;
+	border-radius: 10px
+}
+
+.form-description {
+	font-style: italic;
+	margin-bottom: 0;
+}
+
+.form-content {
+	width: 90%;
+}
