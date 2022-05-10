@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
+import React from 'react';
+
 import Navbar from './components/Navbar';
-import Form from './components/Form';
+import PostJobOffer from './views/PostJobOffer';
+
 import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <>
-      <Navbar />
-      <Form />
-    </>
-  );
-}
+const App = () => (
+  <>
+    <Navbar />
+    <main className="main-content">
+      <PostJobOffer />
+    </main>
+  </>
+);
 
 export default App;
