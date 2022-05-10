@@ -1,6 +1,6 @@
 import express from "express";
 import companiesRouter from "./routes/company";
-import jobOfferRouter from "./routes/joboffer";
+import jobOfferRouter from "./routes/jobOffer";
 
 import createDatabaseConnection from "./createDatabaseConnection";
 
