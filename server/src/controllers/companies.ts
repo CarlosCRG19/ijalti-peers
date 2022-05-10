@@ -37,7 +37,7 @@ export const getCompany = async (req: Request, res: Response): Promise<Response>
     }
 }
 
-export const destroyCompany = async (req: Request, res: Response): Promise<Response>  => {
+export const removeCompany = async (req: Request, res: Response): Promise<Response>  => {
     const company = await Company.findOneBy({id : req.params.id});
 
     if(!company) return res.status(409).send({message: "Company not found"});
