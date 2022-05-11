@@ -16,12 +16,11 @@ export const createCompany = async (req: Request, res: Response): Promise<Respon
     try{
         const newCompany = Company.create(req.body);
         await newCompany.save();
+        return res.status(200).json({message: "Company created", newCompany});
     }catch(error){
         console.log(error);
         return res.status(400).json({message: "Something went wrong"});
     }
-
-    return res.status(200).json({message: "Company created"});
 }
 
 export const getCompany = async (req: Request, res: Response): Promise<Response> => {
@@ -37,7 +36,7 @@ export const getCompany = async (req: Request, res: Response): Promise<Response>
     }
 }
 
-export const destroyCompany = async (req: Request, res: Response): Promise<Response>  => {
+export const removeCompany = async (req: Request, res: Response): Promise<Response>  => {
     const company = await Company.findOneBy({id : req.params.id});
 
     if(!company) return res.status(409).send({message: "Company not found"});

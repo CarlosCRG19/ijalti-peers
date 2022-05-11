@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getCompaniesList, createCompany, getCompany, destroyCompany, updateCompany} from "../controllers";
+import { getCompaniesList, createCompany, getCompany, removeCompany, updateCompany} from "../controllers";
 
 const companiesRouter = Router();
 
@@ -10,7 +10,7 @@ companyList.get(getCompaniesList);
 companyList.post(createCompany);
 
 companyDetail.get(getCompany);
-companyDetail.delete(destroyCompany);
+companyDetail.delete(removeCompany);
 companyDetail.put(updateCompany)
 
 export default companiesRouter;
