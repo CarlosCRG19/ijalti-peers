@@ -22,18 +22,15 @@ export const createOffer = async (
     try {
         const newJobOffer = JobOffer.create(req.body);
         await newJobOffer.save();
+        return res.status(200).json({ message: "Offer has been created successfully", newJobOffer});
     } catch (error) {
         return res.status(500).json({ message: "Something went wronng!" });
     }
-
-    return res
-        .status(201)
-        .json({ message: "Offer has been created successfully" });
 };
 
 // Controlers for offer detail
 
-export const destroyJobOffer = async (
+export const removeJobOffer = async (
     req: Request,
     res: Response
 ): Promise<Response> => {
@@ -44,12 +41,12 @@ export const destroyJobOffer = async (
             return res
                 .status(409)
                 .json({ message: "That entity does not exist!" });
+        return res
+            .status(200)
+            .json({ message: `Offer ${req.params.id} deleted successfully!`,  deletedEntity});
     } catch (error) {
         return res.status(500).json({ message: "Something went wrong!" });
     }
-    return res
-        .status(200)
-        .json({ message: `Offer ${req.params.id} deleted successfully!` });
 };
 
 export const getOffer = async (
