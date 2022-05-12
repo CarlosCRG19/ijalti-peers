@@ -13,11 +13,11 @@ import {
   Handyman,
 } from '@mui/icons-material';
 
-import axios from 'axios';
-
+import { useAPI } from '../../hooks';
 import Form from '../../components/Form';
 import './PostJobOffer.css';
 
+const FAKE_COMPANY_ID = '73f3fc3a-2d6c-4263-9443-cc10b19354d3'; // put an id from a company in your table
 const INITIAL_JOB_OFFER = {
   title: '',
   city: '',
@@ -30,6 +30,8 @@ const INITIAL_JOB_OFFER = {
 const PostJobOffer = () => {
   const [jobOffer, setJobOffer] = useState(INITIAL_JOB_OFFER);
 
+  const api = useAPI();
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -40,12 +42,10 @@ const PostJobOffer = () => {
   };
 
   const handleSubmit = async () => {
-    const res = await axios.post('http://localhost:3000/job-offers/', {
-      ...jobOffer,
-      company: 'b00d8a63-2166-47de-a97a-1cf6c03371b7',
-    });
+    jobOffer.company = FAKE_COMPANY_ID;
+    const response = await api.jobOffer.create(jobOffer);
 
-    console.log(jobOffer);
+    console.log(response);
   };
 
   return (
