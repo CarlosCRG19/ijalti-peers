@@ -3,9 +3,8 @@ import axios from 'axios';
 import { JobOfferAPI } from './api';
 
 const useAPI = () => {
-  // TODO: define baseURL on compilation
   const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000/',
+    baseURL: import.meta.env.VITE_SERVER_URL,
     headers: { 'Content-Type': 'application/json' },
   });
 
