@@ -1,3 +1,4 @@
+import "dotenv/config"
 import express from "express";
 import cors from "cors";
 import companiesRouter from "./routes/company";
@@ -6,7 +7,7 @@ import jobOfferRouter from "./routes/jobOffer";
 import createDatabaseConnection from "./createDatabaseConnection";
 
 const initializeExpress = () => {
-    const PORT = process.env.PORT || 3000;
+    const PORT = process.env.PORT;
 
     const app = express();
 
