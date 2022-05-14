@@ -1,0 +1,24 @@
+{
+  "name": "engibeers",
+  "version": "1.0.0",
+  "description": "TC2005B Team 2 repository Luis David López Magaña",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+		"start": "concurrently \"cd server && npm start\" \"cd client && npm start\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CarlosCRG19/engibeers.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CarlosCRG19/engibeers/issues"
+  },
+  "homepage": "https://github.com/CarlosCRG19/engibeers#readme",
+  "dependencies": {
+    "concurrently": "^7.1.0"
+  }
+}
