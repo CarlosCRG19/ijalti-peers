@@ -1,1 +1,4 @@
-export { default as JobOfferAPI } from './jobOfferAPI';
+import CompanyAPI from './companyAPI';
+import JobOfferAPI from './jobOfferAPI';
+
+export { CompanyAPI, JobOfferAPI };

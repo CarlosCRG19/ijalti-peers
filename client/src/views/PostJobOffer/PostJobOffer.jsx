@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Grid,
-  TextField,
   Button,
+  FormControl,
+  Grid,
   InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
 } from '@mui/material';
 import {
   BusinessCenter,
@@ -29,6 +33,9 @@ const INITIAL_JOB_OFFER = {
 
 const PostJobOffer = () => {
   const [jobOffer, setJobOffer] = useState(INITIAL_JOB_OFFER);
+  // NOTE: for the purpose of the second sprint deployment,
+  //       a select input for companies have been temporarily added
+  const [companies, setCompanies] = useState([]);
 
   const api = useAPI();
 
@@ -47,6 +54,15 @@ const PostJobOffer = () => {
 
     console.log(response);
   };
+
+  useEffect(() => {
+    const getCompanies = async () => {
+      const companyList = await api.company.getAll();
+      setCompanies(companyList);
+    };
+
+    getCompanies();
+  }, []);
 
   return (
     <Form
@@ -160,6 +176,24 @@ const PostJobOffer = () => {
             ),
           }}
         />
+      </Grid>
+      <Grid item xs={12}>
+        <FormControl fullWidth>
+          <InputLabel id="selectCompany">Compañía</InputLabel>
+          <Select
+            labelId="selectCompany"
+            label="Compañía"
+            name="company"
+            value={companies.find((company) => company.id === jobOffer.company)}
+            handleChange={handleChange}
+          >
+            {companies.map((company) => (
+              <MenuItem key={company.id} value={company.id}>
+                {company.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Grid>
       <div className="buttons">
         <Button variant="text" onClick={() => setJobOffer(INITIAL_JOB_OFFER)}>Borrar</Button>
