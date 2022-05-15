@@ -49,7 +49,6 @@ const PostJobOffer = () => {
   };
 
   const handleSubmit = async () => {
-    jobOffer.company = FAKE_COMPANY_ID;
     const response = await api.jobOffer.create(jobOffer);
 
     console.log(response);
