@@ -3,7 +3,10 @@ import models from "./models";
 
 const getConnectionCredentials = () => {
     if (process.env.DATABASE_URL) {
-        return { url: process.env.DATABASE_URL };
+        return ({
+            url: process.env.DATABASE_URL,
+            extra: { rejectUnauthorized: false }
+        });
     }
 
     return ({
