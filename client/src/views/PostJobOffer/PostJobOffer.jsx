@@ -14,11 +14,11 @@ import {
   LocationOn,
   AttachMoney,
   Info,
-  Handyman,
 } from '@mui/icons-material';
 
 import { useAPI } from '../../hooks';
 import Form from '../../components/Form';
+import TagsInput from '../../components/TagsInput';
 import './PostJobOffer.css';
 
 const INITIAL_JOB_OFFER = {
@@ -26,8 +26,8 @@ const INITIAL_JOB_OFFER = {
   city: '',
   salary: '',
   description: '',
-  requiredAbilities: '',
-  suggestedAbilities: '',
+  requiredAbilities: [],
+  suggestedAbilities: [],
 };
 
 const PostJobOffer = () => {
@@ -44,6 +44,13 @@ const PostJobOffer = () => {
     setJobOffer((prevJobOffer) => ({
       ...prevJobOffer,
       [name]: value,
+    }));
+  };
+
+  const handleChangeAbilities = (name, selectedItem) => {
+    setJobOffer((prevJobOffer) => ({
+      ...prevJobOffer,
+      [name]: selectedItem,
     }));
   };
 
@@ -140,38 +147,24 @@ const PostJobOffer = () => {
         />
       </Grid>
       <Grid item xs={12}>
-        <TextField
+        <TagsInput
           name="requiredAbilities"
-          label="Habilidades Requeridas"
-          variant="filled"
-          value={jobOffer.requiredAbilities}
-          onChange={handleChange}
-          required
+          selectedTags={handleChangeAbilities}
           fullWidth
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Handyman />
-              </InputAdornment>
-            ),
-          }}
+          variant="outlined"
+          id="tags"
+          required
+          label="Habilidades Requeridas"
         />
       </Grid>
       <Grid item xs={12}>
-        <TextField
+        <TagsInput
           name="suggestedAbilities"
-          label="Habilidades Sugeridas (Opcional)"
-          variant="filled"
-          value={jobOffer.suggestedAbilities}
-          onChange={handleChange}
+          selectedTags={handleChangeAbilities}
           fullWidth
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Handyman />
-              </InputAdornment>
-            ),
-          }}
+          variant="outlined"
+          id="tags"
+          label="Habilidades Sugeridas"
         />
       </Grid>
       <Grid item xs={12}>
