@@ -5,7 +5,8 @@
 	flex-direction: column;
 	align-items: center;
 	border-radius: 10px;
-	max-width: 50%;
+	width: 50%;
+	min-width: 350px;
 }
 
 .form-title {
