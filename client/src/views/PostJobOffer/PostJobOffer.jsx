@@ -21,7 +21,6 @@ import { useAPI } from '../../hooks';
 import Form from '../../components/Form';
 import './PostJobOffer.css';
 
-const FAKE_COMPANY_ID = '73f3fc3a-2d6c-4263-9443-cc10b19354d3'; // put an id from a company in your table
 const INITIAL_JOB_OFFER = {
   title: '',
   city: '',
@@ -49,9 +48,7 @@ const PostJobOffer = () => {
   };
 
   const handleSubmit = async () => {
-    const response = await api.jobOffer.create(jobOffer);
-
-    console.log(response);
+    await api.jobOffer.create(jobOffer);
   };
 
   useEffect(() => {
@@ -78,6 +75,7 @@ const PostJobOffer = () => {
           required
           fullWidth
           onChange={handleChange}
+          sx={{ backgroundColor: '#E7EDF3' }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
