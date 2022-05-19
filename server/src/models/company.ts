@@ -20,6 +20,9 @@ class Company extends BaseEntity{
     @Column({ nullable: false })
     address : string;
 
+    @Column({ nullable : false})
+    businessLine : string;
+
     @Column({ nullable: false, type:"numeric"})
     phone1 : `${number}`;
 
