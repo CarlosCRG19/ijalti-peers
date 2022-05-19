@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, BaseEntity } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, BaseEntity, JoinTable, ManyToMany} from "typeorm";
 import Company from "./company";
-
+import Skill from "./skill";
 
 @Entity()
 class JobOffer extends BaseEntity{
@@ -21,6 +21,15 @@ class JobOffer extends BaseEntity{
 
     @ManyToOne(() => Company, (company) => company.jobOffers)
     company : Company;
+
+    @ManyToMany(() => Skill)
+    @JoinTable()
+    preferredSkills: Skill[];
+
+    @ManyToMany(() => Skill)
+    @JoinTable()
+    requiredSkills: Skill[];
+
 }
 
 export default JobOffer;    
