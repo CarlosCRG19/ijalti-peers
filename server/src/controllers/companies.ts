@@ -92,13 +92,13 @@ export const companySignUp = async (req: Request, res: Response): Promise<Respon
         // User is created. 
 
         // Signup is performed, proceed to write data to DB
-        const newCompany = Company.create({...req.body.company, userId: newUser}); 
+        const newCompany = Company.create({...req.body.company, user: newUser}); 
         await newCompany.save()
 
         // Company is created, prepare response body
 
         const responseBody = {
-            userId: newUser, 
+            user: newUser, 
             role: "company", 
             company: newCompany, 
             idToken: signUpResponse.data.idToken, 
@@ -113,5 +113,52 @@ export const companySignUp = async (req: Request, res: Response): Promise<Respon
         return res.status(500).json({message: "Something went wrong!"})
 
     }
+
+}
+
+export const companyLogIn = async (req: Request, res: Response) => {
+    // Perform firebase login
+    try {
+        const firebaseLoginUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.FIREBASE_API_KEY}`;
+        const logInRequestConfig: AxiosRequestConfig = {
+            url: firebaseLoginUrl,
+            method: "POST",
+            data: {
+                email: req.body.email,
+                password: req.body.password,
+                returnSecureToken: true
+            }
+        };
+        const firebaseLoginResponse = await axios(logInRequestConfig);
+        
+        
+        const user = await User.findOneBy({firebaseId: firebaseLoginResponse.data["localId"]});
+        console.log(user);
+        if(user == null) return res.status(409).json({message: "Company was not found!"})
+        
+        const company = await Company.find({relations: ["user"], });
+        
+        if(company.length === 0) return res.status(409).json({messaage: "Your user exists, but the company does not!"})
+        const responseBody = {
+
+            user: user.id, 
+            role: "company",
+            company: company,
+            idToken: firebaseLoginResponse.data.idToken,
+            refreshToken: firebaseLoginResponse.data.refreshToken,
+            expiresIn: firebaseLoginResponse.data.expiresIn,
+
+        }
+
+        return res.status(200).json(responseBody);
+
+    } catch(error) {
+        console.log("Exception handling pending");
+        console.log(error);
+        return res.status(500).json({message: "Something went wrong!"});
+    }
+
+
+    
 
 }
