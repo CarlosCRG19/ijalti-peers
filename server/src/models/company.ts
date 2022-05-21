@@ -30,7 +30,8 @@ class Company extends BaseEntity{
     jobOffers : JobOffer[];
 
     @OneToOne(()=>User)
-    userId: User;
+    @JoinColumn()
+    user: User;
 }
 
 export default Company;
