@@ -70,11 +70,13 @@ export const updateCompany = async (req: Request, res: Response): Promise<Respon
 } 
 
 export const companySignUp = async (req: Request, res: Response): Promise<Response> => { 
+    console.log(req.body)
     // Need to create a firebase user with email and password 
     const firebaseSignupURL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.FIREBASE_API_KEY}`
     
     const signUpRequestConfig: AxiosRequestConfig = {
         url: firebaseSignupURL, 
+        method: "POST",
         data: {
             email: req.body.email,
             password: req.body.password,
@@ -108,7 +110,6 @@ export const companySignUp = async (req: Request, res: Response): Promise<Respon
 
     } catch(error) {
         console.log("Exception handling pending");
-
         return res.status(500).json({message: "Something went wrong!"})
 
     }
