@@ -136,9 +136,9 @@ export const companyLogIn = async (req: Request, res: Response) => {
         console.log(user);
         if(user == null) return res.status(409).json({message: "Company was not found!"})
         
-        const company = await Company.find({relations: ["user"], });
+        const company = await Company.findOneBy({user: {id: user.id}});
         
-        if(company.length === 0) return res.status(409).json({messaage: "Your user exists, but the company does not!"})
+        if(company === null) return res.status(409).json({messaage: "Your user exists, but the company does not!"})
         const responseBody = {
 
             user: user.id, 
