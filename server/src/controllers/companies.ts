@@ -111,7 +111,6 @@ export const companySignUp = async (req: Request, res: Response): Promise<Respon
     } catch(error) {
         console.log("Exception handling pending");
         return res.status(500).json({message: "Something went wrong!"})
-
     }
 
 }
@@ -129,18 +128,18 @@ export const companyLogIn = async (req: Request, res: Response) => {
                 returnSecureToken: true
             }
         };
+
         const firebaseLoginResponse = await axios(logInRequestConfig);
-        
         
         const user = await User.findOneBy({firebaseId: firebaseLoginResponse.data["localId"]});
         console.log(user);
-        if(user == null) return res.status(409).json({message: "Company was not found!"})
+        if(!user) return res.status(409).json({message: "Company was not found!"})
         
         const company = await Company.findOneBy({user: {id: user.id}});
         
         if(company === null) return res.status(409).json({messaage: "Your user exists, but the company does not!"})
-        const responseBody = {
 
+        const responseBody = {
             user: user.id, 
             role: "company",
             company: company,
@@ -157,8 +156,4 @@ export const companyLogIn = async (req: Request, res: Response) => {
         console.log(error);
         return res.status(500).json({message: "Something went wrong!"});
     }
-
-
-    
-
 }
