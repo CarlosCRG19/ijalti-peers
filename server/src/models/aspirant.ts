@@ -1,4 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, OneToOne, JoinColumn  } from "typeorm"; 
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    BaseEntity,
+    CreateDateColumn,
+    OneToOne,
+    JoinColumn
+} from "typeorm";
+
 import User from "./user";
 
 enum WorkingStatusChoices {
@@ -6,7 +15,7 @@ enum WorkingStatusChoices {
     "Unemployed",
     "Hiring", 
     "Searching"
-} 
+}
 
 @Entity()
 class Aspirant extends BaseEntity {
@@ -40,7 +49,7 @@ class Aspirant extends BaseEntity {
     @Column()
     workingStatus: WorkingStatusChoices;
 
-    @OneToOne(()=>User)
+    @OneToOne(() => User)
     @JoinColumn()
     user: User
 }
