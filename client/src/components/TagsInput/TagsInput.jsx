@@ -1,137 +1,69 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Chip,
   TextField,
   InputAdornment,
+  Autocomplete,
 } from '@mui/material';
-
-import Downshift from 'downshift';
 
 import {
   Handyman,
 } from '@mui/icons-material';
 
-const TagsInput = ({ ...props }) => {
+const StartAdornment = (
+  <InputAdornment position="start">
+    <Handyman />
+  </InputAdornment>
+);
+
+const TagsInput = (props) => {
   const {
-    selectedTags, placeholder, tags, ...other
+    handleChangeAbilities,
+    tags,
+    name,
+    value,
+    label,
   } = props;
 
-  const [inputValue, setInputValue] = useState('');
-  const [selectedItem, setSelectedItem] = useState([]);
-
-  useEffect(() => {
-    setSelectedItem(tags);
-  }, [tags]);
-
-  // useEffect(() => {
-  //   selectedTags(props.name, selectedItem);
-  // }, [selectedItem, selectedTags]);
-
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      const newSelectedItem = [...selectedItem];
-      const duplicatedValues = newSelectedItem.indexOf(
-        event.target.value.trim(),
-      );
-
-      if (duplicatedValues !== -1) {
-        setInputValue('');
-        return;
-      }
-      if (!event.target.value.replace(/\s/g, '').length) return;
-
-      newSelectedItem.push(event.target.value.trim());
-      setSelectedItem(newSelectedItem);
-      selectedTags(props.name, newSelectedItem);
-      setInputValue('');
-    }
-    if (
-      selectedItem.length
-      && !inputValue.length
-      && event.key === 'Backspace'
-    ) {
-      setSelectedItem(selectedItem.slice(0, selectedItem.length - 1));
-    }
-  };
-
-  function handleChange(item) {
-    let newSelectedItem = [...selectedItem];
-    if (newSelectedItem.indexOf(item) === -1) {
-      newSelectedItem = [...newSelectedItem, item];
-    }
-    setInputValue('');
-    setSelectedItem(newSelectedItem);
-  }
-
-  const handleDelete = (item) => () => {
-    const newSelectedItem = [...selectedItem];
-    newSelectedItem.splice(newSelectedItem.indexOf(item), 1);
-    setSelectedItem(newSelectedItem);
-    selectedTags(props.name, newSelectedItem);
-  };
-
-  function handleInputChange(event) {
-    setInputValue(event.target.value);
-  }
-
-  const getSelectedItem = () => (
-    selectedItem.map((item) => (
-      <Chip
-        key={item}
-        tabIndex={-1}
-        label={item}
-        onDelete={handleDelete(item)}
-      />
-    ))
-  );
-
   return (
-
-    <Downshift
-      id="downshift-multiple"
-      inputValue={inputValue}
-      onChange={handleChange}
-      selectedItem={selectedItem}
-    >
-      {({ getInputProps }) => {
-        const {
-          onBlur, onChange, onFocus, ...inputProps
-        } = getInputProps({
-          onKeyDown: handleKeyDown,
-          placeholder,
-        });
-        return (
-          <div>
-            <TextField
-              InputProps={{
-                startAdornment: [<InputAdornment position="start">
-                  <Handyman />
-                </InputAdornment>, ...getSelectedItem()],
-                onBlur,
-                onChange: (event) => {
-                  handleInputChange(event);
-                  onChange(event);
-                },
-                onFocus,
-              }}
-              {...other}
-              {...inputProps}
-            />
-          </div>
-        );
-      }}
-    </Downshift>
+    <Autocomplete
+      id="tags-standard"
+      multiple
+      variant="outlined"
+      options={tags}
+      getOptionLabel={(option) => option}
+      value={value}
+      onChange={(_, newValue) => handleChangeAbilities(name, newValue)}
+        // console.log(newValue);
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          variant="filled"
+          sx={{ backgroundColor: '#E7EDF3' }}
+          InputProps={{
+            ...params.InputProps,
+            startAdornment: [StartAdornment, params.InputProps.startAdornment],
+          }}
+        />
+      )}
+    />
   );
 };
 
 export default TagsInput;
 
 TagsInput.defaultProps = {
+  name: 'campo',
   tags: [],
+  value: [],
+  label: '',
 };
 
 TagsInput.propTypes = {
-  selectedTags: PropTypes.func.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string),
+  name: PropTypes.string,
+  label: PropTypes.string,
+  value: PropTypes.arrayOf(PropTypes.string),
+  handleChangeAbilities: PropTypes.func.isRequired,
 };

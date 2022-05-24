@@ -30,6 +30,8 @@ const INITIAL_JOB_OFFER = {
   suggestedAbilities: [],
 };
 
+const skills = ['Python', 'C++', 'JavaScript'];
+
 const PostJobOffer = () => {
   const [jobOffer, setJobOffer] = useState(INITIAL_JOB_OFFER);
   // NOTE: for the purpose of the second sprint deployment,
@@ -99,6 +101,7 @@ const PostJobOffer = () => {
           variant="filled"
           value={jobOffer.city}
           onChange={handleChange}
+          sx={{ backgroundColor: '#E7EDF3' }}
           required
           fullWidth
           InputProps={{
@@ -113,10 +116,12 @@ const PostJobOffer = () => {
       <Grid item xs={6}>
         <TextField
           name="salary"
+          type="number"
           label="Salario mensual"
           variant="filled"
           value={jobOffer.salary}
           onChange={handleChange}
+          sx={{ backgroundColor: '#E7EDF3' }}
           required
           fullWidth
           InputProps={{
@@ -135,6 +140,7 @@ const PostJobOffer = () => {
           variant="filled"
           value={jobOffer.description}
           onChange={handleChange}
+          sx={{ backgroundColor: '#E7EDF3' }}
           required
           fullWidth
           InputProps={{
@@ -149,10 +155,13 @@ const PostJobOffer = () => {
       <Grid item xs={12}>
         <TagsInput
           name="requiredAbilities"
-          selectedTags={handleChangeAbilities}
+          value={jobOffer.requiredAbilities}
+          handleChangeAbilities={handleChangeAbilities}
           fullWidth
-          variant="outlined"
+          tags={skills}
+          variant="filled"
           id="tags"
+          sx={{ backgroundColor: '#E7EDF3' }}
           required
           label="Habilidades Requeridas"
         />
@@ -160,10 +169,12 @@ const PostJobOffer = () => {
       <Grid item xs={12}>
         <TagsInput
           name="suggestedAbilities"
-          selectedTags={handleChangeAbilities}
+          value={jobOffer.suggestedAbilities}
+          handleChangeAbilities={handleChangeAbilities}
           fullWidth
           variant="outlined"
           id="tags"
+          sx={{ backgroundColor: '#E7EDF3', innerHeight: '100px' }}
           label="Habilidades Sugeridas"
         />
       </Grid>
