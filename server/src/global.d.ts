@@ -7,5 +7,6 @@ namespace NodeJS {
         DB_USERNAME: string;
         DB_PASSWORD: string;
         DB_DATABASE: string;
+        FIREBASE_AUTH_KID: string;
     }
 }
