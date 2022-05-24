@@ -1,5 +1,5 @@
 import { createConnection, Connection, ConnectionOptions } from "typeorm";
-import models from "./models";
+import * as models from "./models";
 
 const getConnectionCredentials = () => {
     if (process.env.DATABASE_URL) {
@@ -21,7 +21,7 @@ const getConnectionCredentials = () => {
 const createDatabaseConnection = async () : Promise<Connection> => {
     let connectionOptions: ConnectionOptions = {
         type: "postgres",
-        entities: models,
+        entities: Object.values(models),
         synchronize: true,
     }
 
