@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Navbar } from './components';
+import Login from './views/Login';
+import Navbar from './components/Navbar';
 import PostJobOffer from './views/PostJobOffer';
 
 import './App.css';
@@ -9,6 +10,7 @@ const App = () => (
   <>
     <Navbar />
     <main className="main-content">
+      <Login />
       <PostJobOffer />
     </main>
   </>

@@ -2,11 +2,22 @@ import axios from 'axios';
 
 import { CompanyAPI, JobOfferAPI } from './api';
 
-const useAPI = () => {
-  const axiosInstance = axios.create({
+const getAxiosInstance = () => {
+  let headers = { 'Content-Type': 'application/json' };
+  const idToken = localStorage.getItem('idToken');
+
+  if (idToken) {
+    headers = { ...headers, Authorization: `Bearer ${idToken}` };
+  }
+
+  return axios.create({
+    headers,
     baseURL: import.meta.env.VITE_SERVER_URL,
-    headers: { 'Content-Type': 'application/json' },
   });
+};
+
+const useAPI = () => {
+  const axiosInstance = getAxiosInstance();
 
   return {
     company: new CompanyAPI(axiosInstance),
