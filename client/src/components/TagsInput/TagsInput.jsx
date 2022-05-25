@@ -18,7 +18,7 @@ const StartAdornment = (
 
 const TagsInput = (props) => {
   const {
-    handleChangeAbilities,
+    onChange,
     tags,
     name,
     value,
@@ -27,14 +27,11 @@ const TagsInput = (props) => {
 
   return (
     <Autocomplete
-      id="tags-standard"
       multiple
-      variant="outlined"
       options={tags}
-      getOptionLabel={(option) => option}
+      getOptionLabel={(option) => option.name}
       value={value}
-      onChange={(_, newValue) => handleChangeAbilities(name, newValue)}
-        // console.log(newValue);
+      onChange={(event, newValue) => onChange(name, newValue)}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -61,9 +58,9 @@ TagsInput.defaultProps = {
 };
 
 TagsInput.propTypes = {
-  tags: PropTypes.arrayOf(PropTypes.string),
+  tags: PropTypes.arrayOf(PropTypes.object),
   name: PropTypes.string,
   label: PropTypes.string,
   value: PropTypes.arrayOf(PropTypes.string),
-  handleChangeAbilities: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 };

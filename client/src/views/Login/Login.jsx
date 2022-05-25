@@ -37,6 +37,7 @@ const Login = () => {
       response = await api.aspirant.login(credentials.email, credentials.password);
     } else {
       response = await api.company.login(credentials.email, credentials.password);
+      localStorage.setItem('idCompany', response.company.id);
     }
     localStorage.setItem('idToken', response.idToken);
   };
