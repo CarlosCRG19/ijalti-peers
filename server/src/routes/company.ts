@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getCompaniesList, createCompany, getCompany, removeCompany, updateCompany, companySignUp, companyLogIn} from "../controllers";
+import { getCompaniesList, createCompany, getCompany, removeCompany, updateCompany, signupCompany, loginCompany} from "../controllers";
 
 const companiesRouter = Router();
 
@@ -13,7 +13,7 @@ companyDetail.get(getCompany);
 companyDetail.delete(removeCompany);
 companyDetail.put(updateCompany)
 
-companiesRouter.post("/companies/signup", companySignUp);
-companiesRouter.post("/companies/login", companyLogIn);
+companiesRouter.post("/companies/signup", signupCompany);
+companiesRouter.post("/companies/login", loginCompany);
 
 export default companiesRouter;

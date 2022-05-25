@@ -54,5 +54,4 @@ class Aspirant extends BaseEntity {
     user: User
 }
 
-
 export default Aspirant;

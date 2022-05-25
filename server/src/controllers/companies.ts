@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import axios, { Axios, AxiosRequestConfig } from "axios";
-import Company from "../models/company";
-import User from "../models/user";
+import { Company, User } from "../models";
 
 export const getCompaniesList = async (req: Request, res: Response): Promise<Response> => {
     try{
@@ -69,29 +68,32 @@ export const updateCompany = async (req: Request, res: Response): Promise<Respon
     return res.status(200).json({message : `Company ${company.id} updated`, company})
 } 
 
-export const companySignUp = async (req: Request, res: Response): Promise<Response> => { 
+export const signupCompany = async (req: Request, res: Response): Promise<Response> => { 
     // Need to create a firebase user with email and password 
     const firebaseSignupURL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.FIREBASE_API_KEY}`
     
-    const signUpRequestConfig: AxiosRequestConfig = {
+    const {email, password, company} = req.body;
+
+    const signupRequestConfig: AxiosRequestConfig = {
         url: firebaseSignupURL, 
         method: "POST",
         data: {
-            email: req.body.email,
-            password: req.body.password,
+            email,
+            password,
             returnSecureToken: true
         }
     }
 
     try{
-        const signUpResponse = await axios(signUpRequestConfig);
+        const signupResponse = await axios(signupRequestConfig);
+        const {localId, idToken, refreshToken, expiresIn} = signupResponse.data;
         // Create User from signUpResponse 
-        const newUser = User.create({firebaseId: signUpResponse.data.localId}); 
+        const newUser = User.create({firebaseId: localId}); 
         await newUser.save();
         // User is created. 
 
         // Signup is performed, proceed to write data to DB
-        const newCompany = Company.create({...req.body.company, user: newUser}); 
+        const newCompany = Company.create({...company, user: newUser}); 
         await newCompany.save()
         // Company is created, prepare response body
 
@@ -99,9 +101,9 @@ export const companySignUp = async (req: Request, res: Response): Promise<Respon
             user: newUser, 
             role: "company", 
             company: {...newCompany, user: undefined}, 
-            idToken: signUpResponse.data.idToken, 
-            refreshToken: signUpResponse.data.refreshToken,
-            expiresIn: signUpResponse.data.expiresIn,
+            idToken, 
+            refreshToken,
+            expiresIn,
         } 
 
         return res.status(201).json(responseBody);
@@ -113,24 +115,28 @@ export const companySignUp = async (req: Request, res: Response): Promise<Respon
 
 }
 
-export const companyLogIn = async (req: Request, res: Response) => {
+export const loginCompany = async (req: Request, res: Response) => {
     // Perform firebase login
     try {
         const firebaseLoginUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.FIREBASE_API_KEY}`;
+        
+        const {email, password} = req.body;
+
         const logInRequestConfig: AxiosRequestConfig = {
             url: firebaseLoginUrl,
             method: "POST",
             data: {
-                email: req.body.email,
-                password: req.body.password,
+                email,
+                password,
                 returnSecureToken: true
             }
         };
 
-        const firebaseLoginResponse = await axios(logInRequestConfig);
+        const loginResponse = await axios(logInRequestConfig);
         
-        const user = await User.findOneBy({firebaseId: firebaseLoginResponse.data["localId"]});
-        console.log(user);
+        const {localId, idToken, refreshToken, expiresIn} = loginResponse.data;
+
+        const user = await User.findOneBy({firebaseId: localId});
         if(!user) return res.status(409).json({message: "Company was not found!"})
         
         const company = await Company.findOneBy({user: {id: user.id}});
@@ -141,9 +147,9 @@ export const companyLogIn = async (req: Request, res: Response) => {
             user: user.id, 
             role: "company",
             company: company,
-            idToken: firebaseLoginResponse.data.idToken,
-            refreshToken: firebaseLoginResponse.data.refreshToken,
-            expiresIn: firebaseLoginResponse.data.expiresIn,
+            idToken,
+            refreshToken,
+            expiresIn,
 
         }
 

@@ -26,10 +26,10 @@ class Company extends BaseEntity{
     @Column({type:"numeric"})
     phone2 : `${number}`;
 
-    @OneToMany(()=>JobOffer, (jobOffer) => jobOffer.company)
+    @OneToMany(() => JobOffer, (jobOffer) => jobOffer.company)
     jobOffers : JobOffer[];
 
-    @OneToOne(()=>User)
+    @OneToOne(() => User)
     @JoinColumn()
     user: User;
 }
