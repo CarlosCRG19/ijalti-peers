@@ -1,4 +1,6 @@
 import { Router } from "express";
+
+import { firebaseMiddleware } from "../middlewares/auth";
 import { getCompaniesList, createCompany, getCompany, removeCompany, updateCompany, signupCompany, loginCompany} from "../controllers";
 
 const companiesRouter = Router();
@@ -6,7 +8,9 @@ const companiesRouter = Router();
 const companyList = companiesRouter.route("/companies");
 const companyDetail = companiesRouter.route("/companies/:id");
 
-companyList.get(getCompaniesList);
+companiesRouter.use(firebaseMiddleware);
+
+companyList.get(firebaseMiddleware, getCompaniesList);
 companyList.post(createCompany);
 
 companyDetail.get(getCompany);
