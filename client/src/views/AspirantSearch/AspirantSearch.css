@@ -1,0 +1,35 @@
+.form-overwrite {
+  width: 100%;
+}
+
+.main-content-overwrite {
+  padding: 38px;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: #E7EDF3;
+}
+
+@media (min-width: 1280px) {
+  .main-content-overwrite {
+    padding-top: 38px;
+    padding-left: 15%;
+    padding-right: 15%;
+  }
+}
+
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #E7EDF3;
+}
+
+.buttons {
+  margin: 0;
+  margin-top: 24px;
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
