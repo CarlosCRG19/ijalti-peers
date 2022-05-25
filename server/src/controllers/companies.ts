@@ -70,7 +70,6 @@ export const updateCompany = async (req: Request, res: Response): Promise<Respon
 } 
 
 export const companySignUp = async (req: Request, res: Response): Promise<Response> => { 
-    console.log(req.body)
     // Need to create a firebase user with email and password 
     const firebaseSignupURL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.FIREBASE_API_KEY}`
     
@@ -94,13 +93,12 @@ export const companySignUp = async (req: Request, res: Response): Promise<Respon
         // Signup is performed, proceed to write data to DB
         const newCompany = Company.create({...req.body.company, user: newUser}); 
         await newCompany.save()
-
         // Company is created, prepare response body
 
         const responseBody = {
             user: newUser, 
             role: "company", 
-            company: newCompany, 
+            company: {...newCompany, user: undefined}, 
             idToken: signUpResponse.data.idToken, 
             refreshToken: signUpResponse.data.refreshToken,
             expiresIn: signUpResponse.data.expiresIn,
