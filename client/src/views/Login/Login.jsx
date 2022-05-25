@@ -1,9 +1,22 @@
 import React, { useState } from 'react';
+import {
+  Button,
+  ButtonGroup,
+  Grid,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 import { useAPI } from '../../hooks';
 
+import Form from '../../components/Form';
+import './Login.css';
+
+const INITIAL_CREDENTIALS = { email: '', password: '' };
+
 const Login = () => {
-  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [credentials, setCredentials] = useState(INITIAL_CREDENTIALS);
+  const [loginPersonal, setLoginPersonal] = useState(true);
 
   const api = useAPI();
 
@@ -25,33 +38,60 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">
-          Email:
-          <input
-            type="text"
-            id="email"
+    <main className="login">
+      <Typography variant="h2" className="welcome">
+        {loginPersonal ? 'Encuentra tu trabajo ideal' : 'Encuentra a los mejores ingenieros para tu equipo'}
+      </Typography>
+      <Form
+        title="Bienvenido de vuelta"
+        onSubmit={handleSubmit}
+      >
+        <Grid item xs={12}>
+          <ButtonGroup fullWidth>
+            <Button
+              variant={loginPersonal ? 'contained' : 'outlined'}
+              onClick={() => setLoginPersonal(true)}
+            >
+              Personal
+            </Button>
+            <Button
+              variant={!loginPersonal ? 'contained' : 'outlined'}
+              onClick={() => setLoginPersonal(false)}
+            >
+              Empresarial
+            </Button>
+          </ButtonGroup>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
             name="email"
+            label="Email"
+            type="email"
+            variant="filled"
             value={credentials.email}
+            required
+            fullWidth
             onChange={handleChange}
           />
-        </label>
-        <label htmlFor="password">
-          Password:
-          <input
-            type="password"
-            id="password"
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
             name="password"
+            label="Password"
+            type="password"
+            variant="filled"
             value={credentials.password}
+            required
+            fullWidth
             onChange={handleChange}
           />
-        </label>
-        <br />
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+        </Grid>
+        <div className="buttons">
+          <Button variant="text" onClick={() => setCredentials(INITIAL_CREDENTIALS)}>Borrar</Button>
+          <Button variant="contained" sx={{ margin: '0 0 0 1rem' }} type="submit">Ingresar</Button>
+        </div>
+      </Form>
+    </main>
   );
 };
 

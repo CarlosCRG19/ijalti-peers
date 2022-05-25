@@ -1,8 +1,8 @@
 body {
 	margin: 0;
 	background-color: #f0f0f0;
-  min-height: 100vh;
-	
+	min-height: 100vh;
+
 }
 
 #root {
@@ -23,12 +23,4 @@ h6 {
 * {
 	box-sizing: border-box;
 	font-family: "Roboto", "sans-serif";
-}
-
-.main-content {
-	flex-grow: 1;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: #E7EDF3;
 }
