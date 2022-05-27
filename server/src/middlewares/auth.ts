@@ -1,38 +1,27 @@
 import {Request,Response, NextFunction} from "express";
-import jwt from "jsonwebtoken";
+import {auth} from "../firebase/firebaseConfig";
 
+export const firebaseMiddleware = async (req: Request, res: Response, next: NextFunction) =>{
 
-export const firebaseMiddleware =(req: Request, res: Response, next: NextFunction) =>{
-  const unauthorized = () => res.status(401).json({
-    status: 401,
-    message: "Unauthorized"
-  });
-
-  const decodeTokenFromBearer = (bearerHeader: string) =>{
-    const bearer = bearerHeader.split(" ");
+  try {
+    const authHeader: any = req.headers["authorization"];
+    
+    if(!authHeader) throw Error;
+    
+    const bearer = authHeader.split(" ");
     const bearerToken = bearer[1];
-    const decodedToken = jwt.decode(bearerToken, {complete : true});
-    return decodedToken
-  }
-  
-  const bearerHeader = req.headers["authorization"];
 
-  if(!bearerHeader){
-    unauthorized();
-    return;
-  }
+    const decodedToken = await auth.verifyIdToken(bearerToken);
+    req.user_id = decodedToken.uid;
+    next();
 
-  const decodedToken = decodeTokenFromBearer(bearerHeader)
-
-  if(decodedToken?.header.kid !== process.env.FIREBASE_AUTH_KID){
-    unauthorized()
-    return;
+  } catch(error){
+    console.log(error);
+    
+    return res.status(401).json({
+      status: 401,
+      message: "Unauthorized"
+    });
   }
-
-  if(typeof(decodedToken?.payload) !== "string"){
-    req.user_id  = decodedToken?.payload.user_id;
-  }
-  
-  next();
 }
 
