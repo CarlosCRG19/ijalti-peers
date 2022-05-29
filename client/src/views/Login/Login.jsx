@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { useAPI } from '../../hooks';
+import useAPI from '../../hooks/useAPI';
 
 import Form from '../../components/Form';
 import './Login.css';
@@ -32,9 +32,13 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const { idToken } = await api.company.login(credentials.email, credentials.password);
-
-    localStorage.setItem('idToken', idToken);
+    let response;
+    if (loginPersonal) {
+      response = await api.aspirant.login(credentials.email, credentials.password);
+    } else {
+      response = await api.company.login(credentials.email, credentials.password);
+    }
+    localStorage.setItem('idToken', response.idToken);
   };
 
   return (
