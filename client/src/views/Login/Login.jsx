@@ -14,11 +14,6 @@ import './Login.css';
 
 const INITIAL_CREDENTIALS = { email: '', password: '' };
 
-import Form from '../../components/Form';
-import './Login.css';
-
-const INITIAL_CREDENTIALS = { email: '', password: '' };
-
 const Login = () => {
   const [credentials, setCredentials] = useState(INITIAL_CREDENTIALS);
   const [loginPersonal, setLoginPersonal] = useState(true);
