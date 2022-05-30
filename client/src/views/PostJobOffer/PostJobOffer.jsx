@@ -17,8 +17,8 @@ import {
 } from '@mui/icons-material';
 
 import { useAPI } from '../../hooks';
-import Form from '../../components/Form';
-import TagsInput from '../../components/TagsInput';
+import { Form, TagsInput } from '../../components';
+
 import './PostJobOffer.css';
 
 const INITIAL_JOB_OFFER = {
