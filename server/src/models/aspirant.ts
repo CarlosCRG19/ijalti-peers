@@ -11,10 +11,10 @@ import {
 import User from "./user";
 
 enum WorkingStatusChoices {
-    "Employed",
-    "Unemployed",
-    "Hiring", 
-    "Searching"
+    Emplyed = "EMPLOYED",
+    Unemployed = "UNEMPLOYED",
+    Hiring = "HIRING", 
+    Searching = "SEARCHING"
 }
 
 @Entity()

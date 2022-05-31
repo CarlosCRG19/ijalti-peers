@@ -71,6 +71,14 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
 
     try {
         const { aspirant, email, password } = req.body;
+        
+        const newAspirant: Aspirant = Aspirant.create({ 
+            ...aspirant,
+            skills: aspirant.skills.map((skill: number) => {
+                {id: skill}
+            })
+        }); 
+        await newAspirant.save();
 
         const firebaseResponse = await axios({
             method: "POST",
@@ -84,11 +92,11 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
             refreshToken
         } = firebaseResponse.data;
 
+
         const newUser = User.create({ firebaseId: localId });
         await newUser.save();
 
-        const newAspirant = Aspirant.create({ ...aspirant, user: newUser });
-        await newAspirant.save();
+        newAspirant.user = newUser;
 
         return res.status(201).json({
             idToken,
