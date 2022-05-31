@@ -70,10 +70,12 @@ export const updateCompany = async (req: Request, res: Response): Promise<Respon
 
 export const signupCompany = async (req: Request, res: Response): Promise<Response> => { 
     // Need to create a firebase user with email and password 
+    
     const firebaseSignupURL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.FIREBASE_API_KEY}`
     
     const {email, password, company} = req.body;
-
+    
+    
     const signupRequestConfig: AxiosRequestConfig = {
         url: firebaseSignupURL, 
         method: "POST",
@@ -83,19 +85,19 @@ export const signupCompany = async (req: Request, res: Response): Promise<Respon
             returnSecureToken: true
         }
     }
-
+    
     try{
+        const newCompany: Company = Company.create({...company}); 
+        await newCompany.save()
+
         const signupResponse = await axios(signupRequestConfig);
         const {localId, idToken, refreshToken, expiresIn} = signupResponse.data;
-        // Create User from signUpResponse 
+
         const newUser = User.create({firebaseId: localId}); 
         await newUser.save();
-        // User is created. 
 
-        // Signup is performed, proceed to write data to DB
-        const newCompany = Company.create({...company, user: newUser}); 
-        await newCompany.save()
-        // Company is created, prepare response body
+        newCompany.user = newUser;
+        newCompany.save();
 
         const responseBody = {
             user: newUser, 
