@@ -28,7 +28,7 @@ export const getSkill = async (req: Request, res: Response) : Promise<Response> 
         
         if (!skill) return res.status(409).json({ message: "Skill not found" });
 
-        return res.status(200).json({ message: "Skill found", skill});
+        return res.status(200).json({skill});
     } catch(error){
         return res.status(500).json({ message: "Something went wrong"})
     }
