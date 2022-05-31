@@ -30,7 +30,7 @@ export const getAspirant = async (req: Request, res: Response): Promise<Response
 
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
 
-        return res.status(200).json({ message: "Aspirant found", aspirant });
+        return res.status(200).json({ message: "Aspirant found", aspirant: {...aspirant, user: aspirant.user} });
     } catch(error) {
         return res.status(500).json({ message: "Something went wrong" });
     }
@@ -97,6 +97,7 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
         await newUser.save();
 
         newAspirant.user = newUser;
+        newAspirant.save();
 
         return res.status(201).json({
             idToken,
@@ -104,7 +105,7 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
             refreshToken,
             user: newUser,
             role: "aspirant",
-            aspirant: newAspirant,
+            aspirant: {...newAspirant, user: undefined},
         });
     } catch(error) {
         console.log(error);
@@ -139,7 +140,7 @@ export const loginAspirant = async (req: Request, res: Response): Promise<Respon
         if (!aspirant) return res.status(409).json({ message: "Your user exists, but it has not been associated with an aspirant"});
 
         return res.status(200).json({
-            aspirant,
+            aspirant: {...aspirant, user: undefined},
             idToken,
             expiresIn,
             refreshToken,

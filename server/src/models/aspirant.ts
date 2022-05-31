@@ -5,8 +5,11 @@ import {
     BaseEntity,
     CreateDateColumn,
     OneToOne,
-    JoinColumn
+    JoinColumn,
+    ManyToMany,
+    JoinTable
 } from "typeorm";
+import Skill from "./skill";
 
 import User from "./user";
 
@@ -46,8 +49,12 @@ class Aspirant extends BaseEntity {
     @Column()
     yearsOfExperience: number;
 
-    @Column()
+    @Column({default: "SEARCHING"})
     workingStatus: WorkingStatusChoices;
+
+    @ManyToMany(() => Skill)
+    @JoinTable() 
+    skills: Skill[];
 
     @OneToOne(() => User)
     @JoinColumn()
