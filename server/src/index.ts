@@ -1,9 +1,8 @@
 import "dotenv/config"
 import cors from "cors";
 import express from "express";
-
 import createDatabaseConnection from "./createDatabaseConnection";
-import { aspirantRouter, companyRouter, jobOfferRouter } from "./routes";
+import { aspirantRouter, companyRouter, jobOfferRouter, skillRouter } from "./routes";
 
 const initializeExpress = () => {
     const PORT = process.env.PORT;
@@ -16,6 +15,7 @@ const initializeExpress = () => {
     app.use(aspirantRouter);
     app.use(companyRouter);
     app.use(jobOfferRouter);
+    app.use(skillRouter);
 
     app.listen(PORT, () => {
         console.log(`Server listening on port ${PORT}`);
