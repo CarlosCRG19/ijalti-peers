@@ -5,8 +5,15 @@ import { Aspirant, Skill, User } from "../models";
 
 export const getAspirantList = async (req: Request, res: Response): Promise<Response> => {
     try {
-    	const aspirants = await Aspirant.find();
-
+        
+        if(req.query.skills){
+            
+            let {skills}: any = req.query;
+            skills = skills.map((skill: string) => Number(skill));
+            
+        }
+        const aspirants = await Aspirant.find();
+        
 		return res.status(200).json(aspirants);
     } catch(error) {
         return res.status(500).json({ message: "Something went wrong", error });
