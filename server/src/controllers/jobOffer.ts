@@ -24,7 +24,7 @@ export const createOffer = async (
         await newJobOffer.save();
         return res.status(200).json({ message: "Offer has been created successfully", newJobOffer});
     } catch (error) {
-        return res.status(500).json({ message: "Something went wronng!" });
+        return res.status(500).json({ message: "Something went wronng!", error });
     }
 };
 
