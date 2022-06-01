@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import axios from "axios";
 
-import { Aspirant, User } from "../models";
+import { Aspirant, Skill, User } from "../models";
 
 export const getAspirantList = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -39,7 +39,10 @@ export const getAspirant = async (req: Request, res: Response): Promise<Response
 
 export const updateAspirant = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const aspirant = await Aspirant.findOneBy({ id: req.params.id });
+        const aspirant = await Aspirant.findOne({
+            where: {id: req.params.id},
+            relations: ['skills']
+        });
         
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
         
@@ -47,9 +50,9 @@ export const updateAspirant = async (req: Request, res: Response): Promise<Respo
         
         const { skills } = req.body;
         if(skills) {
-            console.log(skills);
-            console.log(skills.map((skill: number) => ({id: skill})));
-            aspirant.skills = skills.map((skill: number) => ({id: skill}));
+            aspirant.skills = skills.map((skill: number) =>{ 
+                return new Object({id: skill})
+            });
         }
 
         await aspirant.save();
