@@ -6,7 +6,7 @@ class Skill extends BaseEntity{
     id : string;
 
     @Column({nullable :false , unique : true})
-    skillName : string;
+    skill: string;
 
 }
 
