@@ -26,11 +26,12 @@ export const createAspirant = async (req: Request, res: Response): Promise<Respo
 
 export const getAspirant = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const aspirant = await Aspirant.findOneBy({ id: req.params.id });
-
+        const aspirant: Aspirant | null = await Aspirant.findOne({
+            where: {id: req.params.id}, relations: ['skills']
+        })
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
-
         return res.status(200).json({ message: "Aspirant found", aspirant: {...aspirant, user: aspirant.user} });
+
     } catch(error) {
         return res.status(500).json({ message: "Something went wrong" });
     }
@@ -39,10 +40,17 @@ export const getAspirant = async (req: Request, res: Response): Promise<Response
 export const updateAspirant = async (req: Request, res: Response): Promise<Response> => {
     try {
         const aspirant = await Aspirant.findOneBy({ id: req.params.id });
-
+        
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
-
+        
         Object.assign(aspirant, req.body);
+        
+        const { skills } = req.body;
+        if(skills) {
+            console.log(skills);
+            console.log(skills.map((skill: number) => ({id: skill})));
+            aspirant.skills = skills.map((skill: number) => ({id: skill}));
+        }
 
         await aspirant.save();
 
@@ -75,7 +83,7 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
         const newAspirant: Aspirant = Aspirant.create({ 
             ...aspirant,
             skills: aspirant.skills.map((skill: number) => {
-                {id: skill}
+                return new Object({id: skill});
             })
         }); 
         await newAspirant.save();
@@ -130,8 +138,8 @@ export const loginAspirant = async (req: Request, res: Response): Promise<Respon
             localId,
             refreshToken
         } = firebaseResponse.data;
-
         const user = await User.findOneBy({ firebaseId: localId });
+        console.log({...user});
 
         if(!user) return res.status(409).json({message: "Aspirant was not found!"});
 
