@@ -20,7 +20,15 @@ export const createOffer = async (
     res: Response
 ): Promise<Response> => {
     try {
-        const newJobOffer = JobOffer.create(req.body);
+        const newJobOffer = JobOffer.create({
+            ...req.body,
+            preferredSkills: req.body.preferredSkills.map((skill: number) => {
+                return new Object({id: skill})
+            }),
+            requiredSkills: req.body.requiredSkills.map((skill: number) => {
+                return new Object({id: skill})
+            }),
+        });
         await newJobOffer.save();
         return res.status(200).json({ message: "Offer has been created successfully", newJobOffer});
     } catch (error) {
@@ -54,9 +62,13 @@ export const getOffer = async (
     res: Response
 ): Promise<Response> => {
     try {
-        const offer = await JobOffer.findOneBy({ id: req.params.id });
+        const offer = await JobOffer.findOne({
+            where: {id: req.params.id},
+            relations: ['preferredSkills', 'requiredSkills']
+        });
         return res.status(200).json(offer);
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ message: "Something went wrong!" });
     }
 };
@@ -67,9 +79,23 @@ export const updateOffer = async (
 ): Promise<Response> => {
     try {
         const offer = await JobOffer.findOneBy({ id: req.params.id });
+
+        if(!offer) return res.status(409).json({message: "Offer not found"});
+
         Object.assign(offer, req.body);
+        
+        const {preferredSkills, requiredSkills} = req.body; 
+
+        offer.requiredSkills = requiredSkills?.map((skill: number) => {
+            return new Object({id: skill});
+        })
+
+        offer.preferredSkills = preferredSkills?.map((skill: number) => {
+            return new Object({id: skill});
+        })
+
         await offer?.save();
-        return res.status(200).json(offer);
+        return res.status(200).json({message: "Offer updated"});
     } catch (error) {
         return res.status(500).json({ message: "Something went wrong!" });
     }

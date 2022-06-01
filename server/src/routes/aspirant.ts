@@ -10,7 +10,14 @@ import {
     signupAspirant,
 } from "../controllers";
 
+import { firebaseMiddleware } from "../middlewares/auth";
+
 const aspirantRouter = Router();
+
+aspirantRouter.post("/aspirants/login", loginAspirant);
+aspirantRouter.post("/aspirants/signup", signupAspirant);
+
+aspirantRouter.use(firebaseMiddleware);
 
 const aspirantList = aspirantRouter.route("/aspirants");
 aspirantList.get(getAspirantList);
@@ -21,7 +28,5 @@ aspirantDetail.get(getAspirant);
 aspirantDetail.put(updateAspirant);
 aspirantDetail.delete(removeAspirant);
 
-aspirantRouter.post("/aspirants/login", loginAspirant);
-aspirantRouter.post("/aspirants/signup", signupAspirant);
 
 export default aspirantRouter;

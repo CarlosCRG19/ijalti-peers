@@ -49,11 +49,10 @@ export const updateAspirant = async (req: Request, res: Response): Promise<Respo
         Object.assign(aspirant, req.body);
         
         const { skills } = req.body;
-        if(skills) {
-            aspirant.skills = skills.map((skill: number) =>{ 
-                return new Object({id: skill})
-            });
-        }
+
+        aspirant.skills = skills?.map((skill: number) =>{ 
+            return new Object({id: skill})
+        });
 
         await aspirant.save();
 
