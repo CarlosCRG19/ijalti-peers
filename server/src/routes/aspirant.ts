@@ -14,11 +14,6 @@ import { firebaseMiddleware } from "../middlewares/auth";
 
 const aspirantRouter = Router();
 
-aspirantRouter.post("/aspirants/login", loginAspirant);
-aspirantRouter.post("/aspirants/signup", signupAspirant);
-
-aspirantRouter.use(firebaseMiddleware);
-
 const aspirantList = aspirantRouter.route("/aspirants");
 aspirantList.get(getAspirantList);
 aspirantList.post(createAspirant);
