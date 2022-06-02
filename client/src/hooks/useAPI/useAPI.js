@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-import { CompanyAPI, JobOfferAPI, AspirantAPI } from './api';
+import {
+  CompanyAPI, JobOfferAPI, AspirantAPI, SkillAPI,
+} from './api';
 
 const getAxiosInstance = () => {
   let headers = { 'Content-Type': 'application/json' };
@@ -23,6 +25,7 @@ const useAPI = () => {
     company: new CompanyAPI(axiosInstance),
     jobOffer: new JobOfferAPI(axiosInstance),
     aspirant: new AspirantAPI(axiosInstance),
+    skill: new SkillAPI(axiosInstance),
   };
 };
 
