@@ -1,22 +1,34 @@
 import { Request, Response } from "express";
 import axios from "axios";
 
-import { Aspirant, Skill, User } from "../models";
+import { Aspirant, User } from "../models";
 
 export const getAspirantList = async (req: Request, res: Response): Promise<Response> => {
     try {
-        
         if(req.query.skills){
+            let {skills : skillList}: any = req.query;
             
-            let {skills}: any = req.query;
-            skills = skills.map((skill: string) => Number(skill));
+            if(typeof skillList === "string"){
+                skillList = [skillList]
+            }
             
+            skillList = skillList?.map((skill: string) => Number(skill));
+        
+            const aspirants = await Aspirant.createQueryBuilder("aspirant")
+            .select("aspirant")
+            .innerJoin('aspirant.skills', 'aspSkills', 'aspSkills.id IN (:...skillIds)', 
+            { skillIds: skillList})
+            .getMany();
+
+            return res.status(200).json(aspirants);    
         }
+
         const aspirants = await Aspirant.find();
         
 		return res.status(200).json(aspirants);
     } catch(error) {
-        return res.status(500).json({ message: "Something went wrong", error });
+        console.log(error);
+        return res.status(500).json({ message: "Something went wrong!!", error });
     }
 };
 
