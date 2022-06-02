@@ -1,3 +1,11 @@
+.main-content {
+	flex-grow: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #E7EDF3;
+}
+
 .buttons {
   margin: 0;
 	margin-top: 24px;

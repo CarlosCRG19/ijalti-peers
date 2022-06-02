@@ -1,9 +1,9 @@
 import APIGateway from './apiGateway';
 
-class CompanyAPI extends APIGateway {
+class AspirantAPI extends APIGateway {
   async getAll() {
     try {
-      const response = await this._client.get('/companies');
+      const response = await this._client.get('/aspirants');
 
       return response.data;
     } catch (error) {
@@ -13,7 +13,7 @@ class CompanyAPI extends APIGateway {
 
   async login(email, password) {
     try {
-      const response = await this._client.post('/companies/login', { email, password });
+      const response = await this._client.post('/aspirants/login', { email, password });
 
       return response.data;
     } catch (error) {
@@ -22,4 +22,4 @@ class CompanyAPI extends APIGateway {
   }
 }
 
-export default CompanyAPI;
+export default AspirantAPI;

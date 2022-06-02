@@ -1,0 +1,11 @@
+.login {
+	flex-grow: 1;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	background-color: #E7EDF3;
+}
+
+.welcome {
+	width: 40%;
+}
