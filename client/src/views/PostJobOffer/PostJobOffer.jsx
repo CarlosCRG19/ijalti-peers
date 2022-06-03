@@ -69,7 +69,7 @@ const PostJobOffer = () => {
       suggestedSkills: jobOffer.suggestedSkills.map((ability) => ability.id),
       company: localStorage.idCompany,
     };
-    // await api.jobOffer.create(formattedJobOffer);
+    await api.jobOffer.create(formattedJobOffer);
   };
 
   useEffect(() => {
