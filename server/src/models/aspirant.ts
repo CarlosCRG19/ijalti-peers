@@ -7,11 +7,13 @@ import {
     OneToOne,
     JoinColumn,
     ManyToMany,
-    JoinTable
+    JoinTable,
+    OneToMany
 } from "typeorm";
 import Skill from "./skill";
 
 import User from "./user";
+import WorkExperience from "./workExperience";
 
 enum WorkingStatusChoices {
     Emplyed = "EMPLOYED",
@@ -55,6 +57,9 @@ class Aspirant extends BaseEntity {
     @ManyToMany(() => Skill)
     @JoinTable() 
     skills: Skill[];
+
+    @OneToMany(() => WorkExperience, (workExperiences) => workExperiences.aspirant)
+    workExperiences: WorkExperience[];
 
     @OneToOne(() => User)
     @JoinColumn()
