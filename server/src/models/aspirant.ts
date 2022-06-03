@@ -5,16 +5,19 @@ import {
     BaseEntity,
     CreateDateColumn,
     OneToOne,
-    JoinColumn
+    JoinColumn,
+    ManyToMany,
+    JoinTable
 } from "typeorm";
+import Skill from "./skill";
 
 import User from "./user";
 
 enum WorkingStatusChoices {
-    "Employed",
-    "Unemployed",
-    "Hiring", 
-    "Searching"
+    Emplyed = "EMPLOYED",
+    Unemployed = "UNEMPLOYED",
+    Hiring = "HIRING", 
+    Searching = "SEARCHING"
 }
 
 @Entity()
@@ -46,8 +49,12 @@ class Aspirant extends BaseEntity {
     @Column()
     yearsOfExperience: number;
 
-    @Column()
+    @Column({default: "SEARCHING"})
     workingStatus: WorkingStatusChoices;
+
+    @ManyToMany(() => Skill)
+    @JoinTable() 
+    skills: Skill[];
 
     @OneToOne(() => User)
     @JoinColumn()
