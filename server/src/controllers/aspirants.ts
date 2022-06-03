@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import axios from "axios";
-
+import { numArr2ObjArr } from "../utils";
 import { Aspirant, User } from "../models";
 
 export const getAspirantList = async (req: Request, res: Response): Promise<Response> => {
@@ -69,9 +69,7 @@ export const updateAspirant = async (req: Request, res: Response): Promise<Respo
         
         const { skills } = req.body;
 
-        aspirant.skills = skills?.map((skill: number) =>{ 
-            return new Object({id: skill})
-        });
+        aspirant.skills = numArr2ObjArr(skills);
 
         await aspirant.save();
 
@@ -103,9 +101,7 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
         
         const newAspirant: Aspirant = Aspirant.create({ 
             ...aspirant,
-            skills: aspirant.skills.map((skill: number) => {
-                return new Object({id: skill});
-            })
+            skills: numArr2ObjArr(aspirant.skills)
         }); 
         await newAspirant.save();
 

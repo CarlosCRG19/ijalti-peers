@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import JobOffer from "../models/jobOffer";
+import { numArr2ObjArr } from "../utils";
 
 // Controllers for Offer List
 
@@ -22,12 +23,8 @@ export const createOffer = async (
     try {
         const newJobOffer = JobOffer.create({
             ...req.body,
-            preferredSkills: req.body.preferredSkills.map((skill: number) => {
-                return new Object({id: skill})
-            }),
-            requiredSkills: req.body.requiredSkills.map((skill: number) => {
-                return new Object({id: skill})
-            }),
+            preferredSkills: numArr2ObjArr(req.body.preferredSkills),
+            requiredSkills: numArr2ObjArr(req.body.requiredSkills)
         });
         await newJobOffer.save();
         return res.status(200).json({ message: "Offer has been created successfully", newJobOffer});
@@ -86,16 +83,12 @@ export const updateOffer = async (
         
         const {preferredSkills, requiredSkills} = req.body; 
 
-        offer.requiredSkills = requiredSkills?.map((skill: number) => {
-            return new Object({id: skill});
-        })
+        offer.requiredSkills = numArr2ObjArr(requiredSkills);
 
-        offer.preferredSkills = preferredSkills?.map((skill: number) => {
-            return new Object({id: skill});
-        })
+        offer.preferredSkills = numArr2ObjArr(preferredSkills);
 
         await offer?.save();
-        return res.status(200).json({message: "Offer updated"});
+        return res.status(200).json({ message: "Offer updated" });
     } catch (error) {
         return res.status(500).json({ message: "Something went wrong!" });
     }
