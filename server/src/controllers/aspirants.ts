@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import axios from "axios";
 import { numArr2ObjArr } from "../utils";
-import { Aspirant, User } from "../models";
+import { Aspirant, User, WorkExperience } from "../models";
 
 export const getAspirantList = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -46,7 +46,7 @@ export const createAspirant = async (req: Request, res: Response): Promise<Respo
 export const getAspirant = async (req: Request, res: Response): Promise<Response> => {
     try {
         const aspirant: Aspirant | null = await Aspirant.findOne({
-            where: {id: req.params.id}, relations: ['skills']
+            where: {id: req.params.id}, relations: ['skills', 'workExperiences']
         })
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
         return res.status(200).json({ message: "Aspirant found", aspirant: {...aspirant, user: aspirant.user} });
@@ -60,21 +60,30 @@ export const updateAspirant = async (req: Request, res: Response): Promise<Respo
     try {
         const aspirant = await Aspirant.findOne({
             where: {id: req.params.id},
-            relations: ['skills']
+            relations: ['skills', 'workExperiences']
         });
         
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
         
         Object.assign(aspirant, req.body);
         
-        const { skills } = req.body;
+        const { skills, workExperiences } = req.body;
 
-        aspirant.skills = numArr2ObjArr(skills);
+        if(skills) aspirant.skills = numArr2ObjArr(skills);
+        
+        if(workExperiences) {
+            for(let experience of workExperiences) {
+                const newExperience: WorkExperience = WorkExperience.create({...experience});
+                newExperience.aspirant = aspirant;
+                newExperience.save();
+            }
+        }
 
         await aspirant.save();
 
         return res.status(200).json({ message: "Aspirant updated" });
     } catch(error) {
+        console.log(error);
         return res.status(500).json({ message: "Something went wrong" });
     }
 };
@@ -99,12 +108,23 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
     try {
         const { aspirant, email, password } = req.body;
         
+        const {skills, workExperiences } = aspirant;
+        
         const newAspirant: Aspirant = Aspirant.create({ 
             ...aspirant,
-            skills: numArr2ObjArr(aspirant.skills)
+            skills: skills ? numArr2ObjArr(aspirant.skills) : []
         }); 
-        await newAspirant.save();
+        
+        if(workExperiences) {
+            newAspirant.workExperiences = workExperiences.map((experience: {}) => {
+                const newExperience: WorkExperience = WorkExperience.create({...experience});
+                newExperience.save()
+                return newExperience;
+            });
+        }
 
+        await newAspirant.save();
+        
         const firebaseResponse = await axios({
             method: "POST",
             url: firebaseSignupURL,
@@ -173,6 +193,7 @@ export const loginAspirant = async (req: Request, res: Response): Promise<Respon
             role: "aspirant",
         });
     } catch(error) {
+        console.log(error);
         return res.status(500).json({ message: "Something went wrong!" });
     }
 };
