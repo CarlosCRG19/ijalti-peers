@@ -21,10 +21,12 @@ export const createOffer = async (
     res: Response
 ): Promise<Response> => {
     try {
+        const { preferredSkills, requiredSkills } = req.body;
+
         const newJobOffer = JobOffer.create({
             ...req.body,
-            preferredSkills: numArr2ObjArr(req.body.preferredSkills),
-            requiredSkills: numArr2ObjArr(req.body.requiredSkills)
+            preferredSkills: preferredSkills && numArr2ObjArr(req.body.preferredSkills),
+            requiredSkills: requiredSkills && numArr2ObjArr(req.body.requiredSkills)
         });
         await newJobOffer.save();
         return res.status(200).json({ message: "Offer has been created successfully", newJobOffer});
@@ -83,9 +85,9 @@ export const updateOffer = async (
         
         const {preferredSkills, requiredSkills} = req.body; 
 
-        offer.requiredSkills = numArr2ObjArr(requiredSkills);
+        if(requiredSkills) offer.requiredSkills = numArr2ObjArr(requiredSkills);
 
-        offer.preferredSkills = numArr2ObjArr(preferredSkills);
+        if(preferredSkills) offer.preferredSkills = numArr2ObjArr(preferredSkills);
 
         await offer?.save();
         return res.status(200).json({ message: "Offer updated" });
