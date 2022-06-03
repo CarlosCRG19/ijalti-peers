@@ -1,15 +1,34 @@
 import { Request, Response } from "express";
 import axios from "axios";
-
+import { numArr2ObjArr } from "../utils";
 import { Aspirant, User } from "../models";
 
 export const getAspirantList = async (req: Request, res: Response): Promise<Response> => {
     try {
-    	const aspirants = await Aspirant.find();
+        if(req.query.skills){
+            let {skills : skillList}: any = req.query;
+            
+            if(typeof skillList === "string"){
+                skillList = [skillList]
+            }
+            
+            skillList = skillList?.map((skill: string) => Number(skill));
+        
+            const aspirants = await Aspirant.createQueryBuilder("aspirant")
+            .select("aspirant")
+            .innerJoin('aspirant.skills', 'aspSkills', 'aspSkills.id IN (:...skillIds)', 
+            { skillIds: skillList})
+            .getMany();
 
+            return res.status(200).json(aspirants);    
+        }
+
+        const aspirants = await Aspirant.find();
+        
 		return res.status(200).json(aspirants);
     } catch(error) {
-        return res.status(500).json({ message: "Something went wrong", error });
+        console.log(error);
+        return res.status(500).json({ message: "Something went wrong!!", error });
     }
 };
 
@@ -26,11 +45,12 @@ export const createAspirant = async (req: Request, res: Response): Promise<Respo
 
 export const getAspirant = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const aspirant = await Aspirant.findOneBy({ id: req.params.id });
-
+        const aspirant: Aspirant | null = await Aspirant.findOne({
+            where: {id: req.params.id}, relations: ['skills']
+        })
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
+        return res.status(200).json({ message: "Aspirant found", aspirant: {...aspirant, user: aspirant.user} });
 
-        return res.status(200).json({ message: "Aspirant found", aspirant });
     } catch(error) {
         return res.status(500).json({ message: "Something went wrong" });
     }
@@ -38,11 +58,18 @@ export const getAspirant = async (req: Request, res: Response): Promise<Response
 
 export const updateAspirant = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const aspirant = await Aspirant.findOneBy({ id: req.params.id });
-
+        const aspirant = await Aspirant.findOne({
+            where: {id: req.params.id},
+            relations: ['skills']
+        });
+        
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
-
+        
         Object.assign(aspirant, req.body);
+        
+        const { skills } = req.body;
+
+        aspirant.skills = numArr2ObjArr(skills);
 
         await aspirant.save();
 
@@ -71,6 +98,12 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
 
     try {
         const { aspirant, email, password } = req.body;
+        
+        const newAspirant: Aspirant = Aspirant.create({ 
+            ...aspirant,
+            skills: numArr2ObjArr(aspirant.skills)
+        }); 
+        await newAspirant.save();
 
         const firebaseResponse = await axios({
             method: "POST",
@@ -84,11 +117,12 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
             refreshToken
         } = firebaseResponse.data;
 
+
         const newUser = User.create({ firebaseId: localId });
         await newUser.save();
 
-        const newAspirant = Aspirant.create({ ...aspirant, user: newUser });
-        await newAspirant.save();
+        newAspirant.user = newUser;
+        newAspirant.save();
 
         return res.status(201).json({
             idToken,
@@ -96,7 +130,7 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
             refreshToken,
             user: newUser,
             role: "aspirant",
-            aspirant: newAspirant,
+            aspirant: {...newAspirant, user: undefined},
         });
     } catch(error) {
         console.log(error);
@@ -121,8 +155,8 @@ export const loginAspirant = async (req: Request, res: Response): Promise<Respon
             localId,
             refreshToken
         } = firebaseResponse.data;
-
         const user = await User.findOneBy({ firebaseId: localId });
+        console.log({...user});
 
         if(!user) return res.status(409).json({message: "Aspirant was not found!"});
 
@@ -131,7 +165,7 @@ export const loginAspirant = async (req: Request, res: Response): Promise<Respon
         if (!aspirant) return res.status(409).json({ message: "Your user exists, but it has not been associated with an aspirant"});
 
         return res.status(200).json({
-            aspirant,
+            aspirant: {...aspirant, user: undefined},
             idToken,
             expiresIn,
             refreshToken,
