@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import Login from './views/Login';
-import { AspirantSignup, CompanySignup, Signup } from './views/Signup';
 import Navbar from './components/Navbar';
 import PostJobOffer from './views/PostJobOffer';
 
@@ -48,9 +47,6 @@ const App = () => (
           )}
         />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signup/aspirant" element={<AspirantSignup />} />
-        <Route path="/signup/company" element={<CompanySignup />} />
         <Route path="/post-job-offer" element={<PostJobOffer />} />
       </Routes>
     </BrowserRouter>
