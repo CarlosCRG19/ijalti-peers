@@ -1,26 +1,62 @@
 import React from 'react';
-import { Grid } from '@mui/material';
+import {
+  useTheme,
+  Box,
+  Grid,
+  Typography,
+} from '@mui/material';
 
 import './Form.css';
 
-const Form = ({
-  title, description, onSubmit, children,
-}) => {
+const Form = (props) => {
+  const {
+    title,
+    description,
+    onSubmit,
+    children,
+  } = props;
+
+  const { palette } = useTheme();
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
     onSubmit(event);
   };
 
-  const checkKeyDown = (e) => {
-    if (e.key === 'Enter') e.preventDefault();
-  };
-
   return (
-    <form className="form" onSubmit={handleSubmit} onKeyDown={(e) => checkKeyDown(e)}>
-      <h2 className="form-title">{title}</h2>
-      <p className="form-description">{description}</p>
-      <Grid container spacing={3} sx={{ padding: '32px' }}>
+    <form className="form" onSubmit={handleSubmit}>
+      <Box
+        display="flex"
+        width="100%"
+        padding="24px 0"
+        alignItems="center"
+        justifyContent="center"
+        borderRadius="10px 10px 0 0"
+        backgroundColor={palette.gray.A}
+      >
+        <Typography
+          variant="h4"
+          component="h2"
+          textAlign="center"
+          fontWeight="medium"
+          color={palette.blue.dark}
+        >
+          {title}
+        </Typography>
+      </Box>
+
+      <Typography
+        variant="body1"
+        width="100%"
+        fontStyle="italic"
+        fontWeight="light"
+        sx={{ p: '32px', pb: 0 }}
+      >
+        {description}
+      </Typography>
+
+      <Grid container spacing={3} padding="32px">
         {children}
       </Grid>
     </form>
