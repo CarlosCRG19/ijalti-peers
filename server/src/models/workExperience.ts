@@ -13,9 +13,6 @@ class WorkExperience extends BaseEntity {
     @ManyToOne(() => Company, company => company.workExperiences, {nullable: true})
     company: Company;
 
-    @Column({default: false})
-    is: boolean;
-
     @Column()
     title: string;
 
