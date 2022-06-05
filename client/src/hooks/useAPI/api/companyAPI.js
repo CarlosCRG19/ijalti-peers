@@ -13,7 +13,7 @@ class CompanyAPI extends APIGateway {
 
   async login(email, password) {
     try {
-      const response = await this._client.post('/companies/login', { email, password });
+      const response = await this._client.post('/login/company', { email, password });
 
       return response.data;
     } catch (error) {

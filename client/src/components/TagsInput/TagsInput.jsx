@@ -50,17 +50,17 @@ const TagsInput = (props) => {
 
 export default TagsInput;
 
-TagsInput.defaultProps = {
-  name: 'campo',
-  tags: [],
-  value: [],
-  label: '',
-};
+// TagsInput.defaultProps = {
+//   name: 'campo',
+//   tags: [],
+//   value: [],
+//   label: '',
+// };
 
-TagsInput.propTypes = {
-  tags: PropTypes.arrayOf(PropTypes.object),
-  name: PropTypes.string,
-  label: PropTypes.string,
-  value: PropTypes.arrayOf(PropTypes.string),
-  onChange: PropTypes.func.isRequired,
-};
+// TagsInput.propTypes = {
+//   tags: PropTypes.arrayOf(PropTypes.object),
+//   name: PropTypes.string,
+//   label: PropTypes.string,
+//   value: PropTypes.arrayOf(PropTypes.string),
+//   onChange: PropTypes.func.isRequired,
+// };
