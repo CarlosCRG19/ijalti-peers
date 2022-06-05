@@ -1,0 +1,16 @@
+.signup__main {
+	height: 100vh;
+	background: #FFF;
+}
+
+.signup__main:after {
+	position: absolute;
+	width: 60vw;
+	height: 100vh;
+	right: 0;
+	bottom: -72px;
+	z-index: 1;
+	background: #E7EDF3;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	clip-path: polygon(70% 0, 100% 0, 100% 100%, 0% 100%)
+}
