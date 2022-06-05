@@ -3,7 +3,6 @@ import JobOffer from "./jobOffer";
 import User from "./user";
 import WorkExperience from "./workExperience";
 
-
 @Entity()
 class Company extends BaseEntity{
     @PrimaryGeneratedColumn("uuid")

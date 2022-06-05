@@ -2,7 +2,9 @@ import "dotenv/config"
 import cors from "cors";
 import express from "express";
 import createDatabaseConnection from "./createDatabaseConnection";
+
 import { aspirantRouter, companyRouter, jobOfferRouter, skillRouter, authRouter, experiencesRouter } from "./routes";
+
 import { firebaseMiddleware } from "./middlewares/auth";
 
 const initializeExpress = () => {

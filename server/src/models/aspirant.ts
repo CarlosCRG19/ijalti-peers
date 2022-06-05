@@ -9,14 +9,15 @@ import {
     ManyToMany,
     JoinTable,
     OneToMany
-} from "typeorm";
-import Skill from "./skill";
 
+} from "typeorm";
+
+import Skill from "./skill";
 import User from "./user";
 import WorkExperience from "./workExperience";
 
 enum WorkingStatusChoices {
-    Emplyed = "EMPLOYED",
+    Employed = "EMPLOYED",
     Unemployed = "UNEMPLOYED",
     Hiring = "HIRING", 
     Searching = "SEARCHING"

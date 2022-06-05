@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import JobOffer from "../models/jobOffer";
 import { numArr2ObjArr } from "../utils";
 
-// Controllers for Offer List
-
 export const getOffersList = async (
     req: Request,
     res: Response
@@ -27,6 +25,7 @@ export const createOffer = async (
             ...req.body,
             preferredSkills: preferredSkills && numArr2ObjArr(req.body.preferredSkills),
             requiredSkills: requiredSkills && numArr2ObjArr(req.body.requiredSkills)
+
         });
         await newJobOffer.save();
         return res.status(200).json({ message: "Offer has been created successfully", newJobOffer});
@@ -34,8 +33,6 @@ export const createOffer = async (
         return res.status(500).json({ message: "Something went wronng!", error });
     }
 };
-
-// Controlers for offer detail
 
 export const removeJobOffer = async (
     req: Request,
@@ -88,6 +85,7 @@ export const updateOffer = async (
         if(requiredSkills) offer.requiredSkills = numArr2ObjArr(requiredSkills);
 
         if(preferredSkills) offer.preferredSkills = numArr2ObjArr(preferredSkills);
+
 
         await offer?.save();
         return res.status(200).json({ message: "Offer updated" });

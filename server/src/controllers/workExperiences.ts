@@ -3,7 +3,6 @@ import { Aspirant, WorkExperience } from "../models";
 
 export const workExperiencesList = async (req: Request, res: Response) => {
     try {
-
         const filterConditions: Object = {
             aspirant: {id: req.query.aspirantId} || undefined,
             company: {id: req.query.companyId} || undefined,
@@ -21,14 +20,11 @@ export const workExperiencesList = async (req: Request, res: Response) => {
 
 export const createExperience = async (req: Request, res: Response) => {
     try {
-
         const aspirant = await Aspirant.findOneBy({user: {firebaseId: req.user_id}});
 
         if(!aspirant) {
             return res.status(400).json({message: "You must be logged in as an aspirant"});
         }
-
-        console.log(aspirant);
 
         const newExperience: WorkExperience = WorkExperience.create({
             ...req.body, 
