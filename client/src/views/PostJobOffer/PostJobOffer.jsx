@@ -5,7 +5,7 @@ import {
   InputAdornment,
   TextField,
 } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   BusinessCenter,
   LocationOn,
@@ -24,7 +24,7 @@ const INITIAL_JOB_OFFER = {
   salary: '',
   description: '',
   requiredSkills: [],
-  suggestedSkills: [],
+  preferredSkills: [],
 };
 
 const PostJobOffer = () => {
@@ -66,7 +66,8 @@ const PostJobOffer = () => {
     const formattedJobOffer = {
       ...jobOffer,
       requiredSkills: jobOffer.requiredSkills.map((ability) => ability.id),
-      suggestedSkills: jobOffer.suggestedSkills.map((ability) => ability.id),
+      preferredSkills: jobOffer.preferredSkills.map((ability) => ability.id),
+      salary: parseInt(jobOffer.salary, 10),
       company: localStorage.idCompany,
     };
     await api.jobOffer.create(formattedJobOffer);
@@ -184,8 +185,8 @@ const PostJobOffer = () => {
         </Grid>
         <Grid item xs={12}>
           <TagsInput
-            name="suggestedSkills"
-            value={jobOffer.suggestedSkills}
+            name="preferredSkills"
+            value={jobOffer.preferredSkills}
             onChange={handleChangeSkills}
             tags={skills}
             fullWidth
