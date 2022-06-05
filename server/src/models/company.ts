@@ -29,6 +29,18 @@ class Company extends BaseEntity{
     @Column({type:"numeric"})
     phone2 : `${number}`;
 
+    @Column({unique: true})
+    socialReason: string;
+
+    @Column({type: "numeric"})
+    postalCode: number;
+
+    @Column()
+    locationState: string;
+
+    @Column()
+    locationCity: string;
+
     @OneToMany(() => JobOffer, (jobOffer) => jobOffer.company)
     jobOffers : JobOffer[];
 

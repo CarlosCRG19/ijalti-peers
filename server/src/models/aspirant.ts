@@ -23,16 +23,27 @@ enum WorkingStatusChoices {
     Searching = "SEARCHING"
 }
 
+enum EducationLevelChoices {
+    HighSchool = "HIGH_SCHOOL",
+    University = "UNIVERSITY",
+    Masters = "MASTERS",
+    Doctorate = "DOCTORATE",
+
+}
+
 @Entity()
 class Aspirant extends BaseEntity {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
     @Column()
-    name: string; 
+    names: string; 
     
     @Column()
-    lastName: string; 
+    firstLastName: string; 
+    
+    @Column()
+    secondLastName: string; 
 
     @Column()
     birthDate: Date; 
@@ -54,6 +65,12 @@ class Aspirant extends BaseEntity {
 
     @Column({default: "SEARCHING"})
     workingStatus: WorkingStatusChoices;
+
+    @Column()
+    educationLevel: EducationLevelChoices;
+
+    @Column({length: 150})
+    biography: string;
 
     @ManyToMany(() => Skill)
     @JoinTable() 
