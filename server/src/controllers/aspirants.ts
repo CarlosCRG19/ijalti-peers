@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import axios from "axios";
 import { numArr2ObjArr } from "../utils";
+
 import { Aspirant, User, WorkExperience } from "../models";
+
 
 export const getAspirantList = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -47,6 +49,7 @@ export const getAspirant = async (req: Request, res: Response): Promise<Response
     try {
         const aspirant: Aspirant | null = await Aspirant.findOne({
             where: {id: req.params.id}, relations: ['skills', 'workExperiences']
+
         })
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
         return res.status(200).json({ message: "Aspirant found", aspirant: {...aspirant, user: aspirant.user} });
@@ -61,6 +64,7 @@ export const updateAspirant = async (req: Request, res: Response): Promise<Respo
         const aspirant = await Aspirant.findOne({
             where: {id: req.params.id},
             relations: ['skills', 'workExperiences']
+
         });
         
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
@@ -78,6 +82,7 @@ export const updateAspirant = async (req: Request, res: Response): Promise<Respo
                 newExperience.save();
             }
         }
+
 
         await aspirant.save();
 
