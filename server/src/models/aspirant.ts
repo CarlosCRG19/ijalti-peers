@@ -34,10 +34,13 @@ class Aspirant extends BaseEntity {
     id: string;
 
     @Column()
-    name: string; 
+    names: string; 
     
     @Column()
-    lastName: string; 
+    firstLastName: string; 
+    
+    @Column()
+    secondLastName: string; 
 
     @Column()
     birthDate: Date; 
