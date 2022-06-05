@@ -14,10 +14,18 @@ import Skill from "./skill";
 import User from "./user";
 
 enum WorkingStatusChoices {
-    Emplyed = "EMPLOYED",
+    Employed = "EMPLOYED",
     Unemployed = "UNEMPLOYED",
     Hiring = "HIRING", 
     Searching = "SEARCHING"
+}
+
+enum EducationLevelChoices {
+    HighSchool = "HIGH_SCHOOL",
+    University = "UNIVERSITY",
+    Masters = "MASTERS",
+    Doctorate = "DOCTORATE",
+
 }
 
 @Entity()
@@ -51,6 +59,12 @@ class Aspirant extends BaseEntity {
 
     @Column({default: "SEARCHING"})
     workingStatus: WorkingStatusChoices;
+
+    @Column()
+    educationLevel: EducationLevelChoices;
+
+    @Column({length: 150})
+    biography: string;
 
     @ManyToMany(() => Skill)
     @JoinTable() 
