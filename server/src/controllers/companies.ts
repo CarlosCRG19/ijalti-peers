@@ -94,6 +94,9 @@ export const signupCompany = async (req: Request, res: Response): Promise<Respon
         const signupResponse = await axios(signupRequestConfig);
         const {localId, idToken, refreshToken, expiresIn} = signupResponse.data;
 
+        const previousUser = await User.findOneBy({firebaseId: localId});
+        if(previousUser) await previousUser.remove();
+
         const newUser = User.create({firebaseId: localId, username}); 
         await newUser.save();
 

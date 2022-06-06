@@ -6,28 +6,28 @@ import User from "./user";
 @Entity()
 class Company extends BaseEntity{
     @PrimaryGeneratedColumn("uuid")
-    id : string;
+    id: string;
 
     @Column({unique : true})
-    name : string;
+    name: string;
 
     @Column()
-    vision : string;
+    vision: string;
 
     @Column({ nullable: false })
-    mision : string;
+    mision: string;
 
     @Column({ nullable: false })
-    address : string;
+    address: string;
 
     @Column({ nullable : false})
-    businessLine : string;
+    businessLine: string;
 
     @Column({ nullable: false, type:"numeric"})
-    phone1 : `${number}`;
+    phone1: `${number}`;
 
     @Column({type:"numeric"})
-    phone2 : `${number}`;
+    phone2: `${number}`;
 
     @Column({unique: true})
     socialReason: string;
@@ -40,6 +40,13 @@ class Company extends BaseEntity{
 
     @Column()
     locationCity: string;
+
+    @Column()
+    contactEmail: string;
+
+    @Column({type: "int"})
+    numEmployees: number;
+
 
     @OneToMany(() => JobOffer, (jobOffer) => jobOffer.company)
     jobOffers : JobOffer[];
