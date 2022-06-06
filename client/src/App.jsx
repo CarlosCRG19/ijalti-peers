@@ -1,10 +1,9 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-import Login from './views/Login';
-import Navbar from './components/Navbar';
-import PostJobOffer from './views/PostJobOffer';
+import PublicRoutes from './routes/PublicRoutes';
+import PrivateRoutes from './routes/PrivateRoutes';
 
 import './App.css';
 
@@ -35,20 +34,8 @@ const theme = createTheme({
 const App = () => (
   <ThemeProvider theme={theme}>
     <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route
-          path="/"
-          element={(
-            <>
-              <a href="/login">Login</a>
-              <a href="/post-job-offer">Post</a>
-            </>
-          )}
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="/post-job-offer" element={<PostJobOffer />} />
-      </Routes>
+      {'idToken' in localStorage && <PrivateRoutes />}
+      <PublicRoutes />
     </BrowserRouter>
   </ThemeProvider>
 );
