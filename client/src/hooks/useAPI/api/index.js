@@ -4,5 +4,8 @@ import AspirantAPI from './aspirantAPI';
 import SkillAPI from './skillAPI';
 
 export {
-  CompanyAPI, JobOfferAPI, AspirantAPI, SkillAPI,
+  CompanyAPI,
+  JobOfferAPI,
+  AspirantAPI,
+  SkillAPI,
 };

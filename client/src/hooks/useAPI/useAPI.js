@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 import {
-  CompanyAPI, JobOfferAPI, AspirantAPI, SkillAPI,
+  CompanyAPI,
+  JobOfferAPI,
+  AspirantAPI,
+  SkillAPI,
 } from './api';
 
 const getAxiosInstance = () => {
