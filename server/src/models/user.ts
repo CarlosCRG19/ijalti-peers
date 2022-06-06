@@ -8,7 +8,7 @@ class BaseUser extends BaseEntity{
     @Column({unique: true})
     firebaseId: string;
 
-    @Column()
+    @Column({default: ''})
     username: string;
 
     @CreateDateColumn()
