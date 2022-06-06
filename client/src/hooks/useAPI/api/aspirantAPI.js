@@ -13,7 +13,7 @@ class AspirantAPI extends APIGateway {
 
   async login(email, password) {
     try {
-      const response = await this._client.post('/aspirants/login', { email, password });
+      const response = await this._client.post('/login/aspirant', { email, password });
 
       return response.data;
     } catch (error) {
