@@ -5,38 +5,21 @@ const companySignupContext = createContext(null);
 const companySignupReducer = (state, action) => {
   const { type, payload } = action;
 
-  const validatePayload = (requiredFields) => requiredFields.every((field) => field in payload);
-
-  const setPropertyIfValid = (requiredFields, property) => {
-    const isValid = validatePayload(requiredFields);
-
-    if (!isValid) {
-      throw new Error(`Missing field in ${property}. RequiredFields are ${requiredFields}`);
-    }
-
-    return { ...state, [property]: { ...payload } };
-  };
-
   switch (type) {
-    case 'setCredentials': {
-      const requiredFields = ['email', 'password'];
+    case 'setCredentials':
+      return { ...state, credentials: { ...payload } };
 
-      return setPropertyIfValid(requiredFields, 'credentials');
-    }
-    case 'setGeneralInfo': {
-      const requiredFields = [
-        'name',
-        'socialReason',
-        'numEmployees',
-        'businessLine',
-        'mision',
-        'vision',
-      ];
-      return setPropertyIfValid(requiredFields, 'generalInfo');
-    }
-    default: {
+    case 'setGeneralInfo':
+      return { ...state, generalInfo: { ...payload } };
+
+    case 'setContactInfo':
+      return { ...state, contactInfo: { ...payload } };
+
+    case 'setProfileInfo':
+      return { ...state, profileInfo: { ...payload } };
+
+    default:
       throw new Error(`Unhandled action type, ${action.type}`);
-    }
   }
 };
 
@@ -49,7 +32,7 @@ const CompanySignupProvider = ({ email, password, children }) => {
   });
 
   return (
-    <companySignupContext.Provider value={[companySignup, updateCompanySignup]}>
+    <companySignupContext.Provider value={{ companySignup, updateCompanySignup }}>
       {children}
     </companySignupContext.Provider>
   );
