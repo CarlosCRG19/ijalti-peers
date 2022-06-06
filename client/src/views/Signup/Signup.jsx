@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 
 import { TextFieldWithLabel } from '../../components';
-// import './Signup.css';
 
 const INITIAL_CREDENTIALS = { email: '', password: '' };
 
