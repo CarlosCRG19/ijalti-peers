@@ -1,30 +1,30 @@
+import React from 'react';
 import { Grid, Button } from '@mui/material';
-import React, { useState } from 'react';
-import { DatePicker, Form, TextFieldWithLabel } from '../../../../components';
+import { Form, TextFieldWithLabel } from '../../../../components';
 import { useCompanySignupContext } from '../../../../contexts/company-signup';
 
 const Generalnfo = ({ onNext }) => {
-  const [companySignup, updateCompanySignup] = useCompanySignupContext();
-  const [generalInfo, setGeneralInfo] = useState(companySignup.generalInfo);
-  
-  const handleSubmit = (event) => {
-    const {name, target} = event.target;
-    updateCompanySignup({type: 'setGeneralInfo', payload: companySignup});
+  const {
+    updateCompanySignup,
+    companySignup: { generalInfo },
+  } = useCompanySignupContext();
+
+  const handleSubmit = () => {
     onNext();
   };
-  const handleChange = event => {
-    const { name } = event;
 
-    setGeneralInfo((prevGeneralInfo) => ({
-      ...prevGeneralInfo,
-      [name]: event.target.value
-    }))
-    return;
-  }
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    const newGeneralInfo = { ...generalInfo, [name]: value };
+
+    updateCompanySignup({ type: 'setGeneralInfo', payload: newGeneralInfo });
+  };
+
   return (
-    <Form 
-      title='Información General'
+    <Form
+      title="Información General"
       onSubmit={handleSubmit}
+      description="¡Queremos conocer tu empresa! Por favor, completa la siguiente información."
     >
       <Grid item xs={12}>
         <TextFieldWithLabel
@@ -50,65 +50,65 @@ const Generalnfo = ({ onNext }) => {
           type="text"
           variant="filled"
           placeholder="Escribe la razón social"
-          value={generalInfo.name}
+          value={generalInfo.socialReason}
           onChange={handleChange}
         />
       </Grid>
       <Grid item xs={4}>
-        <TextFieldWithLabel 
+        <TextFieldWithLabel
           required
-          label='N° de emplados'
-          placeholder='Ingresa un número'
-          type='number'
-          variant='filled'
-          name='numEmployees'
-          id='numEmployees'
+          label="N° de emplados"
+          placeholder="Ingresa un número"
+          type="number"
+          variant="filled"
+          name="numEmployees"
+          id="numEmployees"
           value={generalInfo.numEmployees}
-        /> 
-      </Grid> 
+          onChange={handleChange}
+        />
+      </Grid>
       <Grid item xs={8}>
-        <TextFieldWithLabel 
+        <TextFieldWithLabel
           required
-          label='Giro'
-          placeholder='Selecciona el giro de tu compañía'
-          variant='filled'
-          name='businessLine'
-          id='businessLine'
+          label="Giro"
+          placeholder="Selecciona el giro de tu compañía"
+          variant="filled"
+          name="businessLine"
+          id="businessLine"
           value={generalInfo.businessLine}
-          
+          onChange={handleChange}
         />
       </Grid>
       <Grid item xs={6}>
-        <TextFieldWithLabel 
+        <TextFieldWithLabel
           required
           multiline
           rows={3}
-          label='Misión'
-          type='text'
-          placeholder='La razón de ser de tu compañía'
-          variant='filled'
-          name='businessLine'
-          id='businessLine'
-          value={generalInfo.businessLine}
-          
+          label="Misión"
+          type="text"
+          placeholder="La razón de ser de tu compañía"
+          variant="filled"
+          name="mision"
+          id="mision"
+          value={generalInfo.mision}
+          onChange={handleChange}
         />
       </Grid>
       <Grid item xs={6}>
-        <TextFieldWithLabel 
+        <TextFieldWithLabel
           required
           multiline
           rows={3}
-          label='Visión'
-          type='text'
-          placeholder='Lo que quiere llegar a ser'
-          variant='filled'
-          name='businessLine'
-          id='businessLine'
-          value={generalInfo.businessLine}
-          
+          label="Visión"
+          type="text"
+          placeholder="Lo que quiere llegar a ser"
+          variant="filled"
+          name="vision"
+          id="vision"
+          value={generalInfo.vision}
+          onChange={handleChange}
         />
       </Grid>
-    
       <Grid item xs={12} display="flex" justifyContent="flex-end">
         <Button type="submit" variant="contained" size="large">SIGUIENTE</Button>
       </Grid>

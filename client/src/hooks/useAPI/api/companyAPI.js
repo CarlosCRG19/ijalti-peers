@@ -20,6 +20,16 @@ class CompanyAPI extends APIGateway {
       throw new Error(error.message);
     }
   }
+
+  async signup(email, password, company) {
+    try {
+      const response = await this._client.post('/signup/company', { email, password, company });
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 export default CompanyAPI;
