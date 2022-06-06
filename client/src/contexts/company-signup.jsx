@@ -1,6 +1,6 @@
 import React, { useContext, createContext, useReducer } from 'react';
 
-const companySignupContext = createContext();
+const companySignupContext = createContext(null);
 
 const companySignupReducer = (state, action) => {
   const { type, payload } = action;
@@ -23,7 +23,17 @@ const companySignupReducer = (state, action) => {
 
       return setPropertyIfValid(requiredFields, 'credentials');
     }
-
+    case 'setGeneralInfo': {
+      const requiredFields = [
+        'name',
+        'socialReason',
+        'numEmployees',
+        'businessLine',
+        'mision',
+        'vision',
+      ];
+      return setPropertyIfValid(requiredFields, 'generalInfo');
+    }
     default: {
       throw new Error(`Unhandled action type, ${action.type}`);
     }
@@ -51,6 +61,7 @@ const useCompanySignupContext = () => {
   if (context === undefined) {
     throw new Error('useCompanySignupContext must be used within a CompanySignup provider');
   }
+  return context;
 };
 
 export { CompanySignupProvider, useCompanySignupContext };
