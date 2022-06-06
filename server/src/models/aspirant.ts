@@ -39,7 +39,7 @@ class Aspirant extends BaseEntity {
     @Column()
     firstLastName: string; 
     
-    @Column()
+    @Column({ nullable: true })
     secondLastName: string; 
 
     @Column()
