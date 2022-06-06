@@ -20,6 +20,16 @@ class AspirantAPI extends APIGateway {
       throw new Error(error.message);
     }
   }
+
+  async signup(email, password, aspirant) {
+    try {
+      const response = await this._client.post('/signup/aspirant', { email, password, aspirant });
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 export default AspirantAPI;
