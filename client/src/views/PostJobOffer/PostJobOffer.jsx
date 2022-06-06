@@ -4,6 +4,7 @@ import {
   Grid,
   InputAdornment,
   TextField,
+  Alert,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -29,8 +30,8 @@ const INITIAL_JOB_OFFER = {
 
 const PostJobOffer = () => {
   const [jobOffer, setJobOffer] = useState(INITIAL_JOB_OFFER);
-
   const [skills, setSkills] = useState([]);
+  const [error, setError] = useState('');
 
   const api = useAPI();
 
@@ -70,7 +71,11 @@ const PostJobOffer = () => {
       salary: parseInt(jobOffer.salary, 10),
       company: localStorage.idCompany,
     };
-    await api.jobOffer.create(formattedJobOffer);
+    try {
+      await api.jobOffer.create(formattedJobOffer);
+    } catch (postError) {
+      setError(postError.message);
+    }
   };
 
   useEffect(() => {
@@ -87,7 +92,16 @@ const PostJobOffer = () => {
   }, []);
 
   return (
-    <main className="main-content">
+    <Grid
+      item
+      xs={12}
+      md={6}
+      py={6}
+      display="flex"
+      direction="column"
+      alignItems="center"
+      sx={{ zIndex: 1 }}
+    >
       <Form
         title="Publica una oferta"
         description="Llena todos los campos para publicar una nueva oferta de trabajo"
@@ -196,12 +210,23 @@ const PostJobOffer = () => {
             label="Habilidades Sugeridas"
           />
         </Grid>
-        <div className="buttons">
+        <Grid
+          item
+          xs={12}
+          display="flex"
+          justifyContent="end"
+          sx={{ zIndex: 1 }}
+        >
           <Button variant="text" onClick={() => setJobOffer(INITIAL_JOB_OFFER)}>Borrar</Button>
-          <Button variant="contained" sx={{ margin: '0 0 0 1rem' }} type="submit">Publicar</Button>
-        </div>
+          <Button variant="contained" sx={{ ml: 2 }} type="submit">Publicar</Button>
+        </Grid>
+        {error && (
+        <Grid item xs={12}>
+          <Alert severity="error">{error}</Alert>
+        </Grid>
+        )}
       </Form>
-    </main>
+    </Grid>
   );
 };
 
