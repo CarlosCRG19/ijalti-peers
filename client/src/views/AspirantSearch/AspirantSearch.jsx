@@ -2,8 +2,13 @@ import React, { useState } from 'react'
 
 import {
   Button,
+  FormControl,
   Grid,
   InputAdornment,
+  InputLabel,
+  ListItemIcon,
+  MenuItem,
+  Select,
   TextField
 } from '@mui/material';
 
@@ -18,6 +23,7 @@ import {
 import './AspirantSearch.css'
 import Form from '../../components/Form/Form'
 import AspirantCard from '../../components/AspirantCard';
+import SelectCity from '../../components/SelectCity';
 
 
 
@@ -25,14 +31,15 @@ const AspirantSearch = () => {
 
   const [search, setSearch] = useState("");
 
-  const testSkills = ["JavaScript", "Programación orientada a objetos", "C++", "d", "e", "f"]
-  const searchResults = [
+  const [searchResults, setSearchResults] = useState([]);
+  const exampleSearchResults = [
     {
       aspirantName: "Valeria García",
       title: "Ing. en Tecnologías Computacionales",
       experience: "5",
       description: "Valeria has been looking for a job for the past weeks but she has not found one that matches her interests and aspirations. A colleague [...]",
       habilitiesArray: ["JavaScript", "Programación Orientada Objetos", "Python", "C++"],
+      location: "Guadajara",
       pageURL: ""
     },
     {
@@ -41,6 +48,7 @@ const AspirantSearch = () => {
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non nunc sapien. Nullam odio sapien, gravida ut commodo et, scelerisque quis augue.",
       experience: "0",
       habilitiesArray: ["Java", "C++", "C", "C#"],
+      location: "Zapopan",
       pageURL: ""
     },
     {
@@ -49,24 +57,29 @@ const AspirantSearch = () => {
       description: "Nulla placerat, nibh ac sollicitudin pretium, urna lectus placerat tellus, sit amet suscipit lectus sapien sit amet est. Vivamus lobortis, neque quis hendrerit euismod, neque purus interdum torto.",
       experience: "0",
       habilitiesArray: ["Unity", "Unreal Engine", "C++", "C#"],
+      location: "Zapopan",
       pageURL: ""
     },
   ]
+
   const handleChange = (event) => {
     const { name, value } = event.target;
-
     setSearch((prevSearch) => ({
       ...prevSearch,
       [name]: value,
     }));
   };
+  
 
   const handleSearch = async () => {
-    const formattedSearch = {
-      ...search
-    };
-    console.log(searchResults);
+    console.log(search);
+    setSearchResults(exampleSearchResults);
   };
+
+  const clean = () => {
+    setSearchResults([]);
+    handleChange()
+  }
 
   return (
     <main className='main-content-overwrite'>
@@ -94,25 +107,6 @@ const AspirantSearch = () => {
             }}
           />
         </Grid>
-
-
-        <Grid item xs={12}>
-          <TextField
-            name="suggestedAbilities"
-            label="Habilidades Sugeridas"
-            variant="filled"
-            onChange={handleChange}
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <HandymanOutlined />
-                </InputAdornment>
-              )
-            }}
-          />
-        </Grid>
-
 
         <Grid item xs={6}>
           <TextField
@@ -166,21 +160,23 @@ const AspirantSearch = () => {
         </Grid>
 
         <div className="buttons">
-          <Button variant="text">Limpiar</Button>
+          <Button variant="text" onClick={clean}>Limpiar</Button>
           <Button variant="contained" sx={{ margin: '0 0 0 1rem' }} type="submit">Buscar</Button>
         </div>
       </Form>
 
 
-      <div className='cards'>
+      <div className='cards' fullWidth>
         {
           searchResults.map(aspirant => (
             <AspirantCard
+              key={"Card" + aspirant.aspirantName}
               aspirantName={aspirant.aspirantName}
               title={aspirant.title}
               description={aspirant.description}
               experience={aspirant.experience}
               habilitiesArray={aspirant.habilitiesArray}
+              location={aspirant.location}
               pageURL={aspirant.pageURL}
             />
           ))
