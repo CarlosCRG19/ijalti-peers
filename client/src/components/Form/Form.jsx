@@ -26,7 +26,7 @@ const Form = (props) => {
   };
 
   return (
-    <form className={"form" + extraClass} onSubmit={handleSubmit}>
+    <form className={"form " + extraClass} onSubmit={handleSubmit}>
       <Box
         display="flex"
         width="100%"
