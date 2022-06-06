@@ -10,6 +10,10 @@
   background-color: #E7EDF3;
 }
 
+.cards{
+  max-width: 1265px;
+}
+
 @media (min-width: 1280px) {
   .main-content-overwrite {
     padding-top: 38px;

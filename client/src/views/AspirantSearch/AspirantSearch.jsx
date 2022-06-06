@@ -2,19 +2,13 @@ import React, { useState } from 'react'
 
 import {
   Button,
-  FormControl,
   Grid,
   InputAdornment,
-  InputLabel,
-  ListItemIcon,
-  MenuItem,
-  Select,
   TextField
 } from '@mui/material';
 
 import {
   Handyman,
-  HandymanOutlined,
   LocationOn,
   School,
   Translate,
@@ -25,42 +19,48 @@ import Form from '../../components/Form/Form'
 import AspirantCard from '../../components/AspirantCard';
 import SelectCity from '../../components/SelectCity';
 
+const exampleSearchResults = [
+  {
+    aspirantName: "Valeria García",
+    title: "Ing. en Tecnologías Computacionales",
+    experience: "5",
+    description: "Valeria has been looking for a job for the past weeks but she has not found one that matches her interests and aspirations. A colleague [...]",
+    habilitiesArray: ["JavaScript", "Programación Orientada Objetos", "Python", "C++"],
+    location: "Guadajara",
+    pageURL: ""
+  },
+  {
+    aspirantName: "José Sanchez",
+    title: "Lic. en Informática",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non nunc sapien. Nullam odio sapien, gravida ut commodo et, scelerisque quis augue.",
+    experience: "0",
+    habilitiesArray: ["Java", "C++", "C", "C#"],
+    location: "Zapopan",
+    pageURL: ""
+  },
+  {
+    aspirantName: "Carlos Cesar Tocayo",
+    title: "Desarrollador de graficas computacionales",
+    description: "Nulla placerat, nibh ac sollicitudin pretium, urna lectus placerat tellus, sit amet suscipit lectus sapien sit amet est. Vivamus lobortis, neque quis hendrerit euismod, neque purus interdum torto.",
+    experience: "0",
+    habilitiesArray: ["Unity", "Unreal Engine", "C++", "C#"],
+    location: "Zapopan",
+    pageURL: ""
+  },
+]
 
+const INITIAL_SEARCH = {
+  requiredSkills: '',
+  education: '',
+  languages: '',
+  loation: ''
+};
 
 const AspirantSearch = () => {
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(INITIAL_SEARCH);
 
   const [searchResults, setSearchResults] = useState([]);
-  const exampleSearchResults = [
-    {
-      aspirantName: "Valeria García",
-      title: "Ing. en Tecnologías Computacionales",
-      experience: "5",
-      description: "Valeria has been looking for a job for the past weeks but she has not found one that matches her interests and aspirations. A colleague [...]",
-      habilitiesArray: ["JavaScript", "Programación Orientada Objetos", "Python", "C++"],
-      location: "Guadajara",
-      pageURL: ""
-    },
-    {
-      aspirantName: "José Sanchez",
-      title: "Lic. en Informática",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non nunc sapien. Nullam odio sapien, gravida ut commodo et, scelerisque quis augue.",
-      experience: "0",
-      habilitiesArray: ["Java", "C++", "C", "C#"],
-      location: "Zapopan",
-      pageURL: ""
-    },
-    {
-      aspirantName: "Carlos Cesar Tocayo",
-      title: "Desarrollador de graficas computacionales",
-      description: "Nulla placerat, nibh ac sollicitudin pretium, urna lectus placerat tellus, sit amet suscipit lectus sapien sit amet est. Vivamus lobortis, neque quis hendrerit euismod, neque purus interdum torto.",
-      experience: "0",
-      habilitiesArray: ["Unity", "Unreal Engine", "C++", "C#"],
-      location: "Zapopan",
-      pageURL: ""
-    },
-  ]
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -77,8 +77,8 @@ const AspirantSearch = () => {
   };
 
   const clean = () => {
-    setSearchResults([]);
-    handleChange()
+    //setSearchResults(INITIAL_SEARCH);
+    console.log("clear");
   }
 
   return (
@@ -93,7 +93,7 @@ const AspirantSearch = () => {
 
         <Grid item xs={12}>
           <TextField
-            name="requiredAbilities"
+            name="requiredSkills"
             label="Habilidades requeridas"
             variant="filled"
             onChange={handleChange}
@@ -160,13 +160,13 @@ const AspirantSearch = () => {
         </Grid>
 
         <div className="buttons">
-          <Button variant="text" onClick={clean}>Limpiar</Button>
+          <Button variant="text" onClick={() => setSearch(INITIAL_SEARCH)}>Limpiar</Button>
           <Button variant="contained" sx={{ margin: '0 0 0 1rem' }} type="submit">Buscar</Button>
         </div>
       </Form>
 
 
-      <div className='cards' fullWidth>
+      <div className='cards'>
         {
           searchResults.map(aspirant => (
             <AspirantCard
