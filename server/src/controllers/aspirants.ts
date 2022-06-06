@@ -98,6 +98,7 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
 
     try {
         const { aspirant, email, password } = req.body;
+        const { username } = aspirant;
         
         const newAspirant: Aspirant = Aspirant.create({ 
             ...aspirant,
@@ -117,12 +118,11 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
             refreshToken
         } = firebaseResponse.data;
 
-
-        const newUser = User.create({ firebaseId: localId });
+        const newUser = User.create({ firebaseId: localId, username });
         await newUser.save();
 
         newAspirant.user = newUser;
-        newAspirant.save();
+        await newAspirant.save();
 
         return res.status(201).json({
             idToken,

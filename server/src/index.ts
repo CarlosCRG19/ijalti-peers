@@ -14,13 +14,13 @@ const initializeExpress = () => {
     app.use(express.json());
     
     app.use(authRouter);
+    app.use(skillRouter);
 
     app.use(firebaseMiddleware);
 
     app.use(aspirantRouter);
     app.use(companyRouter);
     app.use(jobOfferRouter);
-    app.use(skillRouter);
 
     app.listen(PORT, () => {
         console.log(`Server listening on port ${PORT}`);
