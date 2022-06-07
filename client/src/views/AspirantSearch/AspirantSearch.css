@@ -1,24 +1,21 @@
 .form-overwrite {
   max-width: 100%;
+  margin: 0px;
 }
 
 .main-content-overwrite {
-  padding: 38px;
+  display: grid;
+  place-items: start center ;
+  grid-template-rows: auto 80%;
   flex-grow: 1;
-  justify-content: center;
-  align-items: center;
+  padding: 38px;
+  min-width: 350px;
   background-color: #E7EDF3;
 }
 
-.cards{
-  max-width: 1265px;
-}
-
-@media (min-width: 1280px) {
-  .main-content-overwrite {
-    padding-top: 38px;
-    padding-left: 15%;
-    padding-right: 15%;
+@media (max-width: 426px){
+  .main-content-overwrite{
+    padding: 8px;
   }
 }
 
