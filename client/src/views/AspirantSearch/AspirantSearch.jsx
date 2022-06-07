@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 
 import {
   Button,
   Grid,
   InputAdornment,
-  TextField
+  TextField,
 } from '@mui/material';
 
 import {
@@ -14,8 +14,8 @@ import {
   Translate,
 } from '@mui/icons-material';
 
-import './AspirantSearch.css'
-import Form from '../../components/Form/Form'
+import './AspirantSearch.css';
+import Form from '../../components/Form/Form';
 import AspirantCard from '../../components/AspirantCard';
 import { TagsInput } from '../../components';
 import useAPI from '../../hooks/useAPI/useAPI';
@@ -28,11 +28,10 @@ const INITIAL_SEARCH = {
 };
 
 const AspirantSearch = () => {
-
   const [search, setSearch] = useState(INITIAL_SEARCH);
   const [searchResults, setSearchResults] = useState([]);
   const [skills, setSkills] = useState([]);
-  
+
   const { aspirant, skill } = useAPI();
 
   const handleChange = (event) => {
@@ -42,7 +41,6 @@ const AspirantSearch = () => {
       [name]: value,
     }));
   };
-  
 
   const handleSubmit = async () => {
     try {
@@ -52,10 +50,9 @@ const AspirantSearch = () => {
       return;
     } catch (error) {
       console.log(error);
-      return;
     }
   };
-  
+
   const handleChangeSkills = (name, selectedSkills) => {
     setSearch((prevSearch) => ({
       ...prevSearch,
@@ -66,7 +63,7 @@ const AspirantSearch = () => {
   const clearSearch = () => {
     setSearch(INITIAL_SEARCH);
     setSearchResults([]);
-  }
+  };
 
   useEffect(() => {
     const getSkills = async () => {
@@ -86,7 +83,7 @@ const AspirantSearch = () => {
       >
 
         <Grid item xs={12}>
-          <TagsInput 
+          <TagsInput
             fullWidth
             name="requiredSkills"
             label="Habilidades"
@@ -111,7 +108,7 @@ const AspirantSearch = () => {
                 <InputAdornment position="start">
                   <School />
                 </InputAdornment>
-              )
+              ),
             }}
           />
         </Grid>
@@ -129,7 +126,7 @@ const AspirantSearch = () => {
                 <InputAdornment position="start">
                   <Translate />
                 </InputAdornment>
-              )
+              ),
             }}
           />
         </Grid>
@@ -147,7 +144,7 @@ const AspirantSearch = () => {
                 <InputAdornment position="start">
                   <LocationOn />
                 </InputAdornment>
-              )
+              ),
             }}
           />
         </Grid>
@@ -158,16 +155,16 @@ const AspirantSearch = () => {
         </div>
       </Form>
 
-      <div className='cards'>
-        { 
-          searchResults && searchResults.map(aspirant => (
+      <div className="cards">
+        {
+          searchResults && searchResults.map((aspirant) => (
             <AspirantCard
-              key={"Card" + aspirant.names}
+              key={`Card${aspirant.names}`}
               aspirantName={`${aspirant.names} ${aspirant.firstLastName}`}
               title={aspirant.title}
               description={aspirant.biography}
               experience={aspirant.experience}
-              habilitiesArray={aspirant.skills && aspirant.skills.map(skill => skill.name)}
+              habilitiesArray={aspirant.skills && aspirant.skills.map((skill) => skill.name)}
               location={`${aspirant.residenceCity}, ${aspirant.residenceState}`}
               pageURL={aspirant.pageURL}
             />
@@ -175,7 +172,7 @@ const AspirantSearch = () => {
         }
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default AspirantSearch
+export default AspirantSearch;
