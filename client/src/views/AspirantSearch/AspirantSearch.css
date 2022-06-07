@@ -1,6 +1,7 @@
 .form-overwrite {
   max-width: 100%;
   margin: 0px;
+  max-width: 720px;
 }
 
 .main-content-overwrite {
@@ -17,6 +18,11 @@
   .main-content-overwrite{
     padding: 8px;
   }
+}
+
+.cards{
+  width: 100%;
+  max-width: 720px;
 }
 
 .main-content {
