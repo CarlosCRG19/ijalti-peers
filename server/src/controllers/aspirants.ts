@@ -13,12 +13,13 @@ export const getAspirantList = async (req: Request, res: Response): Promise<Resp
             }
             
             skillList = skillList?.map((skill: string) => Number(skill));
-        
-            const aspirants = await Aspirant.createQueryBuilder("aspirant")
-            .select("aspirant")
-            .innerJoin('aspirant.skills', 'aspSkills', 'aspSkills.id IN (:...skillIds)', 
-            { skillIds: skillList})
-            .getMany();
+
+            const aspirants = await Aspirant.find({
+                relations: ['skills'], 
+                where: {
+                    skills: numArr2ObjArr(skillList)
+                }}
+            );
 
             return res.status(200).json(aspirants);    
         }

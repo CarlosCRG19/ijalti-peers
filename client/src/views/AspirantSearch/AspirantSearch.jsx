@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
   Button,
@@ -17,49 +17,23 @@ import {
 import './AspirantSearch.css'
 import Form from '../../components/Form/Form'
 import AspirantCard from '../../components/AspirantCard';
-
-const exampleSearchResults = [
-  {
-    aspirantName: "Valeria García",
-    title: "Ing. en Tecnologías Computacionales",
-    experience: "5",
-    description: "Valeria has been looking for a job for the past weeks but she has not found one that matches her interests and aspirations. A colleague [...]",
-    habilitiesArray: ["JavaScript", "Programación Orientada Objetos", "Python", "C++"],
-    location: "Guadajara",
-    pageURL: ""
-  },
-  {
-    aspirantName: "José Sanchez",
-    title: "Lic. en Informática",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non nunc sapien. Nullam odio sapien, gravida ut commodo et, scelerisque quis augue.",
-    experience: "0",
-    habilitiesArray: ["Java", "C++", "C", "C#"],
-    location: "Zapopan",
-    pageURL: ""
-  },
-  {
-    aspirantName: "Carlos Cesar Tocayo",
-    title: "Desarrollador de graficas computacionales",
-    description: "Nulla placerat, nibh ac sollicitudin pretium, urna lectus placerat tellus, sit amet suscipit lectus sapien sit amet est. Vivamus lobortis, neque quis hendrerit euismod, neque purus interdum torto.",
-    experience: "0",
-    habilitiesArray: ["Unity", "Unreal Engine", "C++", "C#"],
-    location: "Zapopan",
-    pageURL: ""
-  },
-]
+import { TagsInput } from '../../components';
+import useAPI from '../../hooks/useAPI/useAPI';
 
 const INITIAL_SEARCH = {
-  requiredSkills: '',
+  requiredSkills: [],
   education: '',
   languages: '',
-  loation: '',
+  city: '',
 };
 
 const AspirantSearch = () => {
 
   const [search, setSearch] = useState(INITIAL_SEARCH);
-
   const [searchResults, setSearchResults] = useState([]);
+  const [skills, setSkills] = useState([]);
+  
+  const { aspirant, skill } = useAPI();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -70,39 +44,57 @@ const AspirantSearch = () => {
   };
   
 
-  const handleSearch = async () => {
-    console.log(search);
-    setSearchResults(exampleSearchResults);
+  const handleSubmit = async () => {
+    try {
+      setSearchResults([]);
+      const aspirants = await aspirant.filterBySkills(search.requiredSkills.map((sk) => sk.id));
+      setSearchResults(aspirants);
+      return;
+    } catch (error) {
+      console.log(error);
+      return;
+    }
   };
   
+  const handleChangeSkills = (name, selectedSkills) => {
+    setSearch((prevSearch) => ({
+      ...prevSearch,
+      [name]: selectedSkills,
+    }));
+  };
+
   const clearSearch = () => {
     setSearch(INITIAL_SEARCH);
     setSearchResults([]);
   }
 
+  useEffect(() => {
+    const getSkills = async () => {
+      const skills = await skill.getAll();
+      setSkills(skills);
+    };
+    getSkills();
+  }, []);
+
   return (
-    <main className='main-content-overwrite'>
+    <main className="main-content-overwrite">
       <Form
         title="Buscar aspirantes"
         description="Completa al menos uno de los campos para realizar una búsqueda"
         extraClass="form-overwrite"
-        onSubmit={handleSearch}
+        onSubmit={handleSubmit}
       >
 
         <Grid item xs={12}>
-          <TextField
-            name="requiredSkills"
-            label="Habilidades requeridas"
-            variant="filled"
-            onChange={handleChange}
+          <TagsInput 
             fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Handyman />
-                </InputAdornment>
-              )
-            }}
+            name="requiredSkills"
+            label="Habilidades"
+            variant="outlined"
+            tags={skills}
+            sx={{ backgroundColor: '#E7EDF3' }}
+            onChange={handleChangeSkills}
+            value={search.requiredSkills}
           />
         </Grid>
 
@@ -111,6 +103,7 @@ const AspirantSearch = () => {
             name="education"
             label="Educación"
             variant="filled"
+            value={search.education}
             onChange={handleChange}
             fullWidth
             InputProps={{
@@ -127,6 +120,7 @@ const AspirantSearch = () => {
           <TextField
             name="languages"
             label="Idiomas"
+            value={search.languages}
             variant="filled"
             onChange={handleChange}
             fullWidth
@@ -144,6 +138,7 @@ const AspirantSearch = () => {
           <TextField
             name="city"
             label="Ubicación"
+            value={search.city}
             variant="filled"
             onChange={handleChange}
             fullWidth
@@ -158,23 +153,22 @@ const AspirantSearch = () => {
         </Grid>
 
         <div className="buttons">
-          <Button variant="text" onClick={() => clearSearch()}>Limpiar</Button>
+          <Button variant="text" onClick={clearSearch}>Limpiar</Button>
           <Button variant="contained" sx={{ margin: '0 0 0 1rem' }} type="submit">Buscar</Button>
         </div>
       </Form>
 
-
       <div className='cards'>
-        {
-          searchResults.map(aspirant => (
+        { 
+          searchResults && searchResults.map(aspirant => (
             <AspirantCard
-              key={"Card" + aspirant.aspirantName}
-              aspirantName={aspirant.aspirantName}
+              key={"Card" + aspirant.names}
+              aspirantName={`${aspirant.names} ${aspirant.firstLastName}`}
               title={aspirant.title}
-              description={aspirant.description}
+              description={aspirant.biography}
               experience={aspirant.experience}
-              habilitiesArray={aspirant.habilitiesArray}
-              location={aspirant.location}
+              habilitiesArray={aspirant.skills && aspirant.skills.map(skill => skill.name)}
+              location={`${aspirant.residenceCity}, ${aspirant.residenceState}`}
               pageURL={aspirant.pageURL}
             />
           ))

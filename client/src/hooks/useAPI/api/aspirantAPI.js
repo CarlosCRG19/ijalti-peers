@@ -30,6 +30,20 @@ class AspirantAPI extends APIGateway {
       throw new Error(error.message);
     }
   }
-}
+
+  async filterBySkills(skillSet) {
+    try {
+      let query = '';
+      skillSet.forEach((skill, index) => {
+        if(index === 0) query += `?skills=${skill}`;
+        else query += `&skills=${skill}`; 
+      });
+      const response = await this._client.get(`/aspirants/${query}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    } 
+  }
+} 
 
 export default AspirantAPI;
