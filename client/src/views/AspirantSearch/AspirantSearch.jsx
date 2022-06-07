@@ -17,7 +17,6 @@ import {
 import './AspirantSearch.css'
 import Form from '../../components/Form/Form'
 import AspirantCard from '../../components/AspirantCard';
-import SelectCity from '../../components/SelectCity';
 
 const exampleSearchResults = [
   {
@@ -53,7 +52,7 @@ const INITIAL_SEARCH = {
   requiredSkills: '',
   education: '',
   languages: '',
-  loation: ''
+  loation: '',
 };
 
 const AspirantSearch = () => {
@@ -75,15 +74,14 @@ const AspirantSearch = () => {
     console.log(search);
     setSearchResults(exampleSearchResults);
   };
-
-  const clean = () => {
-    //setSearchResults(INITIAL_SEARCH);
-    console.log("clear");
+  
+  const clearSearch = () => {
+    setSearch(INITIAL_SEARCH);
+    setSearchResults([]);
   }
 
   return (
     <main className='main-content-overwrite'>
-
       <Form
         title="Buscar aspirantes"
         description="Completa al menos uno de los campos para realizar una búsqueda"
@@ -160,7 +158,7 @@ const AspirantSearch = () => {
         </Grid>
 
         <div className="buttons">
-          <Button variant="text" onClick={() => setSearch(INITIAL_SEARCH)}>Limpiar</Button>
+          <Button variant="text" onClick={() => clearSearch()}>Limpiar</Button>
           <Button variant="contained" sx={{ margin: '0 0 0 1rem' }} type="submit">Buscar</Button>
         </div>
       </Form>
@@ -182,7 +180,6 @@ const AspirantSearch = () => {
           ))
         }
       </div>
-
     </main>
   )
 }
