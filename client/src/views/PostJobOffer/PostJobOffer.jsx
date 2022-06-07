@@ -17,8 +17,6 @@ import {
 import { useAPI } from '../../hooks';
 import { Form, TagsInput } from '../../components';
 
-import './PostJobOffer.css';
-
 const INITIAL_JOB_OFFER = {
   title: '',
   city: '',
