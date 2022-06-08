@@ -8,9 +8,9 @@ import {
 } from '@mui/material';
 
 import {
+  AccessTimeFilled,
   LocationOn,
   School,
-  Translate,
 } from '@mui/icons-material';
 
 import './AspirantSearch.css';
@@ -22,8 +22,8 @@ import SelectWithIcon from '../../components/SelectWithIcon/SelectWithIcon';
 
 const INITIAL_SEARCH = {
   requiredSkills: [],
-  education: [],
-  languages: '',
+  education: '',
+  experience: '',
   city: '',
 };
 
@@ -116,16 +116,18 @@ const AspirantSearch = () => {
 
         <Grid item xs={6}>
           <TextField
-            name="languages"
-            label="Idiomas"
-            value={search.languages}
-            variant="filled"
+            name="experience"
+            label="Años de experiencia"
+            value={search.experience}
+            variant="outlined"
             onChange={handleChange}
+            type="number"
             fullWidth
+            sx={{ backgroundColor: '#E7EDF3' }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Translate />
+                  <AccessTimeFilled />
                 </InputAdornment>
               ),
             }}
@@ -135,11 +137,12 @@ const AspirantSearch = () => {
         <Grid item xs={12}>
           <TextField
             name="city"
-            label="Ubicación"
+            label="Ciudad"
             value={search.city}
-            variant="filled"
+            variant="outlined"
             onChange={handleChange}
             fullWidth
+            sx={{ backgroundColor: '#E7EDF3' }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
