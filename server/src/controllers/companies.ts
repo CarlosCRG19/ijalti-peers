@@ -1,10 +1,16 @@
 import { Request, Response } from "express";
 import axios, { Axios, AxiosRequestConfig } from "axios";
 import { Company, User } from "../models";
-
+import { Like } from "typeorm";
 export const getCompaniesList = async (req: Request, res: Response): Promise<Response> => {
     try{
-        const companies  = await Company.find();
+        const searchQuery = `${req.query.name || ""}%`;
+        const filterOptions: any = {
+            where: {
+                name: Like(searchQuery)
+            }
+        };
+        const companies  = await Company.find(filterOptions);
         return res.status(200).json(companies);
     }catch(error){
         console.log(error);
