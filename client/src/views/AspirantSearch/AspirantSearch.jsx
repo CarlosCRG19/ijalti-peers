@@ -25,6 +25,7 @@ import createQuery from '../../utils/createQuery';
 const INITIAL_SEARCH = {
   requiredSkills: [],
   education: '',
+  educationLabel: '',
   experience: '',
   location: '',
 };
@@ -57,13 +58,16 @@ const AspirantSearch = () => {
     setAlert("");
     try {
       setSearchResults([]);
+
       const query = createQuery(search);
       if (!query) {
         setAlert("Favor de llenar al menos un campo.");
         return;
       }
+
       const aspirants = await aspirant.searchAspirants(query);
       setSearchResults(aspirants);
+
       if (aspirants.length === 0) {
         setAlert("No se encontraron aspirantes para esta búsqueda.");
       }
@@ -98,6 +102,7 @@ const AspirantSearch = () => {
       if (educationLevelChoices[i].name === event.target.value) {
         setSearch((prevSearch) => ({
           ...prevSearch,
+          educationLabel: educationLevelChoices[i].name,
           education: educationLevelChoices[i].id
         }));
       }
@@ -145,7 +150,7 @@ const AspirantSearch = () => {
           <SelectWithIcon
             label={"Educación"}
             itemsarray={educationLevelChoices.map(education => education.name)}
-            value={search.education}
+            value={search.educationLabel}
             onChange={handleChangeEducation}
             icon={<School />}
             sx={{ backgroundColor: '#E7EDF3' }}
