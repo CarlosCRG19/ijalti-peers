@@ -17,8 +17,15 @@ import {
 
 import './AspirantCard.css';
 
+const educationLevelChoices = [
+  { name: 'Preparatoria', id: 'HIGH_SCHOOL' },
+  { name: 'Universidad', id: 'UNIVERSITY' },
+  { name: 'Maestría', id: 'MASTERS' },
+  { name: 'Doctorado', id: 'DOCTORATE' },
+];
+
 const AspirantCard = ({
-  aspirantName, title, description, experience, habilitiesArray, location, pageURL
+  aspirantName, education, description, experience, habilitiesArray, location, pageURL
 }) => {
 
   //Limit to n habilities
@@ -31,11 +38,21 @@ const AspirantCard = ({
 
   //Handle years of experience
   let experienceMessage = `${experience} años de experiencia`
-  if (!experience) {
-    experienceMessage = ""
+  if (experience == 1) {
+    experienceMessage = `${experience} año de experiencia`
   } else if (experience === 0 || experience == "0") {
     experienceMessage = "Primera oportunidad de trabajo"
   }
+
+  //Convert experience from id to name
+  const convertEducation = () => {
+    for (let i = 0; i < educationLevelChoices.length; i++) {
+      if (educationLevelChoices[i].id == education) {
+        return educationLevelChoices[i].name;
+      }
+    }
+  }
+
 
   return (
     <CardActionArea sx={{ marginTop: "32px" }}>
@@ -46,7 +63,7 @@ const AspirantCard = ({
               color="text.secondary"
               variant='subtitle1'
             >
-              {title}
+              {convertEducation()}
             </Typography>
             <Typography variant="h5" >
               {aspirantName}
