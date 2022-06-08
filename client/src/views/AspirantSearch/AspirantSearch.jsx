@@ -8,7 +8,6 @@ import {
 } from '@mui/material';
 
 import {
-  Handyman,
   LocationOn,
   School,
   Translate,
@@ -19,13 +18,21 @@ import Form from '../../components/Form/Form';
 import AspirantCard from '../../components/AspirantCard';
 import { TagsInput } from '../../components';
 import useAPI from '../../hooks/useAPI/useAPI';
+import SelectWithIcon from '../../components/SelectWithIcon/SelectWithIcon';
 
 const INITIAL_SEARCH = {
   requiredSkills: [],
-  education: '',
+  education: [],
   languages: '',
   city: '',
 };
+
+const educationLevelChoices = [
+  { name: 'Preparatoria', id: 'HIGH_SCHOOL' },
+  { name: 'Universidad', id: 'UNIVERSITY' },
+  { name: 'Maestría', id: 'MASTERS' },
+  { name: 'Doctorado', id: 'DOCTORATE' },
+];
 
 const AspirantSearch = () => {
   const [search, setSearch] = useState(INITIAL_SEARCH);
@@ -70,6 +77,7 @@ const AspirantSearch = () => {
       const skills = await skill.getAll();
       setSkills(skills);
     };
+
     getSkills();
   }, []);
 
@@ -96,20 +104,13 @@ const AspirantSearch = () => {
         </Grid>
 
         <Grid item xs={6}>
-          <TextField
-            name="education"
-            label="Educación"
-            variant="filled"
+          <SelectWithIcon
+            label={"Educación"}
+            itemsArray={educationLevelChoices.map(education => education.name)}
             value={search.education}
             onChange={handleChange}
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <School />
-                </InputAdornment>
-              ),
-            }}
+            icon={<School />}
+            sx={{ backgroundColor: '#E7EDF3' }}
           />
         </Grid>
 
