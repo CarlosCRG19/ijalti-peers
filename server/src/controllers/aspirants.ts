@@ -5,28 +5,42 @@ import { Aspirant, JobOffer, User } from "../models";
 
 export const getAspirantList = async (req: Request, res: Response): Promise<Response> => {
     try {
-        if(req.query.skills){
-            let {skills : skillList}: any = req.query;
-            
-            if(typeof skillList === "string"){
-                skillList = [skillList]
-            }
-            
-            skillList = skillList?.map((skill: string) => Number(skill));
+        let {location, expirience, education, skills}: any  = req.query
 
-            const aspirants = await Aspirant.find({
-                relations: ['skills'], 
-                where: {
-                    skills: numArr2ObjArr(skillList)
-                }}
-            );
-
+        if(!location && !expirience && !education && !skills){
+            const aspirants = await Aspirant.find()
             return res.status(200).json(aspirants);    
         }
 
-        const aspirants = await Aspirant.find();
+        let query =  Aspirant.createQueryBuilder("aspirant").select("aspirant")
+
+        if(skills){
+            if(typeof skills === "string"){
+                skills = [skills]
+            }
+            
+            skills = skills?.map((skill: string) => Number(skill));
+            query = query.innerJoinAndSelect('aspirant.skills', 'aspSkills', 'aspSkills.id IN (:...skillIds)', 
+            { skillIds: skills })
+        }
         
-		return res.status(200).json(aspirants);
+        if(location){
+            query = query.andWhere("aspirant.residenceState = :state", { state: location }) 
+        }
+
+        if(expirience){
+            query = query.andWhere("aspirant.yearsOfExperience >= :years", { years : parseInt(expirience) })
+        }
+
+        if(education){
+            query = query.andWhere("aspirant.educationLevel = :educationLevel", { educationLevel: education})
+        }
+        
+        query = query.leftJoinAndSelect('aspirant.skills', 'skills')
+       
+        const aspirants = await query.getMany();
+
+        return res.status(200).json(aspirants);       
     } catch(error) {
         console.log(error);
         return res.status(500).json({ message: "Something went wrong!!", error });
