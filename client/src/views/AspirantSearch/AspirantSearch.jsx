@@ -106,7 +106,7 @@ const AspirantSearch = () => {
         <Grid item xs={6}>
           <SelectWithIcon
             label={"Educación"}
-            itemsArray={educationLevelChoices.map(education => education.name)}
+            itemsarray={educationLevelChoices.map(education => education.name)}
             value={search.education}
             onChange={handleChange}
             icon={<School />}

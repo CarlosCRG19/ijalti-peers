@@ -1,10 +1,6 @@
 import React from 'react';
 
 import {
-  Translate,
-} from '@mui/icons-material';
-
-import {
   FormControl,
   InputAdornment,
   InputLabel,
@@ -15,7 +11,7 @@ import {
 const SelectWithIcon = (props) => {
   const {
     label,
-    itemsArray,
+    itemsarray,
     icon
   } = props;
 
@@ -37,12 +33,13 @@ const SelectWithIcon = (props) => {
           name="education"
           {...props}
           startAdornment={
-            <InputAdornment sx={{paddingRight:"16px"}}> {icon} </InputAdornment>
+            <InputAdornment sx={{ paddingRight: "16px" }} position="start"> {icon} </InputAdornment>
           }
         >
           {
-            itemsArray.map(selectItem => (
+            itemsarray.map(selectItem => (
               <MenuItem
+                key={selectItem}
                 value={selectItem}
                 id={selectItem}
               >
