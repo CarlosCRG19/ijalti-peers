@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   useTheme,
   Card,
@@ -9,7 +9,9 @@ import {
   Chip,
 } from '@mui/material';
 
-import { Cake, Work, School } from '@mui/icons-material';
+import {
+  Cake, Work, School, Handyman,
+} from '@mui/icons-material';
 import useAPI from '../../../hooks/useAPI/useAPI';
 
 const AspirantProfile = () => {
@@ -44,12 +46,17 @@ const AspirantProfile = () => {
   };
 
   const api = useAPI();
+  const navigate = useNavigate();
   const params = useParams();
   const { palette } = useTheme();
 
   const getAspirant = async (idAspirant) => {
-    const response = await api.aspirant.getAspirant(idAspirant);
-    setAspirant(response.aspirant);
+    try {
+      const response = await api.aspirant.getAspirant(idAspirant);
+      setAspirant(response.aspirant);
+    } catch (error) {
+      navigate('/');
+    }
   };
 
   useEffect(() => {
@@ -87,6 +94,7 @@ const AspirantProfile = () => {
         <Card
           sx={{
             width: '90%',
+            padding: '32px',
             maxWidth: '1373px',
             overflow: 'auto',
             borderRadius: '12px',
@@ -98,21 +106,21 @@ const AspirantProfile = () => {
             height: 'auto',
             minHeight: '334px',
             display: 'flex',
-            gap: '24px',
-            padding: '32px',
+
           }}
           >
             <Grid
               container
+              columnSpacing={8}
             >
               <Grid
                 item
                 xs={12}
-                md={2}
+                md={3}
                 display="flex"
                 direction="column"
                 alignItems="center"
-                justifyContent="space-evenly"
+                justifyContent="center"
                 sx={{ zIndex: 1 }}
               >
                 <div style={{
@@ -120,28 +128,29 @@ const AspirantProfile = () => {
                   height: '200px',
                   backgroundColor: 'gray',
                   borderRadius: '100%',
+
                 }}
                 />
                 <Chip
                   label={translateWorkingStatus[aspirant.workingStatus]}
                   sx={{
-                    backgroundColor: palette.blue.regular,
+                    backgroundColor: palette.green,
                     color: 'white',
                     fontWeight: '500',
                     textTransform: 'uppercase',
+                    mt: '16px',
                   }}
                 />
               </Grid>
               <Grid
                 item
                 xs={12}
-                md={5}
-                height="100%"
+                md={4}
                 display="flex"
                 direction="column"
                 alignItems="start"
                 justifyContent="center"
-                sx={{ zIndex: 1, ml: '32px', borderRight: `1px solid ${palette.gray.B}` }}
+                sx={{ zIndex: 1, borderRight: `1px solid ${palette.gray.B}` }}
               >
                 <Typography
                   variant="h4"
@@ -154,15 +163,24 @@ const AspirantProfile = () => {
                   {' '}
                   {aspirant.secondLastName}
                 </Typography>
+
                 <Typography
                   variant="h5"
                   component="h2"
                   sx={{
                     color: palette.gray.C,
+                    mb: '8px',
                   }}
                 >
                   DavBot02
                 </Typography>
+                <Typography
+                  variant="paragraph"
+                  sx={{ color: palette.gray.C, mb: '8px' }}
+                >
+                  {aspirant.biography}
+                </Typography>
+
                 <Typography
                   variant="h6"
                   component="h2"
@@ -171,9 +189,9 @@ const AspirantProfile = () => {
                   }}
                 >
                   {aspirant.residenceCity}
-                  {' '}
+                  {', '}
                   {aspirant.residenceState}
-                  {' '}
+                  {', '}
                   {aspirant.residenceCountry}
                 </Typography>
               </Grid>
@@ -181,16 +199,15 @@ const AspirantProfile = () => {
                 item
                 xs={12}
                 md={4}
-                height="100%"
                 display="flex"
                 direction="column"
                 alignItems="start"
                 justifyContent="space-evenly"
-                sx={{ zIndex: 1, ml: '32px' }}
+                sx={{ zIndex: 1 }}
               >
                 <Typography
-                  variant="h5"
-                  component="h2"
+                  variant="h6"
+                  component="h3"
                   sx={{
                     color: palette.gray.C,
                   }}
@@ -199,8 +216,8 @@ const AspirantProfile = () => {
                   {aspirant.birthDate.slice(0, 10)}
                 </Typography>
                 <Typography
-                  variant="h5"
-                  component="h2"
+                  variant="h6"
+                  component="h3"
                   sx={{
                     color: palette.gray.C,
                   }}
@@ -209,9 +226,10 @@ const AspirantProfile = () => {
                   {`${aspirant.yearsOfExperience} año${aspirant.yearsOfExperience > 1 ? 's' : ''} de experiencia laboral`}
 
                 </Typography>
+
                 <Typography
-                  variant="h5"
-                  component="h2"
+                  variant="h6"
+                  component="h3"
                   sx={{
                     color: palette.gray.C,
                   }}
@@ -219,31 +237,23 @@ const AspirantProfile = () => {
                   <School sx={{ mr: '12px' }} />
                   {translateEducation[aspirant.educationLevel]}
                 </Typography>
+
+                <Typography
+                  variant="h6"
+                  component="h3"
+                  sx={{
+                    color: palette.gray.C,
+                  }}
+                >
+                  <Handyman sx={{ mr: '12px' }} />
+                  {aspirant.skills.map((skill) => skill.name).join(', ')}
+
+                </Typography>
+
               </Grid>
             </Grid>
           </CardContent>
-          <CardContent sx={{ padding: '32px' }}>
-            <Typography variant="h5" component="h2">
-              Habilidades
-            </Typography>
-            <Typography
-              variant="h5"
-              component="h2"
-              sx={{ color: palette.gray.C }}
-            >
-              {aspirant.skills.map((skill) => skill.name)}
-            </Typography>
-            <Typography variant="h5" component="h2" sx={{ mt: '16px' }}>
-              Biografía
-            </Typography>
-            <Typography
-              variant="paragraph"
-              sx={{ color: palette.gray.C }}
-            >
-              {aspirant.biography}
-            </Typography>
 
-          </CardContent>
         </Card>
       </Grid>
     </Grid>
