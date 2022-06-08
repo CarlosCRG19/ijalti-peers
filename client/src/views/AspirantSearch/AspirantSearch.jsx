@@ -20,7 +20,6 @@ import AspirantCard from '../../components/AspirantCard';
 import { TagsInput } from '../../components';
 import useAPI from '../../hooks/useAPI/useAPI';
 import SelectWithIcon from '../../components/SelectWithIcon/SelectWithIcon';
-import { maxWidth } from '@mui/system';
 
 const INITIAL_SEARCH = {
   requiredSkills: [],
@@ -162,6 +161,8 @@ const AspirantSearch = () => {
             }}
           />
         </Grid>
+
+        
 
         <div className="buttons">
           <Button variant="text" onClick={clearSearch}>Limpiar</Button>
