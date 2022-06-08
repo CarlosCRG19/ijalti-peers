@@ -20,7 +20,7 @@ export const firebaseMiddleware = async (req: Request, res: Response, next: Next
     
     return res.status(401).json({
       status: 401,
-      message: "Unauthorized pene"
+      message: "Unauthorized"
     });
   }
 }
