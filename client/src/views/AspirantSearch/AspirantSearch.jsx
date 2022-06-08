@@ -25,7 +25,7 @@ import createQuery from '../../utils/createQuery';
 const INITIAL_SEARCH = {
   requiredSkills: [],
   education: '',
-  expirience: '',
+  experience: '',
   location: '',
 };
 
@@ -47,6 +47,7 @@ const AspirantSearch = () => {
   const handleChange = (event) => {
     setAlert("");
     const { name, value } = event.target;
+    console.log(name)
     setSearch((prevSearch) => ({
       ...prevSearch,
       [name]: value,
@@ -59,12 +60,11 @@ const AspirantSearch = () => {
       setSearchResults([]);
       const query = createQuery(search);
       console.log(query);
-      if(!query){
+      if (!query) {
         setAlert("Favor de llenar al menos un campo.");
         return;
       }
       const aspirants = await aspirant.searchAspirants(query);
-      console.log(aspirants);
       setSearchResults(aspirants);
       if (aspirants.length === 0) {
         setAlert("No se encontraron aspirantes para esta búsqueda.");
@@ -74,6 +74,17 @@ const AspirantSearch = () => {
       console.log(error);
     }
   };
+
+  const handleChangeNumber = (event) => {
+    setAlert("");
+    if(event.target.value < 0){
+      return;
+    }
+    setSearch((prevSearch) => ({
+      ...prevSearch,
+      [event.target.name]: event.target.value,
+    }));
+  }
 
   const handleChangeSkills = (name, selectedSkills) => {
     setAlert("");
@@ -85,12 +96,12 @@ const AspirantSearch = () => {
 
   const handleChangeEducation = (event) => {
     setAlert("");
-    for(let i=0; i<educationLevelChoices.length; i++){
-      if(educationLevelChoices[i].name === event.target.value){
+    for (let i = 0; i < educationLevelChoices.length; i++) {
+      if (educationLevelChoices[i].name === event.target.value) {
         console.log(educationLevelChoices[i].id);
         setSearch((prevSearch) => ({
           ...prevSearch,
-          education : educationLevelChoices[i].id
+          education: educationLevelChoices[i].id
         }));
       }
     }
@@ -146,11 +157,11 @@ const AspirantSearch = () => {
 
         <Grid item xs={6}>
           <TextField
-            name="expirience"
+            name="experience"
             label="Años de experiencia"
-            value={search.expirience}
+            value={search.experience}
             variant="outlined"
-            onChange={handleChange}
+            onChange={handleChangeNumber}
             type="number"
             fullWidth
             sx={{ backgroundColor: '#E7EDF3' }}
@@ -181,7 +192,7 @@ const AspirantSearch = () => {
               ),
             }}
           />
-        </Grid>      
+        </Grid>
 
         <div className="buttons">
           <Button variant="text" onClick={clearSearch}>Limpiar</Button>
@@ -212,7 +223,7 @@ const AspirantSearch = () => {
               aspirantName={`${aspirant.names} ${aspirant.firstLastName}`}
               title={aspirant.title}
               description={aspirant.biography}
-              expirience={aspirant.expirience}
+              experience={aspirant.experience}
               habilitiesArray={aspirant.skills && aspirant.skills.map((skill) => skill.name)}
               location={`${aspirant.residenceCity}, ${aspirant.residenceState}`}
               pageURL={aspirant.pageURL}
