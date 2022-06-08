@@ -44,7 +44,7 @@ const ProfileInfo = ({ onPrevious }) => {
       localStorage.setItem('idToken', response.idToken);
       localStorage.setItem('idCompany', response.company.id);
       // TODO: Redirect to private route
-      navigate('/');
+      navigate('/post-job-offer');
     }
   };
 
