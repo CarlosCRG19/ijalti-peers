@@ -20,12 +20,13 @@ import AspirantCard from '../../components/AspirantCard';
 import { TagsInput } from '../../components';
 import useAPI from '../../hooks/useAPI/useAPI';
 import SelectWithIcon from '../../components/SelectWithIcon/SelectWithIcon';
+import createQuery from '../../utils/createQuery';
 
 const INITIAL_SEARCH = {
   requiredSkills: [],
   education: '',
-  experience: '',
-  city: '',
+  expirience: '',
+  location: '',
 };
 
 const educationLevelChoices = [
@@ -50,13 +51,20 @@ const AspirantSearch = () => {
       ...prevSearch,
       [name]: value,
     }));
-
   };
 
   const handleSubmit = async () => {
+    setAlert("");
     try {
       setSearchResults([]);
-      const aspirants = await aspirant.filterBySkills(search.requiredSkills.map((sk) => sk.id));
+      const query = createQuery(search);
+      console.log(query);
+      if(!query){
+        setAlert("Favor de llenar al menos un campo.");
+        return;
+      }
+      const aspirants = await aspirant.searchAspirants(query);
+      console.log(aspirants);
       setSearchResults(aspirants);
       if (aspirants.length === 0) {
         setAlert("No se encontraron aspirantes para esta búsqueda.");
@@ -74,6 +82,19 @@ const AspirantSearch = () => {
       [name]: selectedSkills,
     }));
   };
+
+  const handleChangeEducation = (event) => {
+    setAlert("");
+    for(let i=0; i<educationLevelChoices.length; i++){
+      if(educationLevelChoices[i].name === event.target.value){
+        console.log(educationLevelChoices[i].id);
+        setSearch((prevSearch) => ({
+          ...prevSearch,
+          education : educationLevelChoices[i].id
+        }));
+      }
+    }
+  }
 
   const clearSearch = () => {
     setSearch(INITIAL_SEARCH);
@@ -117,7 +138,7 @@ const AspirantSearch = () => {
             label={"Educación"}
             itemsarray={educationLevelChoices.map(education => education.name)}
             value={search.education}
-            onChange={handleChange}
+            onChange={handleChangeEducation}
             icon={<School />}
             sx={{ backgroundColor: '#E7EDF3' }}
           />
@@ -125,9 +146,9 @@ const AspirantSearch = () => {
 
         <Grid item xs={6}>
           <TextField
-            name="experience"
+            name="expirience"
             label="Años de experiencia"
-            value={search.experience}
+            value={search.expirience}
             variant="outlined"
             onChange={handleChange}
             type="number"
@@ -145,9 +166,9 @@ const AspirantSearch = () => {
 
         <Grid item xs={12}>
           <TextField
-            name="city"
-            label="Ciudad"
-            value={search.city}
+            name="location"
+            label="Estado"
+            value={search.location}
             variant="outlined"
             onChange={handleChange}
             fullWidth
@@ -160,9 +181,7 @@ const AspirantSearch = () => {
               ),
             }}
           />
-        </Grid>
-
-        
+        </Grid>      
 
         <div className="buttons">
           <Button variant="text" onClick={clearSearch}>Limpiar</Button>
@@ -193,7 +212,7 @@ const AspirantSearch = () => {
               aspirantName={`${aspirant.names} ${aspirant.firstLastName}`}
               title={aspirant.title}
               description={aspirant.biography}
-              experience={aspirant.experience}
+              expirience={aspirant.expirience}
               habilitiesArray={aspirant.skills && aspirant.skills.map((skill) => skill.name)}
               location={`${aspirant.residenceCity}, ${aspirant.residenceState}`}
               pageURL={aspirant.pageURL}
