@@ -5,9 +5,9 @@ import { Aspirant, User } from "../models";
 
 export const getAspirantList = async (req: Request, res: Response): Promise<Response> => {
     try {
-        let {location, expirience, education, skills}: any  = req.query
+        let {location, experience, education, skills}: any  = req.query
 
-        if(!location && !expirience && !education && !skills){
+        if(!location && !experience && !education && !skills){
             const aspirants = await Aspirant.find()
             return res.status(200).json(aspirants);    
         }
@@ -28,8 +28,8 @@ export const getAspirantList = async (req: Request, res: Response): Promise<Resp
             query = query.andWhere("aspirant.residenceState = :state", { state: location }) 
         }
 
-        if(expirience){
-            query = query.andWhere("aspirant.yearsOfExperience >= :years", { years : parseInt(expirience) })
+        if(experience){
+            query = query.andWhere("aspirant.yearsOfExperience >= :years", { years : parseInt(experience) })
         }
 
         if(education){
