@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import {
+  Alert,
   Button,
   Grid,
   InputAdornment,
@@ -19,6 +20,7 @@ import AspirantCard from '../../components/AspirantCard';
 import { TagsInput } from '../../components';
 import useAPI from '../../hooks/useAPI/useAPI';
 import SelectWithIcon from '../../components/SelectWithIcon/SelectWithIcon';
+import { maxWidth } from '@mui/system';
 
 const INITIAL_SEARCH = {
   requiredSkills: [],
@@ -38,15 +40,18 @@ const AspirantSearch = () => {
   const [search, setSearch] = useState(INITIAL_SEARCH);
   const [searchResults, setSearchResults] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [alert, setAlert] = useState('');
 
   const { aspirant, skill } = useAPI();
 
   const handleChange = (event) => {
+    setAlert("");
     const { name, value } = event.target;
     setSearch((prevSearch) => ({
       ...prevSearch,
       [name]: value,
     }));
+
   };
 
   const handleSubmit = async () => {
@@ -54,6 +59,9 @@ const AspirantSearch = () => {
       setSearchResults([]);
       const aspirants = await aspirant.filterBySkills(search.requiredSkills.map((sk) => sk.id));
       setSearchResults(aspirants);
+      if (aspirants.length === 0) {
+        setAlert("No se encontraron aspirantes para esta búsqueda.");
+      }
       return;
     } catch (error) {
       console.log(error);
@@ -61,6 +69,7 @@ const AspirantSearch = () => {
   };
 
   const handleChangeSkills = (name, selectedSkills) => {
+    setAlert("");
     setSearch((prevSearch) => ({
       ...prevSearch,
       [name]: selectedSkills,
@@ -70,6 +79,7 @@ const AspirantSearch = () => {
   const clearSearch = () => {
     setSearch(INITIAL_SEARCH);
     setSearchResults([]);
+    setAlert("");
   };
 
   useEffect(() => {
@@ -157,7 +167,22 @@ const AspirantSearch = () => {
           <Button variant="text" onClick={clearSearch}>Limpiar</Button>
           <Button variant="contained" sx={{ margin: '0 0 0 1rem' }} type="submit">Buscar</Button>
         </div>
+
+        {alert && (
+          <Grid item xs={12}>
+            <Alert
+              severity="info"
+              sx={{
+                maxWidth: "720px",
+                width: "100%"
+              }}
+            >
+              {alert}</Alert>
+          </Grid>
+        )}
       </Form>
+
+
 
       <div className="cards">
         {
