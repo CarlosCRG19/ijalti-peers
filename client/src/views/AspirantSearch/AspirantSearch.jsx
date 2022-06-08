@@ -47,7 +47,6 @@ const AspirantSearch = () => {
   const handleChange = (event) => {
     setAlert("");
     const { name, value } = event.target;
-    console.log(name)
     setSearch((prevSearch) => ({
       ...prevSearch,
       [name]: value,
@@ -59,7 +58,6 @@ const AspirantSearch = () => {
     try {
       setSearchResults([]);
       const query = createQuery(search);
-      console.log(query);
       if (!query) {
         setAlert("Favor de llenar al menos un campo.");
         return;
@@ -98,7 +96,6 @@ const AspirantSearch = () => {
     setAlert("");
     for (let i = 0; i < educationLevelChoices.length; i++) {
       if (educationLevelChoices[i].name === event.target.value) {
-        console.log(educationLevelChoices[i].id);
         setSearch((prevSearch) => ({
           ...prevSearch,
           education: educationLevelChoices[i].id
@@ -158,7 +155,7 @@ const AspirantSearch = () => {
         <Grid item xs={6}>
           <TextField
             name="experience"
-            label="Años de experiencia"
+            label="Años de experiencia mínima"
             value={search.experience}
             variant="outlined"
             onChange={handleChangeNumber}
@@ -222,8 +219,9 @@ const AspirantSearch = () => {
               key={`Card${aspirant.names}`}
               aspirantName={`${aspirant.names} ${aspirant.firstLastName}`}
               title={aspirant.title}
+              education={aspirant.educationLevel}
               description={aspirant.biography}
-              experience={aspirant.experience}
+              experience={aspirant.yearsOfExperience}
               habilitiesArray={aspirant.skills && aspirant.skills.map((skill) => skill.name)}
               location={`${aspirant.residenceCity}, ${aspirant.residenceState}`}
               pageURL={aspirant.pageURL}
