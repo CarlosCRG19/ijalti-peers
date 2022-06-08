@@ -1,3 +1,5 @@
+import { Experimental_CssVarsProvider } from "@mui/material";
+
 const createQuery = (obj) => {
   let output = []
   for (let key in obj) {
@@ -7,6 +9,8 @@ const createQuery = (obj) => {
         for (let i = 0; i < obj[key].length; i++) {
           output.push(`skills=${obj[key][i].id}`);
         }
+      }else if(key === "educationLabel"){
+        continue;
       }
       else {
         output.push(`${key}=${obj[key]}`);
