@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import axios from "axios";
 import { numArr2ObjArr } from "../utils";
-import { Aspirant, User } from "../models";
+import { Aspirant, JobOffer, User } from "../models";
 
 export const getAspirantList = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -179,3 +179,58 @@ export const loginAspirant = async (req: Request, res: Response): Promise<Respon
         return res.status(500).json({ message: "Something went wrong!" });
     }
 };
+
+export const addInterest = async (req: Request, res: Response): Promise<Response> => {
+
+    try {
+        const aspirant = await Aspirant.findOne({
+            where: {user: {firebaseId: req.user_id}},
+            relations: ["interestedInOffers"]
+        });
+        
+        if(!aspirant) throw new Error("Aspirant not found");
+
+        if(req.params.id !== aspirant.id) throw new Error("Unauthorized");
+        
+        const offer = await JobOffer.findOneBy({id: req.params.offerId});
+        if(!offer) throw new Error("Job Offer not found");
+
+        aspirant.interestedInOffers.push(offer)
+        await aspirant.save();
+
+        return res.status(200).json({message: "Added a new interest", offer});
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Something went wrong"})
+    }
+
+}
+
+export const removeInterest = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const aspirant = await Aspirant.findOne({
+            where: {user: {firebaseId: req.user_id}},
+            relations: ["interestedInOffers"]
+        })
+
+        if(!aspirant) throw new Error("Aspirant not found");
+
+        if(req.params.id !== aspirant.id) throw new Error("Unauthorized");
+        
+        const fetchedOffer = await JobOffer.findOneBy({id: req.params.offerId});
+        if(!fetchedOffer) throw new Error("Job Offer not found");
+
+        aspirant.interestedInOffers = aspirant.interestedInOffers.filter(offer => {
+            console.log(offer.id !== req.params.offerId);
+            return offer.id !== req.params.offerId;
+        });
+        await aspirant.save();
+
+        return res.status(200).json({message: "Removed interest", offer: fetchedOffer});
+
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({message: "Something went wrong!"});
+    }
+}
