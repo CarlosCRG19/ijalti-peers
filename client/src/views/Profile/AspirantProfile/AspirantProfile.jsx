@@ -151,7 +151,7 @@ const AspirantProfile = () => {
                 direction="column"
                 alignItems="start"
                 justifyContent="center"
-                sx={{ zIndex: 1, borderRight: `1px solid ${palette.gray.B}` }}
+                sx={{ zIndex: 1 }}
               >
                 <Typography
                   variant="h4"
@@ -173,7 +173,7 @@ const AspirantProfile = () => {
                     mb: '8px',
                   }}
                 >
-                  DavBot02
+                  Username
                 </Typography>
                 <Typography
                   variant="paragraph"

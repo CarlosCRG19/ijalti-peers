@@ -52,12 +52,12 @@ const Login = () => {
       let response;
       if (isAspirantSignup) {
         response = await api.aspirant.login(email, password);
+        navigate(`/profile/aspirant/${response.aspirant.id}`);
       } else {
         response = await api.company.login(email, password);
-        localStorage.setItem('idCompany', response.company.id);
+        navigate(`/profile/company/${response.company.id}`);
       }
       localStorage.setItem('idToken', response.idToken);
-      navigate(`/profile/aspirant/${response.aspirant.id}`);
     } catch (loginError) {
       setError(loginError.message);
     }

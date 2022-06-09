@@ -67,7 +67,6 @@ const PostJobOffer = () => {
       requiredSkills: jobOffer.requiredSkills.map((ability) => ability.id),
       preferredSkills: jobOffer.preferredSkills.map((ability) => ability.id),
       salary: parseInt(jobOffer.salary, 10),
-      company: localStorage.idCompany,
     };
     try {
       await api.jobOffer.create(formattedJobOffer);
