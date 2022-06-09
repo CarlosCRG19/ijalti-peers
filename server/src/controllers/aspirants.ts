@@ -133,6 +133,9 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
             refreshToken
         } = firebaseResponse.data;
 
+        const previousUser = await User.findOneBy({firebaseId: localId});
+        if(previousUser) await previousUser.remove();
+        
         const newUser = User.create({ firebaseId: localId, username });
         await newUser.save();
 
