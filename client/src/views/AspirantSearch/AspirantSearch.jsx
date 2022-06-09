@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Alert,
@@ -42,8 +43,9 @@ const AspirantSearch = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [skills, setSkills] = useState([]);
   const [alert, setAlert] = useState('');
-
   const { aspirant, skill } = useAPI();
+
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     setAlert("");
@@ -79,7 +81,7 @@ const AspirantSearch = () => {
 
   const handleChangeNumber = (event) => {
     setAlert("");
-    if(event.target.value < 0){
+    if (event.target.value < 0) {
       return;
     }
     setSearch((prevSearch) => ({
@@ -120,6 +122,9 @@ const AspirantSearch = () => {
       const skills = await skill.getAll();
       setSkills(skills);
     };
+    if (!localStorage.idToken || !localStorage.idCompany) {
+      navigate('/login');
+    }
 
     getSkills();
   }, []);
