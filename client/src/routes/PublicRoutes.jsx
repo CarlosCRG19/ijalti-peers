@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 
 import Login from '../views/Login';
 import { AspirantSignup, CompanySignup, Signup } from '../views/Signup';
-import PostJobOffer from '../views/PostJobOffer';
 import LandingPage from '../views/LandingPage';
 
 const PublicRoutes = () => (
