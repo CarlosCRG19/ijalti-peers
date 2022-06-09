@@ -1,9 +1,14 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-import PublicRoutes from './routes/PublicRoutes';
-import PrivateRoutes from './routes/PrivateRoutes';
+import { AuthProvider } from './contexts/auth';
+import { CompanyRoutes } from './routes';
+
+import Login from './views/Login';
+import LandingPage from './views/LandingPage';
+import PostJobOffer from './views/PostJobOffer';
+import { AspirantSignup, CompanySignup, Signup } from './views/Signup';
 
 import './App.css';
 
@@ -35,8 +40,18 @@ const theme = createTheme({
 const App = () => (
   <ThemeProvider theme={theme}>
     <BrowserRouter>
-      {'idToken' in localStorage && <PrivateRoutes />}
-      <PublicRoutes />
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signup/company" element={<CompanySignup />} />
+          <Route path="/signup/aspirant" element={<AspirantSignup />} />
+          <Route element={<CompanyRoutes />}>
+            <Route path="/post-job-offer" element={<PostJobOffer />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   </ThemeProvider>
 );
