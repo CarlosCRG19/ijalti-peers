@@ -232,7 +232,7 @@ const AspirantSearch = () => {
               education={aspirant.educationLevel}
               description={aspirant.biography}
               experience={aspirant.yearsOfExperience}
-              habilitiesArray={aspirant.skills && aspirant.skills.map((skill) => skill.name)}
+              abilitiesArray={aspirant.skills && aspirant.skills.map((skill) => skill.name)}
               location={`${aspirant.residenceCity}, ${aspirant.residenceState}`}
               pageURL={aspirant.pageURL}
             />

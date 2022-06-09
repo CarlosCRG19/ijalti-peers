@@ -25,15 +25,15 @@ const educationLevelChoices = [
 ];
 
 const AspirantCard = ({
-  aspirantName, education, description, experience, habilitiesArray, location, pageURL
+  aspirantName, education, description, experience, abilitiesArray, location, pageURL
 }) => {
 
   //Limit to n habilities
-  if (!habilitiesArray) {
-    habilitiesArray = ["Hubo un error al cargar las habilidades de este aspirante"]
+  if (!abilitiesArray) {
+    abilitiesArray = ["Hubo un error al cargar las habilidades de este aspirante"]
   } else {
     const maxHabilities = 3;
-    habilitiesArray = habilitiesArray.slice(0, maxHabilities);
+    abilitiesArray = abilitiesArray.slice(0, maxHabilities);
   }
 
   //Handle years of experience
@@ -88,7 +88,7 @@ const AspirantCard = ({
             sx={{ paddingBottom: "0px" }}
           >
             {
-              habilitiesArray.map(item => (
+              abilitiesArray.map(item => (
                 <ListItem
                   key={item}
                   sx={{ paddingBottom: "0px" }}>
