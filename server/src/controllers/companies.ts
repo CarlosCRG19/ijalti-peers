@@ -74,6 +74,7 @@ export const signupCompany = async (req: Request, res: Response): Promise<Respon
     const firebaseSignupURL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.FIREBASE_API_KEY}`
     
     const {email, password, company} = req.body;
+    const { username } = company;
     
     
     const signupRequestConfig: AxiosRequestConfig = {
@@ -93,7 +94,10 @@ export const signupCompany = async (req: Request, res: Response): Promise<Respon
         const signupResponse = await axios(signupRequestConfig);
         const {localId, idToken, refreshToken, expiresIn} = signupResponse.data;
 
-        const newUser = User.create({firebaseId: localId}); 
+        const previousUser = await User.findOneBy({firebaseId: localId});
+        if(previousUser) await previousUser.remove();
+
+        const newUser = User.create({firebaseId: localId, username, email}); 
         await newUser.save();
 
         newCompany.user = newUser;
@@ -111,7 +115,7 @@ export const signupCompany = async (req: Request, res: Response): Promise<Respon
         return res.status(201).json(responseBody);
 
     } catch(error) {
-        console.log("Exception handling pending");
+        console.log(error);
         return res.status(500).json({message: "Something went wrong!"})
     }
 

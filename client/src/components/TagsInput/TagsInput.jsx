@@ -39,6 +39,7 @@ const TagsInput = (props) => {
           name={name}
           {...params}
           {...inputProps}
+          required={inputProps.required ? value.length === 0 : false}
           InputProps={{
             ...params.InputProps,
             startAdornment: [StartAdornment, params.InputProps.startAdornment],

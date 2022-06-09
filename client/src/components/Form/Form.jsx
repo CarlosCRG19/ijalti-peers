@@ -14,6 +14,7 @@ const Form = (props) => {
     description,
     onSubmit,
     children,
+    extraClass
   } = props;
 
   const { palette } = useTheme();
@@ -25,7 +26,7 @@ const Form = (props) => {
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
+    <form className={"form " + extraClass} onSubmit={handleSubmit}>
       <Box
         display="flex"
         width="100%"

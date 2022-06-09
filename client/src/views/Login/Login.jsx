@@ -48,17 +48,16 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { email, password } = credentials;
-    let response;
     try {
+      let response;
       if (isAspirantSignup) {
         response = await api.aspirant.login(email, password);
+        navigate(`/profile/aspirant/${response.aspirant.id}`);
       } else {
         response = await api.company.login(email, password);
-        localStorage.setItem('idCompany', response.company.id);
+        navigate(`/profile/company/${response.company.id}`);
       }
-
       localStorage.setItem('idToken', response.idToken);
-      navigate('/');
     } catch (loginError) {
       setError(loginError.message);
     }

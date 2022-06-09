@@ -17,8 +17,6 @@ import {
 import { useAPI } from '../../hooks';
 import { Form, TagsInput } from '../../components';
 
-import './PostJobOffer.css';
-
 const INITIAL_JOB_OFFER = {
   title: '',
   city: '',
@@ -69,7 +67,6 @@ const PostJobOffer = () => {
       requiredSkills: jobOffer.requiredSkills.map((ability) => ability.id),
       preferredSkills: jobOffer.preferredSkills.map((ability) => ability.id),
       salary: parseInt(jobOffer.salary, 10),
-      company: localStorage.idCompany,
     };
     try {
       await api.jobOffer.create(formattedJobOffer);
@@ -190,7 +187,6 @@ const PostJobOffer = () => {
             onChange={handleChangeSkills}
             fullWidth
             tags={skills}
-            variant="filled"
             id="tags"
             sx={{ backgroundColor: '#E7EDF3' }}
             required
