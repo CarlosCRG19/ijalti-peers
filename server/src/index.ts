@@ -2,7 +2,7 @@ import "dotenv/config"
 import cors from "cors";
 import express from "express";
 import createDatabaseConnection from "./createDatabaseConnection";
-import { aspirantRouter, companyRouter, jobOfferRouter, skillRouter, authRouter } from "./routes";
+import { aspirantRouter, companyRouter, jobOfferRouter, skillRouter, authRouter, experiencesRouter } from "./routes";
 import { firebaseMiddleware } from "./middlewares/auth";
 
 const initializeExpress = () => {
@@ -21,6 +21,7 @@ const initializeExpress = () => {
     app.use(aspirantRouter);
     app.use(companyRouter);
     app.use(jobOfferRouter);
+    app.use(experiencesRouter);
 
     app.listen(PORT, () => {
         console.log(`Server listening on port ${PORT}`);
