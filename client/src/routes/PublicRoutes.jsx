@@ -10,7 +10,6 @@ const PublicRoutes = () => (
   <Routes>
     <Route path="/" element={<LandingPage />} />
     <Route path="/login" element={<Login />} />
-    <Route path="/post-job-offer" element={<PostJobOffer />} />
     <Route path="/signup" element={<Signup />} />
     <Route path="/signup/aspirant" element={<AspirantSignup />} />
     <Route path="/signup/company" element={<CompanySignup />} />
