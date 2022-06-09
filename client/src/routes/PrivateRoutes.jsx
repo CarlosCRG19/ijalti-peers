@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Navbar } from '../components';
 
-import { PostJobOffer, AspirantProfile } from '../views';
+import { PostJobOffer, AspirantProfile, CompanyProfile } from '../views';
 
 const PrivateRoutes = () => (
   <Routes>
@@ -21,6 +21,15 @@ const PrivateRoutes = () => (
         <>
           <Navbar />
           <AspirantProfile />
+        </>
+      )}
+    />
+    <Route
+      path="/profile/company/:id"
+      element={(
+        <>
+          <Navbar />
+          <CompanyProfile />
         </>
       )}
     />

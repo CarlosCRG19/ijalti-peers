@@ -12,6 +12,7 @@ import {
 import {
   Cake, Work, School, Handyman,
 } from '@mui/icons-material';
+
 import useAPI from '../../../hooks/useAPI/useAPI';
 
 const AspirantProfile = () => {
@@ -145,7 +146,7 @@ const AspirantProfile = () => {
               <Grid
                 item
                 xs={12}
-                md={4}
+                md={5}
                 display="flex"
                 direction="column"
                 alignItems="start"
@@ -210,6 +211,8 @@ const AspirantProfile = () => {
                   component="h3"
                   sx={{
                     color: palette.gray.C,
+                    display: 'flex',
+                    alignItems: 'center',
                   }}
                 >
                   <Cake sx={{ mr: '12px' }} />
@@ -220,6 +223,8 @@ const AspirantProfile = () => {
                   component="h3"
                   sx={{
                     color: palette.gray.C,
+                    display: 'flex',
+                    alignItems: 'center',
                   }}
                 >
                   <Work sx={{ mr: '12px' }} />
@@ -232,6 +237,8 @@ const AspirantProfile = () => {
                   component="h3"
                   sx={{
                     color: palette.gray.C,
+                    display: 'flex',
+                    alignItems: 'center',
                   }}
                 >
                   <School sx={{ mr: '12px' }} />
@@ -243,6 +250,8 @@ const AspirantProfile = () => {
                   component="h3"
                   sx={{
                     color: palette.gray.C,
+                    display: 'flex',
+                    alignItems: 'center',
                   }}
                 >
                   <Handyman sx={{ mr: '12px' }} />

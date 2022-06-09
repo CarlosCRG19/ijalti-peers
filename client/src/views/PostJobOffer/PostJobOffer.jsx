@@ -188,7 +188,6 @@ const PostJobOffer = () => {
             onChange={handleChangeSkills}
             fullWidth
             tags={skills}
-            variant="filled"
             id="tags"
             sx={{ backgroundColor: '#E7EDF3' }}
             required
