@@ -11,7 +11,6 @@ const INITIAL_LOCATION = {
 
 //UNFINISHED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 const SelectLocation = () => {
-  //[location, setLocation] = useState(INITIAL_LOCATION)
   return (
     <>
       <Grid item xs={4}>

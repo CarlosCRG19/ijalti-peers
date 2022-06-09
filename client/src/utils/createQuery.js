@@ -1,5 +1,3 @@
-import { Experimental_CssVarsProvider } from "@mui/material";
-
 const createQuery = (obj) => {
   let output = []
   for (let key in obj) {
