@@ -7,8 +7,11 @@ import {
     OneToOne,
     JoinColumn,
     ManyToMany,
-    JoinTable
+    JoinTable,
+    ManyToOne,
+    OneToMany
 } from "typeorm";
+import JobOffer from "./jobOffer";
 import Skill from "./skill";
 
 import User from "./user";
@@ -68,10 +71,13 @@ class Aspirant extends BaseEntity {
 
     @Column({length: 150})
     biography: string;
-
+ 
     @ManyToMany(() => Skill)
     @JoinTable() 
     skills: Skill[];
+    
+    @ManyToMany(type => JobOffer, jobOffer => jobOffer.interestedAspirants)
+    interestedInOffers: JobOffer[];
 
     @OneToOne(() => User)
     @JoinColumn()

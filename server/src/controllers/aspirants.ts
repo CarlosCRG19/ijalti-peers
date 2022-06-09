@@ -46,7 +46,7 @@ export const createAspirant = async (req: Request, res: Response): Promise<Respo
 export const getAspirant = async (req: Request, res: Response): Promise<Response> => {
     try {
         const aspirant: Aspirant | null = await Aspirant.findOne({
-            where: {id: req.params.id}, relations: ['skills']
+            where: {id: req.params.id}, relations: ['skills', 'interestedInOffers']
         })
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
         return res.status(200).json({ message: "Aspirant found", aspirant: {...aspirant, user: aspirant.user} });
@@ -64,17 +64,17 @@ export const updateAspirant = async (req: Request, res: Response): Promise<Respo
         });
         
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
-        
         Object.assign(aspirant, req.body);
         
         const { skills } = req.body;
 
-        aspirant.skills = numArr2ObjArr(skills);
+        if(skills) aspirant.skills = numArr2ObjArr(skills);
 
         await aspirant.save();
 
         return res.status(200).json({ message: "Aspirant updated" });
     } catch(error) {
+        console.log(error);
         return res.status(500).json({ message: "Something went wrong" });
     }
 };
