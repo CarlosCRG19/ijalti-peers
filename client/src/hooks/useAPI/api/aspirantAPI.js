@@ -40,6 +40,15 @@ class AspirantAPI extends APIGateway {
       throw new Error(error.message);
     }
   }
+
+  async searchAspirants(searchQuery) {
+    try {
+      const response = await this._client.get(`/aspirants/${searchQuery}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 export default AspirantAPI;

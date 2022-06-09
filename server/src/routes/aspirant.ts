@@ -6,8 +6,8 @@ import {
     getAspirant,
     updateAspirant,
     removeAspirant,
-    loginAspirant,
-    signupAspirant,
+    addInterest,
+    removeInterest
 } from "../controllers";
 
 import { firebaseMiddleware } from "../middlewares/auth";
@@ -23,5 +23,7 @@ aspirantDetail.get(getAspirant);
 aspirantDetail.put(updateAspirant);
 aspirantDetail.delete(removeAspirant);
 
+aspirantRouter.post("/aspirants/:id/interests/:offerId", addInterest);
+aspirantRouter.delete("/aspirants/:id/interests/:offerId", removeInterest);
 
 export default aspirantRouter;
