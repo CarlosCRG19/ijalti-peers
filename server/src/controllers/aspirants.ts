@@ -46,10 +46,13 @@ export const createAspirant = async (req: Request, res: Response): Promise<Respo
 export const getAspirant = async (req: Request, res: Response): Promise<Response> => {
     try {
         const aspirant: Aspirant | null = await Aspirant.findOne({
-            where: {id: req.params.id}, relations: ['skills', 'interestedInOffers']
+            where: {id: req.params.id}, relations: ['skills', 'interestedInOffers', 'user']
         })
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
-        return res.status(200).json({ message: "Aspirant found", aspirant: {...aspirant, user: aspirant.user} });
+
+        const {email,username} = aspirant.user
+
+        return res.status(200).json( { message: "Aspirant found", aspirant: { ...aspirant, email, username, user: undefined } });
 
     } catch(error) {
         return res.status(500).json({ message: "Something went wrong" });
@@ -121,7 +124,7 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
         const previousUser = await User.findOneBy({firebaseId: localId});
         if(previousUser) await previousUser.remove();
         
-        const newUser = User.create({ firebaseId: localId, username });
+        const newUser = User.create({ firebaseId: localId, username, email});
         await newUser.save();
 
         newAspirant.user = newUser;
