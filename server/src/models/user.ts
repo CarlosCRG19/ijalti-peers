@@ -11,6 +11,9 @@ class BaseUser extends BaseEntity{
     @Column({default: ''})
     username: string;
 
+    @Column({default: ''})
+    email: string;
+     
     @CreateDateColumn()
     createdAt: Date;
 }
