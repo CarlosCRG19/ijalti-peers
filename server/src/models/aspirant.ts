@@ -12,10 +12,7 @@ import {
     OneToMany
 } from "typeorm";
 
-import JobOffer from "./jobOffer";
-import Skill from "./skill";
-
-import {Skill, User, WorkExperience} from "./"
+import {Skill, User, WorkExperience, JobOffer} from "./"
 
 enum WorkingStatusChoices {
     Employed = "EMPLOYED",

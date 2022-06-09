@@ -34,7 +34,7 @@ const PublicProfile = ({ onPrevious }) => {
 
     // TODO: clean this filtering of properties
     aspirant.yearsOfExperience = +aspirant.yearsOfExperience;
-    aspirant.skills = aspirant.skills.map((skill) => skill.id);
+    if (aspirant.skills) aspirant.skills = aspirant.skills.map((skill) => skill.id);
 
     const response = await api.aspirant.signup(email, password, aspirant);
 
