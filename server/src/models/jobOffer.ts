@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, BaseEntity, JoinTable, ManyToMany, OneToMany} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, BaseEntity, JoinTable, ManyToMany, CreateDateColumn} from "typeorm";
 import Aspirant from "./aspirant";
 import Company from "./company";
 import Skill from "./skill";
@@ -19,6 +19,9 @@ class JobOffer extends BaseEntity{
 
     @Column({ nullable: false })
     description: string;
+
+    @CreateDateColumn()
+    createdAt: Date;
 
     @ManyToOne(() => Company, (company) => company.jobOffers)
     company : Company;

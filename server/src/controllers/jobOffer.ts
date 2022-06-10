@@ -9,11 +9,27 @@ export const getOffersList = async (
     req: Request,
     res: Response
 ): Promise<Response> => {
-    try {
-        const offers = await JobOffer.find();
-        return res.status(200).json(offers);
+    try{
+        const nOffers = 10;
+        
+        let  page : any = req.query.page || 1;
+        page = parseInt(page);
+        
+        page = (page > 1) ? page : 1
+
+        const takeJobOffers = nOffers * page
+        const skipJobOffers = nOffers * (page - 1)
+      
+        const offers = await JobOffer.findAndCount({
+            relations: ['preferredSkills', 'requiredSkills', 'interestedAspirants'],
+            order:{'createdAt' : 'DESC'}, 
+            take: takeJobOffers,
+            skip: skipJobOffers
+        });
+        return res.status(200).json(offers[0]);
     } catch (error) {
-        return res.status(500).json({ message: "Something weng wrong!" });
+        console.log(error)
+        return res.status(500).json({ message: "Something went wrong!" });
     }
 };
 
