@@ -10,9 +10,18 @@ export const getOffersList = async (
     res: Response
 ): Promise<Response> => {
     try {
-        const offers = await JobOffer.find();
+
+        const { companyId } = req.query;
+
+        const filterOptions: Object = {
+            company: companyId ? {id: companyId } : undefined
+        }
+
+        const offers: JobOffer[] = await JobOffer.findBy(filterOptions);
+        
         return res.status(200).json(offers);
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ message: "Something weng wrong!" });
     }
 };
