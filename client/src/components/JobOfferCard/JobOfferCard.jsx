@@ -1,42 +1,89 @@
-import React from 'react';
+import { React, useState } from 'react';
 
 import {
+  Avatar,
+  Button,
   Card,
-  CardActionArea,
+  CardActions,
   CardContent,
+  CardHeader,
+  Collapse,
+  Link,
   Typography
 } from '@mui/material';
 
-const JobOfferCard = () => {
+import { Box, styled } from '@mui/system';
+
+import "./JobOfferCard.css"
+
+const CardContentNoPadding = styled(CardContent)(
+  `
+  &:last-child{
+    padding-bottom: 0px;
+  }
+  `
+);
+
+const JobOfferCard = ({
+  position,
+  company,
+  description,
+  profilePictureURL,
+  companyProfileURL,
+  date,
+}) => {
+  const [expand, setExpand] = useState();
+
+  if (!profilePictureURL) {
+    profilePictureURL = "#"
+  }
+
+  if (!companyProfileURL) {
+    companyProfileURL = "#"
+  }
+
   return (
-    <div className='card'>
-      <CardActionArea>
-        <Card className='card' elevation={3}>
-          <CardContent>
-            <Typography
-              color="text.secondary"
-              variant='subtitle1'
+    <div className='joboffer-card'>
+      <Card>
+        <CardHeader
+          avatar={
+            <Avatar alt={company} src={profilePictureURL} />
+          }
+          title={
+            <Link
+              href={companyProfileURL}
+              underline="hover"
+              variant='h6'
             >
-              {"A"}
-            </Typography>
-            <Typography variant="h5">
-              {"B"}
-            </Typography>
-            <Typography
-              color="text.secondary"
-              variant="caption"
-              display="block"
-              sx={{ paddingBottom: "12px" }}
+              {company}
+            </Link>
+          }
+          subheader={date}
+        />
+        <CardContentNoPadding>
+          <Typography variant='h5'>{position}</Typography>
+
+          <CardActions>
+            <Button
+              fullWidth
+              variant='text'
+              onClick={() => { setExpand(!expand) }}
             >
-              {"C"}
-            </Typography>
-            <Typography variant="body">
-              {"D"}
-            </Typography>
-          </CardContent>
-        </Card>
-      </CardActionArea>
-    </div >
+              Ver más
+            </Button>
+          </CardActions>
+
+          <Collapse in={expand} timeout="auto" unmountOnExit>
+            <Box sx={{ paddingBottom: "16px" }}>
+              <Typography variant='body'>
+                {description}
+              </Typography>
+            </Box>
+          </Collapse>
+
+        </CardContentNoPadding>
+      </Card>
+    </div>
   );
 };
 

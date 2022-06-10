@@ -1,5 +1,8 @@
-.main-content{
-    flex-grow: 1;
-    
-
+.main-feed-content {
+  display: grid;
+  place-items: start center;
+  flex-grow: 1;
+  padding: 38px;
+  min-width: 350px;
+  background-color: #E7EDF3;
 }
