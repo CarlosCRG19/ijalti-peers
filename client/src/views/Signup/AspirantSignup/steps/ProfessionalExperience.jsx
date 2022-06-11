@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { MenuItem, Button, Grid } from '@mui/material';
+import {
+  useTheme, MenuItem, Button, Grid, Typography, Box, List, Paper,
+} from '@mui/material';
 import {
   Form,
+  DatePicker,
   SelectWithLabel,
   TagsInputWithLabel,
   TextFieldWithLabel,
+  WorkExperienceCard,
 } from '../../../../components';
 import { useAPI } from '../../../../hooks';
 import { useAspirantSignup } from '../../../../contexts/aspirant-signup';
@@ -24,14 +28,24 @@ const educationLevelChoices = [
   { label: 'Doctorado', value: 'DOCTORATE' },
 ];
 
+const INITIAL_WORK_EXPERIENCE = {
+  title: null, company: null, startDate: null, endDate: null,
+};
+
 const ProfessionalExperience = ({ onPrevious, onNext }) => {
   const api = useAPI();
+  const { palette } = useTheme();
+
   const {
     updateAspirantSignup,
     aspirantSignup: { professionalExperience },
   } = useAspirantSignup();
 
   const [skills, setSkills] = useState([]);
+
+  const [workExperience, setWorkExperience] = useState(INITIAL_WORK_EXPERIENCE);
+
+  const [fullWorkExperience, setFullWorkExperience] = useState([]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -52,6 +66,39 @@ const ProfessionalExperience = ({ onPrevious, onNext }) => {
     });
   };
 
+  const handleChangeWorkExperience = (event) => {
+    const { name, value } = event.target;
+    setWorkExperience((prevWorkExperience) => ({
+      ...prevWorkExperience,
+      [name]: value,
+    }));
+  };
+
+  const handleChangeFullWorkExperience = () => {
+    setFullWorkExperience((prevFullWorkExperience) => (
+      [...prevFullWorkExperience, {
+        ...workExperience,
+        id: prevFullWorkExperience.length,
+      }]
+    ));
+    setWorkExperience(INITIAL_WORK_EXPERIENCE);
+  };
+
+  const handleDeleteWorkExperience = (id) => {
+    setFullWorkExperience((prevFullWorkExperience) => (
+      prevFullWorkExperience.filter((experience) => experience.id !== id)
+    ));
+
+    let counter = 0;
+    setFullWorkExperience((prevFullWorkExperience) => (
+      prevFullWorkExperience.map((experience) => {
+        experience.id = counter;
+        counter += 1;
+        return experience;
+      })
+    ));
+  };
+
   const handleSubmit = () => {
     onNext();
   };
@@ -62,7 +109,13 @@ const ProfessionalExperience = ({ onPrevious, onNext }) => {
       setSkills(skillList);
     };
 
+    // const getCompanies = async () => {
+    //   const companyList = await api.company.getAll();
+    //   setCompanies(companyList);
+    // };
+
     getSkills();
+    // getCompanies();
   }, []);
 
   return (
@@ -134,6 +187,97 @@ const ProfessionalExperience = ({ onPrevious, onNext }) => {
           value={professionalExperience.skills}
           onChange={handleChangeSkills}
         />
+      </Grid>
+
+      <Grid item xs={4}>
+        <Typography variant="h6" fontWeight="regular">Experiencia Laboral</Typography>
+      </Grid>
+      <Grid item xs={8}>
+        <hr style={{ color: palette.gray.D, marginTop: '16px' }} />
+      </Grid>
+
+      <Grid item xs={6}>
+        <TextFieldWithLabel
+          size="regular"
+          label="Posición"
+          id="title"
+          name="title"
+          variant="filled"
+          placeholder="Selecciona una posición"
+          value={workExperience.title}
+          onChange={handleChangeWorkExperience}
+        />
+      </Grid>
+
+      <Grid item xs={6}>
+        <TextFieldWithLabel
+          size="regular"
+          label="Empresa"
+          id="company"
+          name="company"
+          variant="filled"
+          placeholder="Selecciona una empresa"
+          value={workExperience.company}
+          onChange={handleChangeWorkExperience}
+        />
+      </Grid>
+
+      <Grid item xs={5}>
+        <DatePicker
+          label="Fecha de inicio"
+          id="startDate"
+          name="startDate"
+          type="text"
+          variant="filled"
+          placeholder="Selecciona una fecha"
+          value={workExperience.startDate}
+          onChange={handleChangeWorkExperience}
+        />
+      </Grid>
+
+      <Grid item xs={5}>
+        <DatePicker
+          label="Fecha de término"
+          id="endDate"
+          name="endDate"
+          type="text"
+          variant="filled"
+          placeholder="Selecciona una fecha"
+          value={workExperience.endDate}
+          onChange={handleChangeWorkExperience}
+        />
+      </Grid>
+
+      <Grid item xs={2}>
+        <Box display="flex" justifyContent="center" alignItems="end" sx={{ width: '100%', height: '100%' }}>
+          <Button
+            variant="contained"
+            sx={{
+              height: '60px', width: '60px', borderRadius: '50%', fontSize: '24px',
+            }}
+            onClick={handleChangeFullWorkExperience}
+            disabled={!Object.values(workExperience).every((value) => value)}
+          >
+            +
+          </Button>
+        </Box>
+      </Grid>
+
+      <Grid item xs={12}>
+        <Paper style={{ maxHeight: 200, overflow: 'auto', background: palette.gray.A }}>
+          <List>
+            {fullWorkExperience.map((experience) => (
+              <WorkExperienceCard
+                title={experience.title}
+                company={experience.company}
+                startDate={experience.startDate}
+                endDate={experience.endDate}
+                id={experience.id}
+                onDelete={handleDeleteWorkExperience}
+              />
+            ))}
+          </List>
+        </Paper>
       </Grid>
 
       <Grid item xs={12} display="flex" justifyContent="flex-end" gap="16px">
