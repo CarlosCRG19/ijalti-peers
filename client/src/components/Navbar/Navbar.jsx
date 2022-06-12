@@ -5,6 +5,7 @@ import {
   Link,
 } from '@mui/material';
 import './Navbar.css';
+import CompanySearchbar from '../CompanySearchbar/CompanySearchbar';
 
 const Navbar = () => (
   <Grid
@@ -26,6 +27,7 @@ const Navbar = () => (
         src="https://www.ijalti.org.mx/wp-content/uploads/2019/05/favicon.png"
       />
       <Link href="/" variant="h3" underline="none">IJALTI PEERS</Link>
+      <CompanySearchbar />
     </Grid>
   </Grid>
 );
