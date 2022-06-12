@@ -14,7 +14,6 @@ const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({ idToken: '', user: { username: '', userId: '', role: '' } });
-  console.log(auth);
 
   const api = useAPI();
   const navigate = useNavigate();

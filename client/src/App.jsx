@@ -3,13 +3,17 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { AuthProvider } from './contexts/auth';
-import { CompanyRoutes } from './routes';
+import { AspirantRoutes, CompanyRoutes, SharedRoutes } from './routes';
 
-import Login from './views/Login';
-import LandingPage from './views/LandingPage';
-import PostJobOffer from './views/PostJobOffer';
 import { AspirantSignup, CompanySignup, Signup } from './views/Signup';
-
+import { Navbar } from './components';
+import {
+  CompanyProfile,
+  AspirantProfile,
+  PostJobOffer,
+  LandingPage,
+  Login,
+} from './views';
 import './App.css';
 
 const theme = createTheme({
@@ -47,8 +51,31 @@ const App = () => (
           <Route path="/signup" element={<Signup />} />
           <Route path="/signup/company" element={<CompanySignup />} />
           <Route path="/signup/aspirant" element={<AspirantSignup />} />
+          <Route element={<SharedRoutes />}>
+            <Route
+              path="/profile/aspirant/:id"
+              element={(
+                <>
+                  <Navbar />
+                  <AspirantProfile />
+                </>
+              )}
+            />
+            <Route
+              path="/profile/company/:id"
+              element={(
+                <>
+                  <Navbar />
+                  <CompanyProfile />
+                </>
+              )}
+            />
+          </Route>
           <Route element={<CompanyRoutes />}>
             <Route path="/post-job-offer" element={<PostJobOffer />} />
+          </Route>
+          <Route element={<AspirantRoutes />}>
+            <Route />
           </Route>
         </Routes>
       </AuthProvider>
