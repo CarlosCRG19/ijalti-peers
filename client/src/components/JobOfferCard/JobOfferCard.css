@@ -1,4 +1,30 @@
-.joboffer-card{
+.job-offer-card {
     min-width: 100%;
     margin: 32px 0px 0px 0px;
+
+}
+
+.job-offer-header-info {
+    display: grid;
+    grid-template-columns: 65% auto;
+}
+
+.job-offer-body-info {
+    display: grid;
+    text-align: justify;
+    grid-template-columns: auto 60%;
+    margin: 16px 16px 16px 0px;
+    gap: 16px
+}
+
+@media (max-width: 720px) {
+    .job-offer-body-info {
+        display: block;
+    }
+    .job-offer-abilities {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        gap: 16px;
+    }
+
 }

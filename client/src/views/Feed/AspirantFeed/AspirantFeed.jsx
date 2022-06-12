@@ -9,14 +9,13 @@ import {
 } from '@mui/material';
 
 import './AspirantFeed.css'
-import { JobOfferCard } from '../../../components';
+import { JobOffer, JobOfferCard } from '../../../components';
 import { Box } from '@mui/system';
 
 import useAPI from '../../../hooks/useAPI/useAPI';
 const AspirantFeed = () => {
   const [offers, setOffers] = useState();
   const [companies, setCompanies] = useState();
-  const [date, setDAte] = useState();
   const api = useAPI();
 
   const getCompany = async (idcompany) => {
@@ -32,9 +31,7 @@ const AspirantFeed = () => {
     try {
       const response = await api.jobOffer.getByPage(page);
       setOffers(response);
-      /*response.forEach(offer => {
-        console.log(offer);
-      });*/
+      console.log(response[0]);
     } catch (error) {
       console.log(error);
     }
@@ -54,15 +51,6 @@ const AspirantFeed = () => {
           maxWidth: "720px"
         }}>
 
-        <JobOfferCard
-          position={"Diseñador Gráfico"}
-          company={"Amazon"}
-          profilePictureURL={""}
-          description={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mauris nunc, gravida sit amet porttitor ac, eleifend consectetur risus. Proin luctus justo lectus, nec dapibus nunc interdum vel. Quisque volutpat diam ut ullamcorper iaculis. Aenean vestibulum lectus quis dapibus maximus. Nulla pharetra feugiat libero sed feugiat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras nulla lorem, lobortis sed enim non, maximus commodo elit."}
-          date={"2022-06-10"}
-        />
-
-
         {
           offers && offers.map((offer) => (
             <JobOfferCard
@@ -72,6 +60,10 @@ const AspirantFeed = () => {
               profilePictureURL={"https://rotulosmatesanz.com/wp-content/uploads/2017/09/2000px-Google_G_Logo.svg_.png"}
               description={offer.description}
               date={offer.createdAt}
+              location={offer.city}
+              salary={offer.salary}
+              requiredSkills={offer.requiredSkills}
+              preferredSkills={offer.preferredSkills}
             />
           ))
         }
