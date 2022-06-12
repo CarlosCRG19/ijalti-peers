@@ -14,7 +14,9 @@ import {
   Collapse,
   Link,
   Typography,
-  Box
+  Box,
+  List,
+  ListItemText
 } from '@mui/material';
 
 import {
@@ -39,6 +41,10 @@ const JobOfferCard = ({
   profilePictureURL,
   companyProfileURL,
   date,
+  location,
+  salary,
+  requiredSkills,
+  preferredSkills,
 }) => {
   const [expand, setExpand] = useState();
 
@@ -50,8 +56,14 @@ const JobOfferCard = ({
     companyProfileURL = "#"
   }
 
+  if (salary) {
+    salary = "$" + salary
+  }
+
+
+
   return (
-    <div className='joboffer-card'>
+    <div className='job-offer-card'>
       <Card>
         <CardHeader
           avatar={
@@ -67,9 +79,16 @@ const JobOfferCard = ({
             </Link>
           }
           subheader={parseDateYYYYMMDD(date)}
-        />
+        >
+        </CardHeader>
         <CardContentNoPadding>
-          <Typography variant='h5'>{position}</Typography>
+          <div className='job-offer-header-info'>
+            <Typography variant='h5' sx={{ placeSelf: "center start" }}>{position}</Typography>
+            <div>
+              <Typography variant='subtitle1'>{salary}</Typography>
+              <Typography variant='subtitle1'>{location}</Typography>
+            </div>
+          </div>
 
           <CardActions>
             <Button
@@ -82,10 +101,34 @@ const JobOfferCard = ({
           </CardActions>
 
           <Collapse in={expand} timeout="auto" unmountOnExit>
-            <Box sx={{ paddingBottom: "16px" }}>
-              <Typography variant='body'>
-                {description}
-              </Typography>
+            <Box className="job-offer-body-info" sx={{ paddingBottom: "16px" }}>
+              <div className='job-offer-abilities'>
+                <div>
+                  <Typography variant='h6'>Habilidades requeridas:</Typography>
+                  <List sx={{ padding: "0px 0px 8px 0px" }}>
+                    {
+                      requiredSkills && requiredSkills.map((skill) => (
+                        <ListItemText>- {skill.name}</ListItemText>
+                      ))
+                    }
+                  </List>
+                </div>
+                <div>
+
+                  <Typography variant='h6'>Habilidades sugeridas:</Typography>
+                  <List sx={{ padding: "0px 0px 8px 0px" }}>
+                    {
+                      preferredSkills && preferredSkills.map((skill) => (
+                        <ListItemText>- {skill.name}</ListItemText>
+                      ))
+                    }
+                  </List>
+                </div>
+              </div>
+
+              <div>
+                <Typography variant='body'>{description}</Typography>
+              </div>
             </Box>
           </Collapse>
 
