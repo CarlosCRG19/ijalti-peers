@@ -1,4 +1,8 @@
-import { React, useState } from 'react';
+import {
+  React,
+  useState,
+  useEffect
+} from 'react';
 
 import {
   Avatar,
@@ -9,12 +13,16 @@ import {
   CardHeader,
   Collapse,
   Link,
-  Typography
+  Typography,
+  Box
 } from '@mui/material';
 
-import { Box, styled } from '@mui/system';
+import {
+  styled,
+} from '@mui/system';
 
-import "./JobOfferCard.css"
+import parseDateYYYYMMDD from '../../utils/parseDate';
+import './JobOfferCard.css'
 
 const CardContentNoPadding = styled(CardContent)(
   `
@@ -58,7 +66,7 @@ const JobOfferCard = ({
               {company}
             </Link>
           }
-          subheader={date}
+          subheader={parseDateYYYYMMDD(date)}
         />
         <CardContentNoPadding>
           <Typography variant='h5'>{position}</Typography>

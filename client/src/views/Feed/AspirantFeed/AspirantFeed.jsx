@@ -1,4 +1,8 @@
-import React from 'react';
+import {
+  React,
+  useState,
+  useEffect
+} from 'react';
 
 import {
   Typography,
@@ -7,7 +11,41 @@ import {
 import './AspirantFeed.css'
 import { JobOfferCard } from '../../../components';
 import { Box } from '@mui/system';
+
+import useAPI from '../../../hooks/useAPI/useAPI';
 const AspirantFeed = () => {
+  const [offers, setOffers] = useState();
+  const [companies, setCompanies] = useState();
+  const [date, setDAte] = useState();
+  const api = useAPI();
+
+  const getCompany = async (idcompany) => {
+    try {
+      const response = await api.company.getCompany(idcompany);
+      setCompanies(response.company);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getJobOffers = async (page) => {
+    try {
+      const response = await api.jobOffer.getByPage(page);
+      setOffers(response);
+      /*response.forEach(offer => {
+        console.log(offer);
+      });*/
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  useEffect(() => {
+    getJobOffers(1);
+  }, []);
+
+
   return (
     <div className='main-feed-content'>
       <Box
@@ -15,22 +53,28 @@ const AspirantFeed = () => {
           width: "100%",
           maxWidth: "720px"
         }}>
-        <JobOfferCard
-          position={"Desarrollador frontend"}
-          company={"Google LLC"}
-          profilePictureURL={"https://rotulosmatesanz.com/wp-content/uploads/2017/09/2000px-Google_G_Logo.svg_.png"}
-          description={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mauris nunc, gravida sit amet porttitor ac, eleifend consectetur risus. Proin luctus justo lectus, nec dapibus nunc interdum vel. Quisque volutpat diam ut ullamcorper iaculis. Aenean vestibulum lectus quis dapibus maximus. Nulla pharetra feugiat libero sed feugiat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras nulla lorem, lobortis sed enim non, maximus commodo elit."}
-        />
+
         <JobOfferCard
           position={"Diseñador Gráfico"}
-          company={"Adobe"}
-          description={"Proin luctus tempor magna, nec finibus justo egestas sed. Aenean iaculis arcu turpis, eget ultricies ligula condimentum et. Nulla ex nulla, fermentum posuere arcu nec, vulputate sollicitudin dui. Aenean a luctus velit. Ut gravida tortor mollis, tristique risus eleifend, congue augue. Nulla rhoncus gravida augue, eu sollicitudin massa consectetur non. Suspendisse sed quam vitae nibh euismod consectetur."}
+          company={"Amazon"}
+          profilePictureURL={""}
+          description={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mauris nunc, gravida sit amet porttitor ac, eleifend consectetur risus. Proin luctus justo lectus, nec dapibus nunc interdum vel. Quisque volutpat diam ut ullamcorper iaculis. Aenean vestibulum lectus quis dapibus maximus. Nulla pharetra feugiat libero sed feugiat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras nulla lorem, lobortis sed enim non, maximus commodo elit."}
+          date={"2022-06-10"}
         />
-        <JobOfferCard
-          position={"Baquetón"}
-          company={"Engibeers"}
-          description={"No description provided."}
-        />
+
+
+        {
+          offers && offers.map((offer) => (
+            <JobOfferCard
+              key={offer.id}
+              position={offer.title}
+              company={"Google LLC"}
+              profilePictureURL={"https://rotulosmatesanz.com/wp-content/uploads/2017/09/2000px-Google_G_Logo.svg_.png"}
+              description={offer.description}
+              date={offer.createdAt}
+            />
+          ))
+        }
       </Box>
     </div>
   );
