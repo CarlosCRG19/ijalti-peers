@@ -27,7 +27,7 @@ const AspirantSignup = () => {
         container
         component="main"
         overflowY="scroll"
-        sx={{ background: palette.gray.B, height: '100vh' }}
+        sx={{ background: palette.gray.B }}
       >
         <Grid item xs={3} display="flex" justifyContent="center" mt={6}>
           <VerticalStepper steps={steps} activeStep={currentStepIndex} />

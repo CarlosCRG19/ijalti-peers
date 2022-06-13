@@ -29,7 +29,7 @@ const educationLevelChoices = [
 ];
 
 const INITIAL_WORK_EXPERIENCE = {
-  title: null, company: null, startDate: null, endDate: null,
+  title: '', at: '', startDate: null, endDate: null,
 };
 
 const ProfessionalExperience = ({ onPrevious, onNext }) => {
@@ -81,6 +81,34 @@ const ProfessionalExperience = ({ onPrevious, onNext }) => {
         id: prevFullWorkExperience.length,
       }]
     ));
+
+    const formattedFullWorkExperience = fullWorkExperience.map((experience) => {
+      const newExperience = { ...experience };
+      newExperience.startDate = String(newExperience.startDate);
+      newExperience.endDate = String(newExperience.endDate);
+      return newExperience;
+    });
+
+    const formattedLastWorkExperience = {
+      ...workExperience,
+      startDate: String(workExperience.startDate),
+      endDate: String(workExperience.endDate),
+    };
+
+    delete formattedFullWorkExperience.id;
+
+    const newProfessionalExperience = {
+      ...professionalExperience,
+      workExperience: [...formattedFullWorkExperience, formattedLastWorkExperience],
+    };
+
+    updateAspirantSignup({
+      type: 'setProfessionalExperience',
+      payload: newProfessionalExperience,
+    });
+
+    console.log(newProfessionalExperience);
+
     setWorkExperience(INITIAL_WORK_EXPERIENCE);
   };
 
@@ -92,12 +120,25 @@ const ProfessionalExperience = ({ onPrevious, onNext }) => {
     let counter = 0;
     setFullWorkExperience((prevFullWorkExperience) => (
       prevFullWorkExperience.map((experience) => {
-        experience.id = counter;
+        const newExperience = { ...experience };
+        newExperience.id = counter;
         counter += 1;
-        return experience;
+        return newExperience;
       })
     ));
   };
+
+  const displayWorkExperience = () => fullWorkExperience.map((experience) => (
+    <WorkExperienceCard
+      title={experience.title}
+      at={experience.at}
+      startDate={experience.startDate}
+      endDate={experience.endDate}
+      id={experience.id}
+      onDelete={handleDeleteWorkExperience}
+      key={String(experience.id)}
+    />
+  ));
 
   const handleSubmit = () => {
     onNext();
@@ -110,8 +151,8 @@ const ProfessionalExperience = ({ onPrevious, onNext }) => {
     };
 
     // const getCompanies = async () => {
-    //   const companyList = await api.company.getAll();
-    //   setCompanies(companyList);
+    //   const atList = await api.at.getAll();
+    //   setCompanies(atList);
     // };
 
     getSkills();
@@ -213,11 +254,11 @@ const ProfessionalExperience = ({ onPrevious, onNext }) => {
         <TextFieldWithLabel
           size="regular"
           label="Empresa"
-          id="company"
-          name="company"
+          id="at"
+          name="at"
           variant="filled"
           placeholder="Selecciona una empresa"
-          value={workExperience.company}
+          value={workExperience.at}
           onChange={handleChangeWorkExperience}
         />
       </Grid>
@@ -264,18 +305,12 @@ const ProfessionalExperience = ({ onPrevious, onNext }) => {
       </Grid>
 
       <Grid item xs={12}>
-        <Paper style={{ maxHeight: 200, overflow: 'auto', background: palette.gray.A }}>
+        <Paper sx={{
+          maxHeight: 200, height: 200, overflow: 'auto', background: palette.gray.A,
+        }}
+        >
           <List>
-            {fullWorkExperience.map((experience) => (
-              <WorkExperienceCard
-                title={experience.title}
-                company={experience.company}
-                startDate={experience.startDate}
-                endDate={experience.endDate}
-                id={experience.id}
-                onDelete={handleDeleteWorkExperience}
-              />
-            ))}
+            {displayWorkExperience()}
           </List>
         </Paper>
       </Grid>

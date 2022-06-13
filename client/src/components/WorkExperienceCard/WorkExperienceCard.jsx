@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 
 const WorkExperienceCard = ({
-  title, company, startDate, endDate, id, onDelete,
+  title, at, startDate, endDate, id, onDelete,
 }) => {
   const { palette } = useTheme();
 
@@ -34,7 +34,7 @@ const WorkExperienceCard = ({
         </Typography>
         <Box display="flex" sx={{ mt: '16px' }}>
           <Typography variant="body1" sx={{ color: palette.orange }}>
-            {company}
+            {at}
             &nbsp;
           </Typography>
           <Typography variant="body1">

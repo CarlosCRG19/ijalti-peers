@@ -31,7 +31,7 @@ const CompanyProfile = () => {
       const response = await api.company.getCompany(idcompany);
       setCompany(response.company);
     } catch (error) {
-      navigate('/');
+      navigate('/error');
     }
   };
 

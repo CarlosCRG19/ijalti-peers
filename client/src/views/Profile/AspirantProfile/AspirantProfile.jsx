@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 
 import {
-  Cake, Work, School, Handyman,
+  Cake, Work, School, Handyman, AccountCircle,
 } from '@mui/icons-material';
 
 import useAPI from '../../../hooks/useAPI/useAPI';
@@ -56,13 +56,15 @@ const AspirantProfile = () => {
       const response = await api.aspirant.getAspirant(idAspirant);
       setAspirant(response.aspirant);
     } catch (error) {
-      navigate('/');
+      navigate('/error');
     }
   };
 
   useEffect(() => {
     getAspirant(params.id);
   }, []);
+
+  console.log(aspirant);
 
   return (
     <Grid
@@ -124,14 +126,7 @@ const AspirantProfile = () => {
                 justifyContent="center"
                 sx={{ zIndex: 1 }}
               >
-                <div style={{
-                  width: '200px',
-                  height: '200px',
-                  backgroundColor: 'gray',
-                  borderRadius: '100%',
-
-                }}
-                />
+                <AccountCircle sx={{ width: 200, height: 200, color: palette.gray.C }} />
                 <Chip
                   label={translateWorkingStatus[aspirant.workingStatus]}
                   sx={{
@@ -168,13 +163,19 @@ const AspirantProfile = () => {
                 <Typography
                   variant="h5"
                   component="h2"
-                  sx={{
-                    color: palette.gray.C,
-                    mb: '8px',
-                  }}
+                  sx={{ color: palette.gray.C }}
                 >
-                  Username
+                  {aspirant.username}
                 </Typography>
+
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{ color: palette.gray.C, mb: '8px' }}
+                >
+                  {aspirant.email }
+                </Typography>
+
                 <Typography
                   variant="paragraph"
                   sx={{ color: palette.gray.C, mb: '8px' }}
@@ -228,7 +229,9 @@ const AspirantProfile = () => {
                   }}
                 >
                   <Work sx={{ mr: '12px' }} />
-                  {`${aspirant.yearsOfExperience} año${aspirant.yearsOfExperience > 1 ? 's' : ''} de experiencia laboral`}
+                  {aspirant.yearsOfExperience === 0 ? 'Primera experiencia laboral'
+                    : `${aspirant.yearsOfExperience} ${aspirant.yearsOfExperience === 1 ? 'año' : 'años'}
+                    de experiencia laboral`}
 
                 </Typography>
 
