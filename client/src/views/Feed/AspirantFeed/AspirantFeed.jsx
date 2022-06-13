@@ -31,7 +31,6 @@ const AspirantFeed = () => {
     try {
       const response = await api.jobOffer.getByPage(page);
       setOffers(response);
-      console.log(response[0]);
     } catch (error) {
       console.log(error);
     }

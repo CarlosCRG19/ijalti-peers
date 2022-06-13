@@ -46,7 +46,8 @@ const JobOfferCard = ({
   requiredSkills,
   preferredSkills,
 }) => {
-  const [expand, setExpand] = useState();
+  const [expand, setExpand] = useState(true);
+  const [expandMsg, setExpandMsg] = useState('Ver más');
 
   if (!profilePictureURL) {
     profilePictureURL = "#"
@@ -59,8 +60,12 @@ const JobOfferCard = ({
   if (salary) {
     salary = "$" + salary
   }
-
-
+  const handleExpand = (state) => {
+    setExpand(!expand);
+    console.log(expand);
+    expand ? setExpandMsg("Ver menos") : setExpandMsg("Ver más");
+    return state;
+  }
 
   return (
     <div className='job-offer-card'>
@@ -90,17 +95,9 @@ const JobOfferCard = ({
             </div>
           </div>
 
-          <CardActions>
-            <Button
-              fullWidth
-              variant='text'
-              onClick={() => { setExpand(!expand) }}
-            >
-              Ver más
-            </Button>
-          </CardActions>
 
-          <Collapse in={expand} timeout="auto" unmountOnExit>
+
+          <Collapse in={!expand} timeout="auto" unmountOnExit>
             <Box className="job-offer-body-info" sx={{ paddingBottom: "16px" }}>
               <div className='job-offer-abilities'>
                 <div>
@@ -108,7 +105,7 @@ const JobOfferCard = ({
                   <List sx={{ padding: "0px 0px 8px 0px" }}>
                     {
                       requiredSkills && requiredSkills.map((skill) => (
-                        <ListItemText>- {skill.name}</ListItemText>
+                        <ListItemText key={skill.name}>- {skill.name}</ListItemText>
                       ))
                     }
                   </List>
@@ -119,7 +116,7 @@ const JobOfferCard = ({
                   <List sx={{ padding: "0px 0px 8px 0px" }}>
                     {
                       preferredSkills && preferredSkills.map((skill) => (
-                        <ListItemText>- {skill.name}</ListItemText>
+                        <ListItemText key={skill.name}>- {skill.name}</ListItemText>
                       ))
                     }
                   </List>
@@ -131,7 +128,15 @@ const JobOfferCard = ({
               </div>
             </Box>
           </Collapse>
-
+          <CardActions>
+            <Button
+              fullWidth
+              variant='text'
+              onClick={handleExpand}
+            >
+              {expandMsg}
+            </Button>
+          </CardActions>
         </CardContentNoPadding>
       </Card>
     </div>
