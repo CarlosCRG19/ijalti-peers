@@ -1,14 +1,19 @@
 .job-offer-card {
     min-width: 100%;
     margin: 32px 0px 0px 0px;
-
 }
 
 .job-offer-header-info {
     display: grid;
-    grid-template-columns: 50% 20% 30%;
+    grid-template-columns: 50% 50%;
     place-items: center start;
     gap: 8px;
+}
+
+.job-offer-subheader{
+    display: grid;
+    width: 100%;
+    grid-template-columns: 40% 60%;
 }
 
 .job-offer-body-info {
@@ -28,5 +33,11 @@
         grid-template-columns: 50% 50%;
         gap: 16px;
     }
+}
 
+@media (max-width: 550px) {
+    .job-offer-header-info {
+        display: block;
+        
+    }
 }
