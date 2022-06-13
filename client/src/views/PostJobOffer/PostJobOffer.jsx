@@ -81,9 +81,7 @@ const PostJobOffer = () => {
       setSkills(skillList);
     };
 
-    if (!localStorage.idToken || !localStorage.idCompany) {
-      navigate('/login');
-    }
+
 
     getSkills();
   }, []);

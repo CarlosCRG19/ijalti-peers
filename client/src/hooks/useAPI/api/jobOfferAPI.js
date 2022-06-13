@@ -20,6 +20,17 @@ class JobOfferAPI extends APIGateway {
       throw new Error(error.message);
     }
   }
+
+
+  async getByPage(page) {
+    try {
+      const response = await this._client.get(`job-offers/?page=${page}`);
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 export default JobOfferAPI;

@@ -10,23 +10,34 @@ export const getOffersList = async (
     res: Response
 ): Promise<Response> => {
     try{
-        const nOffers = 10;
-        
-        let  page : any = req.query.page || 1;
-        page = parseInt(page);
-        
-        page = (page > 1) ? page : 1
+        if ('page' in req.query) {
+            const nOffers = 10;
+            
+            let  page : any = req.query.page || 1;
+            page = parseInt(page);
+            
+            page = (page > 1) ? page : 1
+    
+            const takeJobOffers = nOffers * page
+            const skipJobOffers = nOffers * (page - 1)
+          
+            const offers = await JobOffer.findAndCount({
+                relations: ['preferredSkills', 'requiredSkills', 'interestedAspirants', 'company'],
+                select: {
+                    company: {
+                        id: true,
+                        name: true,
+                    },
+                },
+                order:{'createdAt' : 'DESC'}, 
+                take: takeJobOffers,
+                skip: skipJobOffers
+            });
 
-        const takeJobOffers = nOffers * page
-        const skipJobOffers = nOffers * (page - 1)
-      
-        const offers = await JobOffer.findAndCount({
-            relations: ['preferredSkills', 'requiredSkills', 'interestedAspirants'],
-            order:{'createdAt' : 'DESC'}, 
-            take: takeJobOffers,
-            skip: skipJobOffers
-        });
-        return res.status(200).json(offers[0]);
+            return res.status(200).json(offers[0]);
+        }
+        const offers = await JobOffer.find();
+        return res.status(200).json(offers);
     } catch (error) {
         console.log(error)
         return res.status(500).json({ message: "Something went wrong!" });
