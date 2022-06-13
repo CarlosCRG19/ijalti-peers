@@ -5,17 +5,21 @@ import {
 } from 'react';
 
 import {
+  Card,
+  CardContent,
   Typography,
 } from '@mui/material';
 
 import './AspirantFeed.css'
-import { JobOffer, JobOfferCard } from '../../../components';
+import { JobOfferCard } from '../../../components';
+
 import { Box } from '@mui/system';
 
 import useAPI from '../../../hooks/useAPI/useAPI';
 const AspirantFeed = () => {
   const [offers, setOffers] = useState();
   const [companies, setCompanies] = useState();
+  const [aspirant, setAspirant] = useState();
   const api = useAPI();
 
   const getCompany = async (idcompany) => {
@@ -36,9 +40,19 @@ const AspirantFeed = () => {
     }
   };
 
+  const getAspirant = async (idAspirant) => {
+    try {
+      const response = await api.aspirant.getAspirant(idAspirant);
+      setAspirant(response.aspirant);
+      console.log(aspirant);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     getJobOffers(1);
+    getAspirant(localStorage.idAspirant);
   }, []);
 
 
@@ -49,7 +63,16 @@ const AspirantFeed = () => {
           width: "100%",
           maxWidth: "720px"
         }}>
-
+        <Card>
+          <CardContent>
+            {
+              <Typography variant='h4'>
+                Bienvenido de vuelta, {aspirant ? aspirant.names : " "}👋.
+              </Typography>
+            }
+            <Typography variant='h5'>Estas son las ofertas más de trabajo más recientes.</Typography>
+          </CardContent>
+        </Card>
         {
           offers && offers.map((offer) => (
             <JobOfferCard

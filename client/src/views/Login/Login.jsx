@@ -58,6 +58,7 @@ const Login = () => {
         navigate(`/profile/company/${response.company.id}`);
       }
       localStorage.setItem('idToken', response.idToken);
+      localStorage.setItem('idAspirant', response.aspirant.id);
     } catch (loginError) {
       setError(loginError.message);
     }
