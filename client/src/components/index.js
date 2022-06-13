@@ -1,6 +1,7 @@
 import Form from './Form';
 import Navbar from './Navbar';
 import JobOffer from './JobOffer';
+import JobOfferCard from './JobOfferCard'
 import TagsInput from './TagsInput';
 import DatePicker from './DatePicker';
 import SelectWithLabel from './SelectWithLabel';
@@ -13,6 +14,7 @@ export {
   Form,
   Navbar,
   JobOffer,
+  JobOfferCard,
   TagsInput,
   DatePicker,
   SelectWithLabel,

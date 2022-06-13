@@ -61,7 +61,6 @@ const Login = () => {
 
         storeCredentials('company', idToken, id, name);
       }
-
       navigate('/');
     } catch (loginError) {
       setError(loginError.message);
