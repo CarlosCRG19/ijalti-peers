@@ -1,7 +1,9 @@
 import {
   React,
-  useState
+  useState,
 } from 'react';
+
+import { useNavigate } from 'react-router-dom';
 
 import {
   Avatar,
@@ -38,7 +40,6 @@ const JobOfferCard = ({
   company,
   description,
   profilePictureURL,
-  companyProfileURL,
   date,
   location,
   salary,
@@ -48,12 +49,9 @@ const JobOfferCard = ({
   const [expand, setExpand] = useState(true);
   const [expandMsg, setExpandMsg] = useState('Ver más');
 
+  const navigate = useNavigate();
   if (!profilePictureURL) {
     profilePictureURL = "#"
-  }
-
-  if (!companyProfileURL) {
-    companyProfileURL = "#"
   }
 
   if (salary) {
@@ -70,15 +68,16 @@ const JobOfferCard = ({
       <Card>
         <CardHeader
           avatar={
-            <Avatar alt={company} src={profilePictureURL} />
+            <Avatar alt={company.name} src={profilePictureURL} />
           }
           title={
             <Link
-              href={companyProfileURL}
+              sx={{ cursor: "pointer" }}
               underline="hover"
               variant='h6'
+              onClick={() => navigate(`/profile/company/${company.id}`)}
             >
-              {company}
+              {company.name}
             </Link>
           }
           subheader={parseDateYYYYMMDD(date)}

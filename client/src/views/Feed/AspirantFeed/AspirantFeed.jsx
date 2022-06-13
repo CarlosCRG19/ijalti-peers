@@ -20,19 +20,9 @@ import useAPI from '../../../hooks/useAPI/useAPI';
 
 const AspirantFeed = () => {
   const [offers, setOffers] = useState();
-  const [companies, setCompanies] = useState();
   const [aspirant, setAspirant] = useState();
   const [page, setPage] = useState(1);
   const api = useAPI();
-
-  const getCompany = async (idcompany) => {
-    try {
-      const response = await api.company.getCompany(idcompany);
-      setCompanies(response.company);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const getJobOffers = async (page) => {
     try {
@@ -87,8 +77,7 @@ const AspirantFeed = () => {
             <JobOfferCard
               key={offer.id}
               position={offer.title}
-              company={"Google LLC"}
-              profilePictureURL={"https://rotulosmatesanz.com/wp-content/uploads/2017/09/2000px-Google_G_Logo.svg_.png"}
+              company={offer.company}
               description={offer.description}
               date={offer.createdAt}
               location={offer.city}
