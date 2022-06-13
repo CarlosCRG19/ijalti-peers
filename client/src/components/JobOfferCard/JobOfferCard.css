@@ -6,7 +6,9 @@
 
 .job-offer-header-info {
     display: grid;
-    grid-template-columns: 65% auto;
+    grid-template-columns: 50% 20% 30%;
+    place-items: center start;
+    gap: 8px;
 }
 
 .job-offer-body-info {

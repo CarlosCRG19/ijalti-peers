@@ -5,21 +5,24 @@ import {
 } from 'react';
 
 import {
+  Box,
   Card,
   CardContent,
+  Pagination,
   Typography,
 } from '@mui/material';
 
 import './AspirantFeed.css'
 import { JobOfferCard } from '../../../components';
-
-import { Box } from '@mui/system';
-
 import useAPI from '../../../hooks/useAPI/useAPI';
+
+
+
 const AspirantFeed = () => {
   const [offers, setOffers] = useState();
   const [companies, setCompanies] = useState();
   const [aspirant, setAspirant] = useState();
+  const [page, setPage] = useState(1);
   const api = useAPI();
 
   const getCompany = async (idcompany) => {
@@ -44,20 +47,26 @@ const AspirantFeed = () => {
     try {
       const response = await api.aspirant.getAspirant(idAspirant);
       setAspirant(response.aspirant);
-      console.log(aspirant);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handlePageChange = (pageNumber) => {
+    setPage(pageNumber);
+    getJobOffers(pageNumber);
+    const header = document.getElementById("header");
+    header.scrollIntoView({behavior: "smooth"});
+  }
+
   useEffect(() => {
-    getJobOffers(1);
+    getJobOffers(page);
     getAspirant(localStorage.idAspirant);
   }, []);
 
 
   return (
-    <div className='main-feed-content'>
+    <div className='main-feed-content' id="header">
       <Box
         sx={{
           width: "100%",
@@ -89,7 +98,14 @@ const AspirantFeed = () => {
             />
           ))
         }
+
       </Box>
+      <Pagination
+        count={10}
+        onChange={(e) => handlePageChange(e.target.textContent)}
+        color="primary"
+        sx={{ paddingTop: "32px" }}
+      ></Pagination>
     </div>
   );
 };

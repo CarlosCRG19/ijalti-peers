@@ -87,10 +87,8 @@ const JobOfferCard = ({
         <CardContentNoPadding>
           <div className='job-offer-header-info'>
             <Typography variant='h5' sx={{ placeSelf: "center start" }}>{position}</Typography>
-            <div>
-              <Typography variant='subtitle1'>{salary}</Typography>
-              <Typography variant='subtitle1'>{location}</Typography>
-            </div>
+            <Typography variant='h6'>{salary}</Typography>
+            <Typography variant='h6'>{location}</Typography>
           </div>
 
 
