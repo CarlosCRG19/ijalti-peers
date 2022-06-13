@@ -14,16 +14,18 @@ import {
 import { TextFieldWithLabel } from '../../components';
 
 import useAPI from '../../hooks/useAPI';
+import { useAuth } from '../../contexts/auth';
 
 const INITIAL_CREDENTIALS = { email: '', password: '' };
 
 const Login = () => {
-  const [isAspirantSignup, setIsApirantSignup] = useState(true);
+  const [isAspirantLogin, setIsApirantLogin] = useState(true);
   const [credentials, setCredentials] = useState(INITIAL_CREDENTIALS);
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
   const { palette } = useTheme();
+  const { storeCredentials } = useAuth();
 
   const canLogin = useCallback(() => {
     const { email, password } = credentials;
@@ -48,17 +50,18 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { email, password } = credentials;
+
     try {
-      let response;
-      if (isAspirantSignup) {
-        response = await api.aspirant.login(email, password);
-        navigate(`/profile/aspirant/${response.aspirant.id}`);
+      if (isAspirantLogin) {
+        const { idToken, aspirant: { id, name } } = await api.aspirant.login(email, password);
+
+        storeCredentials('aspirant', idToken, id, name);
       } else {
-        response = await api.company.login(email, password);
-        navigate(`/profile/company/${response.company.id}`);
+        const { idToken, company: { id, name } } = await api.company.login(email, password);
+
+        storeCredentials('company', idToken, id, name);
       }
-      localStorage.setItem('idToken', response.idToken);
-      localStorage.setItem('idAspirant', response.aspirant.id);
+      navigate('/');
     } catch (loginError) {
       setError(loginError.message);
     }
@@ -86,7 +89,7 @@ const Login = () => {
     >
       <Grid item md={6} display={{ xs: 'none', md: 'flex' }} justifyContent="center" sx={{ zIndex: 1 }}>
         <Typography variant="h2" component="p" sx={{ fontWeight: 500, width: '640px' }}>
-          {isAspirantSignup ? 'Encuentra tu trabajo ideal' : 'Encuentra a los mejores ingenieros para tu equipo' }
+          {isAspirantLogin ? 'Encuentra tu trabajo ideal' : 'Encuentra a los mejores ingenieros para tu equipo' }
         </Typography>
       </Grid>
 
@@ -124,14 +127,14 @@ const Login = () => {
               }}
             >
               <Button
-                onClick={() => setIsApirantSignup(true)}
-                variant={isAspirantSignup ? 'contained' : 'outlined'}
+                onClick={() => setIsApirantLogin(true)}
+                variant={isAspirantLogin ? 'contained' : 'outlined'}
               >
                 Personal
               </Button>
               <Button
-                onClick={() => setIsApirantSignup(false)}
-                variant={isAspirantSignup ? 'outlined' : 'contained'}
+                onClick={() => setIsApirantLogin(false)}
+                variant={isAspirantLogin ? 'outlined' : 'contained'}
               >
                 Empresarial
               </Button>

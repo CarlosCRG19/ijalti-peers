@@ -1,10 +1,19 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-import PublicRoutes from './routes/PublicRoutes';
-import PrivateRoutes from './routes/PrivateRoutes';
+import { AuthProvider } from './contexts/auth';
+import { AspirantRoutes, CompanyRoutes, SharedRoutes } from './routes';
 
+import { AspirantSignup, CompanySignup, Signup } from './views/Signup';
+import { Navbar } from './components';
+import {
+  CompanyProfile,
+  AspirantProfile,
+  PostJobOffer,
+  LandingPage,
+  Login,
+} from './views';
 import './App.css';
 
 const theme = createTheme({
@@ -35,8 +44,41 @@ const theme = createTheme({
 const App = () => (
   <ThemeProvider theme={theme}>
     <BrowserRouter>
-      {'idToken' in localStorage && <PrivateRoutes />}
-      <PublicRoutes />
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signup/company" element={<CompanySignup />} />
+          <Route path="/signup/aspirant" element={<AspirantSignup />} />
+          <Route element={<SharedRoutes />}>
+            <Route
+              path="/profile/aspirant/:id"
+              element={(
+                <>
+                  <Navbar />
+                  <AspirantProfile />
+                </>
+              )}
+            />
+            <Route
+              path="/profile/company/:id"
+              element={(
+                <>
+                  <Navbar />
+                  <CompanyProfile />
+                </>
+              )}
+            />
+          </Route>
+          <Route element={<CompanyRoutes />}>
+            <Route path="/post-job-offer" element={<PostJobOffer />} />
+          </Route>
+          <Route element={<AspirantRoutes />}>
+            <Route />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   </ThemeProvider>
 );

@@ -1,4 +1,5 @@
-import PublicRoutes from './PublicRoutes';
-import PrivateRoutes from './PrivateRoutes';
+import AspirantRoutes from './AspirantRoutes';
+import CompanyRoutes from './CompanyRoutes';
+import SharedRoutes from './SharedRoutes';
 
-export { PublicRoutes, PrivateRoutes };
+export { AspirantRoutes, CompanyRoutes, SharedRoutes };

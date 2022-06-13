@@ -28,7 +28,7 @@ const CompanyProfile = () => {
 
   const getCompany = async (idcompany) => {
     try {
-      const response = await api.company.getCompany(idcompany);
+      const response = await api.company.getById(idcompany);
       setCompany(response.company);
     } catch (error) {
       navigate('/');

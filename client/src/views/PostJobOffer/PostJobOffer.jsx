@@ -80,9 +80,6 @@ const PostJobOffer = () => {
       const skillList = await api.skill.getAll();
       setSkills(skillList);
     };
-
-
-
     getSkills();
   }, []);
 
