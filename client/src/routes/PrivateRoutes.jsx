@@ -3,7 +3,9 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Navbar } from '../components';
 import { useAuth } from '../contexts/auth';
 
-import { PostJobOffer, AspirantProfile, CompanyProfile, AspirantFeed } from '../views';
+import {
+  PostJobOffer, AspirantProfile, CompanyProfile, AspirantFeed,
+} from '../views';
 import AspirantSearch from '../views/AspirantSearch';
 import AspirantRoutes from './AspirantRoutes';
 import CompanyRoutes from './CompanyRoutes';
@@ -11,7 +13,7 @@ import SharedRoutes from './SharedRoutes';
 
 const PrivateRoutes = () => {
   const { idToken, user } = useAuth();
-if (!idToken) return null;
+  if (!idToken) return null;
   return (
     <>
       <Navbar />
@@ -34,6 +36,7 @@ if (!idToken) return null;
           ? (
             <Route element={<CompanyRoutes />}>
               <Route path="/post-job-offer" element={<PostJobOffer />} />
+              <Route path="/aspirant-search" element={<AspirantSearch />} />
               <Route path="/" element={<Navigate to={`/profile/company/${user.userId}`} />} />
             </Route>
           )
