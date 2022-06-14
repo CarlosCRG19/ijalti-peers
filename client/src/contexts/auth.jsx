@@ -10,10 +10,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAPI } from '../hooks';
 import { isEmptyObject } from '../utils';
 
+const INITIAL_STATE = { idToken: '', user: { username: '', userId: '', role: '' } };
+
 const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState({ idToken: '', user: { username: '', userId: '', role: '' } });
+  const [auth, setAuth] = useState(INITIAL_STATE);
 
   const api = useAPI();
   const navigate = useNavigate();
@@ -31,7 +33,8 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.clear();
-    navigate('/login');
+    setAuth(INITIAL_STATE);
+    navigate('/');
   };
 
   const validateAuth = async (role, idToken, userId, username) => {
@@ -51,8 +54,9 @@ const AuthProvider = ({ children }) => {
       idToken,
       username,
     } = localStorage;
-
+    console.log(localStorage);
     if (!role && !idToken && !userId && !username) {
+      console.log('a')
       logout();
       return;
     }

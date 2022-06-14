@@ -8,7 +8,7 @@ const CompanyRoutes = () => {
 
   console.log(idToken, user);
   if (!idToken || user.role !== 'company') {
-    return <Navigate to="/login" />;
+    return null;
   }
 
   return <Outlet />;
