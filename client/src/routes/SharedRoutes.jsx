@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/auth';
 const SharedRoutes = () => {
   const { idToken } = useAuth();
   if (!idToken) {
-    return <Navigate to="/login" />;
+    return null;
   }
   return <Outlet />;
 };

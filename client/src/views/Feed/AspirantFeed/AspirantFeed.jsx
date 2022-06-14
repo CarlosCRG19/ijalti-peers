@@ -15,14 +15,14 @@ import {
 import './AspirantFeed.css'
 import { JobOfferCard } from '../../../components';
 import useAPI from '../../../hooks/useAPI/useAPI';
-
-
+import { useAuth } from '../../../contexts/auth';
 
 const AspirantFeed = () => {
   const [offers, setOffers] = useState();
   const [aspirant, setAspirant] = useState();
   const [page, setPage] = useState(1);
   const api = useAPI();
+  const { user } = useAuth();
 
   const getJobOffers = async (page) => {
     try {
@@ -51,7 +51,7 @@ const AspirantFeed = () => {
 
   useEffect(() => {
     getJobOffers(page);
-    getAspirant(localStorage.idAspirant);
+    getAspirant(user.userId);
   }, []);
 
 
