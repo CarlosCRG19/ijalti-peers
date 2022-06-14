@@ -2,13 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { Button, Grid } from '@mui/material';
+
 import { useAPI } from '../../../../hooks';
 import { Form, TextFieldWithLabel } from '../../../../components';
+import { useAuth } from '../../../../contexts/auth';
 import { useAspirantSignup } from '../../../../contexts/aspirant-signup';
 
 const PublicProfile = ({ onPrevious }) => {
   const api = useAPI();
   const navigate = useNavigate();
+  const { storeCredentials } = useAuth();
   const { aspirantSignup, updateAspirantSignup, isCompleted } = useAspirantSignup();
   const {
     credentials,
@@ -36,13 +39,14 @@ const PublicProfile = ({ onPrevious }) => {
     aspirant.yearsOfExperience = +aspirant.yearsOfExperience;
     if (aspirant.skills) aspirant.skills = aspirant.skills.map((skill) => skill.id);
 
-    const response = await api.aspirant.signup(email, password, aspirant);
+    const { idToken, aspirant: { id, name } } = await api.aspirant.signup(
+      email,
+      password,
+      aspirant,
+    );
 
-    if (response) {
-      localStorage.setItem('idToken', response.idToken);
-      // TODO: Redirect to private route
-      navigate('/');
-    }
+    storeCredentials('aspirant', idToken, id, name);
+    navigate('/');
   };
 
   return (

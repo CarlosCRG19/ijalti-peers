@@ -80,11 +80,6 @@ const PostJobOffer = () => {
       const skillList = await api.skill.getAll();
       setSkills(skillList);
     };
-
-    if (!localStorage.idToken || !localStorage.idCompany) {
-      navigate('/login');
-    }
-
     getSkills();
   }, []);
 

@@ -3,6 +3,7 @@ import LandingPage from './LandingPage';
 import PostJobOffer from './PostJobOffer';
 import NotFound from './NotFound';
 import { AspirantProfile, CompanyProfile } from './Profile';
+import { AspirantFeed } from './Feed';
 
 export {
   Login,

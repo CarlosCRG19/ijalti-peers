@@ -4,11 +4,13 @@ import { Grid, Button } from '@mui/material';
 
 import { useAPI } from '../../../../hooks';
 import { Form, TextFieldWithLabel } from '../../../../components';
+import { useAuth } from '../../../../contexts/auth';
 import { useCompanySignupContext } from '../../../../contexts/company-signup';
 
 const ProfileInfo = ({ onPrevious }) => {
   const api = useAPI();
   const navigate = useNavigate();
+  const { storeCredentials } = useAuth();
   const { companySignup, updateCompanySignup } = useCompanySignupContext();
   const {
     credentials,
@@ -38,14 +40,10 @@ const ProfileInfo = ({ onPrevious }) => {
     company.phone1 = +company.phone1;
     company.phone1 = +company.phone2;
 
-    const response = await api.company.signup(email, password, company);
+    const { idToken, company: { id, name } } = await api.company.signup(email, password, company);
 
-    if (response) {
-      localStorage.setItem('idToken', response.idToken);
-      localStorage.setItem('idCompany', response.company.id);
-      // TODO: Redirect to private route
-      navigate('/post-job-offer');
-    }
+    storeCredentials('company', idToken, id, name);
+    navigate('/post-job-offer');
   };
 
   return (

@@ -1,11 +1,11 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-import PublicRoutes from './routes/PublicRoutes';
-import PrivateRoutes from './routes/PrivateRoutes';
-
+import { AuthProvider } from './contexts/auth';
 import './App.css';
+import PrivateRoutes from './routes/PrivateRoutes';
+import PublicRoutes from './routes/PublicRoutes';
 
 const theme = createTheme({
   palette: {
@@ -36,8 +36,10 @@ const theme = createTheme({
 const App = () => (
   <ThemeProvider theme={theme}>
     <BrowserRouter>
-      {'idToken' in localStorage && <PrivateRoutes />}
-      <PublicRoutes />
+      <AuthProvider>
+        <PublicRoutes />
+        <PrivateRoutes />
+      </AuthProvider>
     </BrowserRouter>
   </ThemeProvider>
 );

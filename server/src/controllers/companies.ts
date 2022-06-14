@@ -1,9 +1,18 @@
 import { Request, Response } from "express";
 import axios, { Axios, AxiosRequestConfig } from "axios";
 import { Company, User } from "../models";
+import { Like } from "typeorm";
 
 export const getCompaniesList = async (req: Request, res: Response): Promise<Response> => {
     try{
+        if ('name' in req.query) {
+            const { name }: any = req.query;
+            const companies = await Company.createQueryBuilder()
+                .where("LOWER(name) LIKE :name", { name: `${ name.toLowerCase() }%` })
+                .take(10)
+                .getMany();
+            return res.status(200).json(companies);
+        }
         const companies  = await Company.find();
         return res.status(200).json(companies);
     }catch(error){
