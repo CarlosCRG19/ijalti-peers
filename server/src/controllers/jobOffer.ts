@@ -10,35 +10,47 @@ export const getOffersList = async (
     res: Response
 ): Promise<Response> => {
     try{
-        if ('page' in req.query) {
-            const nOffers = 10;
-            
-            let  page : any = req.query.page || 1;
-            page = parseInt(page);
-            
-            page = (page > 1) ? page : 1
-
-            const skipJobOffers = nOffers * (page - 1)
-          
-            const offers = await JobOffer.findAndCount({
-                relations: ['preferredSkills', 'requiredSkills', 'interestedAspirants', 'company'],
-                select: {
-                    company: {
-                        id: true,
-                        name: true,
-                    },
-                },
-                order:{'createdAt' : 'DESC'}, 
-                take: nOffers,
-                skip: skipJobOffers
-            });
-
-            return res.status(200).json({offers: offers[0], totalCount: offers[1]});
+        if(!('page' in req.query) && !('companyId' in req.query)) {
+            const offers = await JobOffer.find();
+            return res.status(200).json(offers);
         }
-        const offers = await JobOffer.find();
-        return res.status(200).json(offers);
-    } catch (error) {
+        
+        let company = undefined
+        if('companyId' in req.query){
+            const companyId: any = req.query.companyId
+            company = await Company.findOneBy( {id: companyId} );
+        } 
+        
+        const nOffers = 10;
+
+        let  page : any = req.query.page || 1;
+        page = parseInt(page);
+        page = (page > 1) ? page : 1
+
+        const skipJobOffers = nOffers * (page - 1)
+
+        const [offers, totalCount] = await JobOffer.findAndCount({
+            where: company ? { company: {id: company.id} } : {},
+            relations: ['preferredSkills', 'requiredSkills', 'interestedAspirants', 'company'],
+            select: {
+                company: {
+                    id: true,
+                    name: true, 
+                },
+            },
+            order:{'createdAt' : 'DESC'}, 
+            take: nOffers,
+            skip: skipJobOffers
+        });
+        return res.status(200).json({offers, totalCount});
+    }catch (error) {
         console.log(error)
+        
+        let {code : errorCode}: any = error;
+        if (errorCode === "22P02"){
+            return res.status(404).json({ message: "Not found!" });
+        }
+        
         return res.status(500).json({ message: "Something went wrong!" });
     }
 };
@@ -48,8 +60,6 @@ export const createOffer = async (
     res: Response
 ): Promise<Response> => {
     try {
-        // const user = await User.findOneBy({firebaseId: req.user_id});
-        // if(!user) throw new Error("Failed");
         const company = await Company.findOneBy({user: {firebaseId: req.user_id}});
         if(!company) throw Error("Company wasn't found");
         const newJobOffer = JobOffer.create({
