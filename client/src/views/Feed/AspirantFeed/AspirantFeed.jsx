@@ -21,6 +21,7 @@ const AspirantFeed = () => {
   const [offers, setOffers] = useState();
   const [aspirant, setAspirant] = useState();
   const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState();
   const api = useAPI();
   const { user } = useAuth();
 
@@ -32,6 +33,11 @@ const AspirantFeed = () => {
       console.log(error);
     }
   };
+
+  const getPageCount = async () => {
+    const offerObject = await api.jobOffer.getByPage(page);
+    setPageCount(Math.ceil(offerObject.totalCount / 10));
+  }
 
   const getAspirant = async (idAspirant) => {
     try {
@@ -46,10 +52,11 @@ const AspirantFeed = () => {
     setPage(pageNumber);
     getJobOffers(pageNumber);
     const header = document.getElementById("header");
-    header.scrollIntoView({behavior: "smooth"});
+    header.scrollIntoView({ behavior: "smooth" });
   }
 
   useEffect(() => {
+    getPageCount();
     getJobOffers(page);
     getAspirant(user.userId);
   }, []);
@@ -73,7 +80,7 @@ const AspirantFeed = () => {
           </CardContent>
         </Card>
         {
-          offers && offers.map((offer) => (
+          offers && offers.offers.map((offer) => (
             <JobOfferCard
               key={offer.id}
               position={offer.title}
@@ -90,7 +97,7 @@ const AspirantFeed = () => {
 
       </Box>
       <Pagination
-        count={10}
+        count={pageCount}
         onChange={(e) => handlePageChange(e.target.textContent)}
         color="primary"
         sx={{ paddingTop: "32px" }}
