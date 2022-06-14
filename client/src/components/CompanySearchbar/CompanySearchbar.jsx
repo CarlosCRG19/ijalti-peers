@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { TextField, MenuItem } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { TextField, MenuItem, Autocomplete } from '@mui/material';
 import './CompanySearchbar.css';
 
 import { useAPI } from '../../hooks';
 
 const CompanySearchbar = () => {
   const [query, setQuery] = useState('');
+
   const [queryResult, setQueryResult] = useState([]);
+
   const { company } = useAPI();
+
   const handleChange = (event) => {
     const { value } = event.target;
     setQuery(value);
@@ -24,16 +27,31 @@ const CompanySearchbar = () => {
     searchCompanies();
   };
   return (
-    <div className="search-bar">
-      <TextField value={query} onChange={handleChange} placeholder="Busca una compañía" />
-      {queryResult.map((item) => (
-        <Link style={{ textDecoration: 'none' }} to={`/profile/company/${item.id}`}>
+    <Autocomplete
+      freeSolo
+      options={queryResult}
+      getOptionLabel={(option) => option.name}
+      sx={{ width: 300, ml: 4 }}
+      renderOption={(props, option) => (
+        <Link to={`/profile/company/${option.id}`} style={{ textDecoration: 'none', color: 'black' }}>
           <MenuItem>
-            <p className="menu-item">{item.name}</p>
+            {option.name}
           </MenuItem>
         </Link>
-      ))}
-    </div>
+      )}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Busca una compañía"
+          value={query}
+          onChange={handleChange}
+          variant="standard"
+          InputProps={{
+            ...params.InputProps,
+          }}
+        />
+      )}
+    />
   );
 };
 

@@ -1,45 +1,117 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Grid,
   Box,
   Button,
-  Link as MuiLink
+  Link as MuiLink,
+  Typography,
+  Menu,
+  MenuItem,
+  Fade,
 } from '@mui/material';
+
+import { Search } from '@mui/icons-material';
+
 import { useNavigate, Link } from 'react-router-dom';
+
+import CompanySearchbar from '../CompanySearchbar';
 
 import { useAuth } from '../../contexts/auth';
 import './Navbar.css';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <Grid
       container
       component="nav"
       fullWidth
+      spacing={0}
+      sx={{ background: 'white', py: 1 }}
     >
       <Grid
-        xs={12}
+        xs={3}
         item
-        fullWidth
         display="flex"
-        sx={{ background: 'white' }}
       >
         <Box
           component="img"
-          sx={{ zIndex: '1', mx: '12px' }}
+          sx={{ zIndex: '1', mx: 2 }}
           alt="The house from the offer."
           src="https://www.ijalti.org.mx/wp-content/uploads/2019/05/favicon.png"
         />
-        <Link to="/" style={{textDecoration: "none"}}>
+
+        <Link to="/" style={{ textDecoration: 'none' }}>
           <MuiLink variant="h3" underline="none">IJALTI PEERS</MuiLink>
         </Link>
-        <Button onClick={() => logout()}>Cerrar sesión</Button>
+      </Grid>
+      <Grid
+        xs={1}
+        item
+        display="flex"
+      />
+      <Grid
+        xs={6}
+        item
+        display="flex"
+      >
+        {user.role === 'company'
+          ? (
+            <Button onClick={() => navigate('/aspirant-search')}>
+              <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+                <Search />
+                Busca aspirantes
+              </Typography>
+            </Button>
+          )
+          : <CompanySearchbar />}
+      </Grid>
+      <Grid xs={1} />
+      <Grid
+        xs={1}
+        item
+        display="flex"
+      >
+        <Button
+          sx={{ justifySelf: 'end' }}
+          id="fade-button"
+          aria-controls={open ? 'fade-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+        >
+          Opciones
+        </Button>
+        <Menu
+          id="fade-menu"
+          MenuListProps={{
+            'aria-labelledby': 'fade-button',
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          TransitionComponent={Fade}
+        >
+          {user.role === 'aspirant' && <MenuItem onClick={() => navigate(`profile/aspirant/${user.userId}`)}>Mi perfil</MenuItem>}
+          <MenuItem onClick={() => logout()} sx={{ justifySelf: 'end' }}>Cerrar sesión</MenuItem>
+        </Menu>
       </Grid>
     </Grid>
-  )
+  );
 };
 
 export default Navbar;

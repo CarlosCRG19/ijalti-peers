@@ -23,6 +23,8 @@ import useAPI from '../../hooks/useAPI/useAPI';
 import SelectWithIcon from '../../components/SelectWithIcon/SelectWithIcon';
 import createQuery from '../../utils/createQuery';
 
+import { useAuth } from '../../contexts/auth';
+
 const INITIAL_SEARCH = {
   requiredSkills: [],
   education: '',
@@ -47,8 +49,10 @@ const AspirantSearch = () => {
 
   const navigate = useNavigate();
 
+  const { user } = useAuth();
+
   const handleChange = (event) => {
-    setAlert("");
+    setAlert('');
     const { name, value } = event.target;
     setSearch((prevSearch) => ({
       ...prevSearch,
@@ -57,13 +61,13 @@ const AspirantSearch = () => {
   };
 
   const handleSubmit = async () => {
-    setAlert("");
+    setAlert('');
     try {
       setSearchResults([]);
 
       const query = createQuery(search);
       if (!query) {
-        setAlert("Favor de llenar al menos un campo.");
+        setAlert('Favor de llenar al menos un campo.');
         return;
       }
 
@@ -71,7 +75,7 @@ const AspirantSearch = () => {
       setSearchResults(aspirants);
 
       if (aspirants.length === 0) {
-        setAlert("No se encontraron aspirantes para esta búsqueda.");
+        setAlert('No se encontraron aspirantes para esta búsqueda.');
       }
       return;
     } catch (error) {
@@ -80,7 +84,7 @@ const AspirantSearch = () => {
   };
 
   const handleChangeNumber = (event) => {
-    setAlert("");
+    setAlert('');
     if (event.target.value < 0) {
       return;
     }
@@ -88,10 +92,10 @@ const AspirantSearch = () => {
       ...prevSearch,
       [event.target.name]: event.target.value,
     }));
-  }
+  };
 
   const handleChangeSkills = (name, selectedSkills) => {
-    setAlert("");
+    setAlert('');
     setSearch((prevSearch) => ({
       ...prevSearch,
       [name]: selectedSkills,
@@ -99,22 +103,22 @@ const AspirantSearch = () => {
   };
 
   const handleChangeEducation = (event) => {
-    setAlert("");
+    setAlert('');
     for (let i = 0; i < educationLevelChoices.length; i++) {
       if (educationLevelChoices[i].name === event.target.value) {
         setSearch((prevSearch) => ({
           ...prevSearch,
           educationLabel: educationLevelChoices[i].name,
-          education: educationLevelChoices[i].id
+          education: educationLevelChoices[i].id,
         }));
       }
     }
-  }
+  };
 
   const clearSearch = () => {
     setSearch(INITIAL_SEARCH);
     setSearchResults([]);
-    setAlert("");
+    setAlert('');
   };
 
   useEffect(() => {
@@ -122,7 +126,7 @@ const AspirantSearch = () => {
       const skills = await skill.getAll();
       setSkills(skills);
     };
-    if (!localStorage.idToken || !localStorage.idCompany) {
+    if (user.role !== 'company') {
       navigate('/login');
     }
 
@@ -153,8 +157,8 @@ const AspirantSearch = () => {
 
         <Grid item xs={6}>
           <SelectWithIcon
-            label={"Educación"}
-            itemsarray={educationLevelChoices.map(education => education.name)}
+            label="Educación"
+            itemsarray={educationLevelChoices.map((education) => education.name)}
             value={search.educationLabel}
             onChange={handleChangeEducation}
             icon={<School />}
@@ -211,16 +215,16 @@ const AspirantSearch = () => {
             <Alert
               severity="info"
               sx={{
-                maxWidth: "720px",
-                width: "100%"
+                maxWidth: '720px',
+                width: '100%',
               }}
             >
-              {alert}</Alert>
+              {alert}
+
+            </Alert>
           </Grid>
         )}
       </Form>
-
-
 
       <div className="cards">
         {

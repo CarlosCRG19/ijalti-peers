@@ -1,12 +1,13 @@
 import Form from './Form';
 import Navbar from './Navbar';
 import JobOffer from './JobOffer';
-import JobOfferCard from './JobOfferCard'
+import JobOfferCard from './JobOfferCard';
 import TagsInput from './TagsInput';
 import DatePicker from './DatePicker';
-import SelectWithLabel from './SelectWithLabel';
 import PasswordField from './PasswordField';
 import VerticalStepper from './VerticalStepper';
+import SelectWithLabel from './SelectWithLabel';
+import CompanySearchbar from './CompanySearchbar';
 import TagsInputWithLabel from './TagsInputWithLabel';
 import TextFieldWithLabel from './TextFieldWithLabel';
 
@@ -17,9 +18,10 @@ export {
   JobOfferCard,
   TagsInput,
   DatePicker,
-  SelectWithLabel,
   PasswordField,
   VerticalStepper,
+  SelectWithLabel,
+  CompanySearchbar,
   TagsInputWithLabel,
   TextFieldWithLabel,
 };
