@@ -7,7 +7,6 @@ const AspirantRoutes = () => {
   const { idToken, user } = useAuth();
 
   if (!idToken || user.role !== 'aspirant') {
-    console.log('valio verga')
     return null;
   }
 

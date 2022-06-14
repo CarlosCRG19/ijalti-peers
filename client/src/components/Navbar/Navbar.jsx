@@ -2,10 +2,10 @@ import React from 'react';
 import {
   Grid,
   Box,
-  Link,
   Button,
+  Link as MuiLink
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import { useAuth } from '../../contexts/auth';
 import './Navbar.css';
@@ -33,8 +33,10 @@ const Navbar = () => {
           alt="The house from the offer."
           src="https://www.ijalti.org.mx/wp-content/uploads/2019/05/favicon.png"
         />
-        <Link href="/" variant="h3" underline="none">IJALTI PEERS</Link>
-        <Button onClick={() => logout()}> texto</Button>
+        <Link to="/" style={{textDecoration: "none"}}>
+          <MuiLink variant="h3" underline="none">IJALTI PEERS</MuiLink>
+        </Link>
+        <Button onClick={() => logout()}>Cerrar sesión</Button>
       </Grid>
     </Grid>
   )
