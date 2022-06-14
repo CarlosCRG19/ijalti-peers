@@ -7,6 +7,7 @@ import {
   Grid,
   Typography,
   Box,
+  Button,
 } from '@mui/material';
 
 import {
@@ -49,23 +50,22 @@ const CompanyProfile = () => {
   useEffect(() => {
     getCompany(params.id);
     getJobOffers();
-    console.log(jobOffers[0]);
   }, []);
 
   return (
     <Grid
       container
-      component="main"
-      display="flex"
-      flexDirection="start"
-      sx={{marginBottom: "64px"}}
+      component='main'
+      display='flex'
+      flexDirection='start'
+      sx={{ marginBottom: '64px' }}
     >
       <Grid
         item
         xs={12}
-        display="flex"
-        justifyContent="center"
-        alignItems="start"
+        display='flex'
+        justifyContent='center'
+        alignItems='start'
         sx={{ zIndex: 1, my: '16px' }}
       >
         <Card
@@ -77,7 +77,7 @@ const CompanyProfile = () => {
             borderRadius: '12px',
             display: 'flex',
             flexDirection: 'column',
-            boxShadow: "6"
+            boxShadow: '6',
           }}
         >
           <CardContent sx={{
@@ -93,10 +93,10 @@ const CompanyProfile = () => {
                 item
                 xs={12}
                 md={3}
-                display="flex"
-                direction="column"
-                alignItems="center"
-                justifyContent="center"
+                display='flex'
+                direction='column'
+                alignItems='center'
+                justifyContent='center'
                 sx={{ zIndex: 1 }}
               >
                 <div style={{
@@ -111,23 +111,23 @@ const CompanyProfile = () => {
                 item
                 xs={12}
                 md={5}
-                display="flex"
-                direction="column"
-                alignItems="start"
-                justifyContent="center"
+                display='flex'
+                direction='column'
+                alignItems='start'
+                justifyContent='center'
                 sx={{ zIndex: 1 }}
               >
                 <Typography
-                  variant="h4"
-                  component="h1"
+                  variant='h4'
+                  component='h1'
                   sx={{ fontWeight: 500 }}
                 >
                   {company.name}
                 </Typography>
 
                 <Typography
-                  variant="h5"
-                  component="h2"
+                  variant='h5'
+                  component='h2'
                   sx={{
                     color: palette.gray.C,
                     mb: '8px',
@@ -137,8 +137,8 @@ const CompanyProfile = () => {
                 </Typography>
 
                 <Typography
-                  variant="h6"
-                  component="h2"
+                  variant='h6'
+                  component='h2'
                   sx={{
                     color: palette.blue.lightest,
                   }}
@@ -156,15 +156,15 @@ const CompanyProfile = () => {
                 item
                 xs={12}
                 md={4}
-                display="flex"
-                direction="column"
-                alignItems="start"
-                justifyContent="space-evenly"
+                display='flex'
+                direction='column'
+                alignItems='start'
+                justifyContent='space-evenly'
                 sx={{ zIndex: 1 }}
               >
                 <Typography
-                  variant="h6"
-                  component="h3"
+                  variant='h6'
+                  component='h3'
                   sx={{
                     color: palette.gray.C,
                     display: 'flex',
@@ -175,8 +175,8 @@ const CompanyProfile = () => {
                   {company.businessLine}
                 </Typography>
                 <Typography
-                  variant="h6"
-                  component="h3"
+                  variant='h6'
+                  component='h3'
                   sx={{
                     color: palette.gray.C,
                     display: 'flex',
@@ -189,8 +189,8 @@ const CompanyProfile = () => {
                   {company.phone2}
                 </Typography>
                 <Typography
-                  variant="h6"
-                  component="h3"
+                  variant='h6'
+                  component='h3'
                   sx={{
                     color: palette.gray.C,
                     display: 'flex',
@@ -209,16 +209,23 @@ const CompanyProfile = () => {
       </Grid>
       <Grid
         item
+        container
         xs={12}
-        display="flex"
-        justifyContent="center"
-        alignItems="start"
+        display='flex'
+        justifyContent='center'
+        alignItems='start'
         sx={{ zIndex: 1, mt: '8px' }}
       >
         <Box className='company-job-offers'>
-          <Grid container columnSpacing={2} className='company-job-offers-child' display="flex">
+          <Grid container columnSpacing={2} className='company-job-offers-child' display='flex'>
 
             <Grid item md={8} xs={12}>
+              <Button
+                onClick={() => navigate('/post-job-offer')}
+                variant='contained'
+                fullWidth
+                sx={{ height: '48px' }}
+              >NUEVA OFERTA +</Button>
               {jobOffers && jobOffers.map((offer) => (
                 <JobOfferCard
                   key={offer.id}
@@ -230,36 +237,36 @@ const CompanyProfile = () => {
                   salary={offer.salary}
                   requiredSkills={offer.requiredSkills}
                   preferredSkills={offer.preferredSkills}
-                  sxCard={{ boxShadow: "4" }}
+                  sxCard={{ boxShadow: '4', borderRadius: '12px' }}
                 />
               ))}
             </Grid>
 
             <Grid item md={4} xs={12}>
               <Card
-                sx={{ borderRadius: '12px', marginTop: "32px" }}
+                sx={{ borderRadius: '12px' }}
               >
                 <CardContent>
                   <Typography
-                    variant="h6"
-                    component="h3"
+                    variant='h6'
+                    component='h3'
                   >
                     Misión
                   </Typography>
                   <Typography
-                    variant="paragraph"
+                    variant='paragraph'
                   >
                     {company.mision}
                   </Typography>
                   <Typography
-                    variant="h6"
-                    component="h3"
+                    variant='h6'
+                    component='h3'
                     sx={{ mt: '16px' }}
                   >
                     Visión
                   </Typography>
                   <Typography
-                    variant="paragraph"
+                    variant='paragraph'
                   >
                     {company.vision}
                   </Typography>
