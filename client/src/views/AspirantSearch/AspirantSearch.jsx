@@ -81,6 +81,7 @@ const AspirantSearch = () => {
     } catch (error) {
       console.log(error);
     }
+
   };
 
   const handleChangeNumber = (event) => {
@@ -242,6 +243,7 @@ const AspirantSearch = () => {
           searchResults && searchResults.map((aspirant) => (
             <AspirantCard
               key={`Card${aspirant.names}`}
+              aspirantId={`${aspirant.id}`}
               aspirantName={`${aspirant.names} ${aspirant.firstLastName}`}
               title={aspirant.title}
               education={aspirant.educationLevel}
