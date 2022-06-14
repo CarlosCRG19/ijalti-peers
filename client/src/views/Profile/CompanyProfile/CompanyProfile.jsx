@@ -219,7 +219,7 @@ const CompanyProfile = () => {
         <Box className='company-job-offers'>
           <Grid container columnSpacing={2} className='company-job-offers-child' display='flex'>
 
-            <Grid item md={8} xs={12}>
+            <Grid item md={8} xs={12} order={{ xs: 2, md: 1 }}>
               <Button
                 onClick={() => navigate('/post-job-offer')}
                 variant='contained'
@@ -242,9 +242,9 @@ const CompanyProfile = () => {
               ))}
             </Grid>
 
-            <Grid item md={4} xs={12}>
+            <Grid item md={4} xs={12} order={{ xs: 1 }}>
               <Card
-                sx={{ borderRadius: '12px' }}
+                sx={{ borderRadius: '12px', marginBottom: '32px' }}
               >
                 <CardContent>
                   <Typography
