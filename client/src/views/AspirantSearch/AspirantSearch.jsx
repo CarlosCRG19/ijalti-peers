@@ -203,12 +203,23 @@ const AspirantSearch = () => {
               ),
             }}
           />
+          <Grid container item xs={12}
+            sx={{ pt: "16px" }}
+          >
+            <Grid item xs={8}>
+              <Button variant="text" onClick={() => navigate("/")}>Regresar</Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="text" onClick={clearSearch}>Limpiar</Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="contained" sx={{ margin: '0 0 0 1rem' }} type="submit">Buscar</Button>
+            </Grid>
+          </Grid>
         </Grid>
 
-        <div className="buttons">
-          <Button variant="text" onClick={clearSearch}>Limpiar</Button>
-          <Button variant="contained" sx={{ margin: '0 0 0 1rem' }} type="submit">Buscar</Button>
-        </div>
+
+
 
         {alert && (
           <Grid item xs={12}>
