@@ -182,7 +182,7 @@ const Signup = () => {
         </Card>
         <Button
           variant="text"
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/')}
           sx={{
             color: palette.blue.lightest,
             marginTop: '24px',
