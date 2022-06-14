@@ -17,8 +17,7 @@ export const getOffersList = async (
             page = parseInt(page);
             
             page = (page > 1) ? page : 1
-    
-            const takeJobOffers = nOffers * page
+
             const skipJobOffers = nOffers * (page - 1)
           
             const offers = await JobOffer.findAndCount({
@@ -30,11 +29,11 @@ export const getOffersList = async (
                     },
                 },
                 order:{'createdAt' : 'DESC'}, 
-                take: takeJobOffers,
+                take: nOffers,
                 skip: skipJobOffers
             });
 
-            return res.status(200).json(offers[0]);
+            return res.status(200).json({offers: offers[0], totalCount: offers[1]});
         }
         const offers = await JobOffer.find();
         return res.status(200).json(offers);
