@@ -45,7 +45,7 @@ const CompanySearchbar = () => {
           label="Busca una compañía"
           value={query}
           onChange={handleChange}
-          variant="filled"
+          variant="standard"
           InputProps={{
             ...params.InputProps,
           }}

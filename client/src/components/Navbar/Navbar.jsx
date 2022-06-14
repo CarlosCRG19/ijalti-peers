@@ -41,7 +41,7 @@ const Navbar = () => {
       component="nav"
       fullWidth
       spacing={0}
-      sx={{ background: 'white' }}
+      sx={{ background: 'white', py: 1 }}
     >
       <Grid
         xs={3}
@@ -59,9 +59,13 @@ const Navbar = () => {
           <MuiLink variant="h3" underline="none">IJALTI PEERS</MuiLink>
         </Link>
       </Grid>
-
       <Grid
-        xs={8}
+        xs={1}
+        item
+        display="flex"
+      />
+      <Grid
+        xs={6}
         item
         display="flex"
       >
@@ -76,7 +80,7 @@ const Navbar = () => {
           )
           : <CompanySearchbar />}
       </Grid>
-
+      <Grid xs={1} />
       <Grid
         xs={1}
         item
