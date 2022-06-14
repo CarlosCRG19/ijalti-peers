@@ -45,6 +45,7 @@ const JobOfferCard = ({
   salary,
   requiredSkills,
   preferredSkills,
+  sxCard
 }) => {
   const [expand, setExpand] = useState(true);
   const [expandMsg, setExpandMsg] = useState('Ver más');
@@ -65,7 +66,7 @@ const JobOfferCard = ({
 
   return (
     <div className='job-offer-card'>
-      <Card>
+      <Card props sx={sxCard}>
         <CardHeader
           avatar={
             <Avatar alt={company.name} src={profilePictureURL} />

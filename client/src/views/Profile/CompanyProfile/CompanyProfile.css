@@ -1,0 +1,10 @@
+.company-job-offers{
+    width: 90%;
+    max-width: 1373px;
+}
+
+@media (max-width: 720px){
+    .company-job-offers{
+        display: gird;
+    }
+}

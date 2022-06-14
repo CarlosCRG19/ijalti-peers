@@ -13,9 +13,11 @@ import {
   Email, LocalPhone, Work,
 } from '@mui/icons-material';
 
-import { JobOffer } from '../../../components';
+import { JobOfferCard } from '../../../components';
+
 
 import useAPI from '../../../hooks/useAPI/useAPI';
+import './CompanyProfile.css'
 
 const CompanyProfile = () => {
   const [company, setCompany] = useState({});
@@ -37,8 +39,8 @@ const CompanyProfile = () => {
 
   const getJobOffers = async () => {
     try {
-      const response = await api.jobOffer.getAll();
-      setJobOffers(response);
+      const response = await api.jobOffer.getByPage(1);
+      setJobOffers(response.offers);
     } catch (error) {
       navigate('/');
     }
@@ -47,6 +49,7 @@ const CompanyProfile = () => {
   useEffect(() => {
     getCompany(params.id);
     getJobOffers();
+    console.log(jobOffers[0]);
   }, []);
 
   return (
@@ -55,20 +58,7 @@ const CompanyProfile = () => {
       component="main"
       display="flex"
       flexDirection="start"
-      sx={{
-        height: '100vh',
-        background: palette.white,
-        '&:after': {
-          content: '""',
-          position: 'absolute',
-          width: '60vw',
-          height: '100vh',
-          right: '0',
-          background: palette.gray.B,
-          boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-          clipPath: 'polygon(70% 0, 100% 0, 100% 100%, 0% 100%)',
-        },
-      }}
+      sx={{marginBottom: "64px"}}
     >
       <Grid
         item
@@ -87,12 +77,12 @@ const CompanyProfile = () => {
             borderRadius: '12px',
             display: 'flex',
             flexDirection: 'column',
+            boxShadow: "6"
           }}
         >
           <CardContent sx={{
             minHeight: '334px',
             display: 'flex',
-
           }}
           >
             <Grid
@@ -215,6 +205,7 @@ const CompanyProfile = () => {
             </Grid>
           </CardContent>
         </Card>
+
       </Grid>
       <Grid
         item
@@ -224,22 +215,29 @@ const CompanyProfile = () => {
         alignItems="start"
         sx={{ zIndex: 1, mt: '8px' }}
       >
-        <Box sx={{ width: '90%' }}>
-          <Grid container columnSpacing={2}>
-            <Grid item xs={8}>
-              {jobOffers.map((jobOffer) => (
-                <JobOffer
-                  title={jobOffer.title}
-                  city={jobOffer.city}
-                  salary={jobOffer.salary}
-                  description={jobOffer.description}
-                  id={jobOffer.id}
+        <Box className='company-job-offers'>
+          <Grid container columnSpacing={2} className='company-job-offers-child' display="flex">
+
+            <Grid item md={8} xs={12}>
+              {jobOffers && jobOffers.map((offer) => (
+                <JobOfferCard
+                  key={offer.id}
+                  position={offer.title}
+                  company={offer.company}
+                  description={offer.description}
+                  date={offer.createdAt}
+                  location={offer.city}
+                  salary={offer.salary}
+                  requiredSkills={offer.requiredSkills}
+                  preferredSkills={offer.preferredSkills}
+                  sxCard={{ boxShadow: "4" }}
                 />
               ))}
             </Grid>
-            <Grid item xs={4}>
+
+            <Grid item md={4} xs={12}>
               <Card
-                sx={{ borderRadius: '12px' }}
+                sx={{ borderRadius: '12px', marginTop: "32px" }}
               >
                 <CardContent>
                   <Typography
@@ -262,7 +260,6 @@ const CompanyProfile = () => {
                   </Typography>
                   <Typography
                     variant="paragraph"
-
                   >
                     {company.vision}
                   </Typography>
@@ -271,8 +268,8 @@ const CompanyProfile = () => {
             </Grid>
           </Grid>
         </Box>
-      </Grid>
-    </Grid>
+      </Grid >
+    </Grid >
   );
 };
 
