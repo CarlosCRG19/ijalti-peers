@@ -54,9 +54,7 @@ const AuthProvider = ({ children }) => {
       idToken,
       username,
     } = localStorage;
-    console.log(localStorage);
     if (!role && !idToken && !userId && !username) {
-      console.log('a')
       logout();
       return;
     }
