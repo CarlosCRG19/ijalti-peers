@@ -81,6 +81,7 @@ const AspirantSearch = () => {
     } catch (error) {
       console.log(error);
     }
+
   };
 
   const handleChangeNumber = (event) => {
@@ -203,12 +204,23 @@ const AspirantSearch = () => {
               ),
             }}
           />
+          <Grid container item xs={12}
+            sx={{ pt: "16px" }}
+          >
+            <Grid item xs={8}>
+              <Button variant="text" onClick={() => navigate("/")}>Cancelar</Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="text" onClick={clearSearch}>Limpiar</Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="contained" sx={{ margin: '0 0 0 1rem' }} type="submit">Buscar</Button>
+            </Grid>
+          </Grid>
         </Grid>
 
-        <div className="buttons">
-          <Button variant="text" onClick={clearSearch}>Limpiar</Button>
-          <Button variant="contained" sx={{ margin: '0 0 0 1rem' }} type="submit">Buscar</Button>
-        </div>
+
+
 
         {alert && (
           <Grid item xs={12}>
@@ -228,19 +240,32 @@ const AspirantSearch = () => {
 
       <div className="cards">
         {
-          searchResults && searchResults.map((aspirant) => (
-            <AspirantCard
-              key={`Card${aspirant.names}`}
-              aspirantName={`${aspirant.names} ${aspirant.firstLastName}`}
-              title={aspirant.title}
-              education={aspirant.educationLevel}
-              description={aspirant.biography}
-              experience={aspirant.yearsOfExperience}
-              abilitiesArray={aspirant.skills && aspirant.skills.map((skill) => skill.name)}
-              location={`${aspirant.residenceCity}, ${aspirant.residenceState}`}
-              pageURL={aspirant.pageURL}
-            />
-          ))
+          searchResults.length != 0 &&
+          <>
+            <Alert
+            severity='info'
+            sx={{mt: '32px', boxShadow: 1}}
+            >Click en alguno de los aspirantes para ver su perfil en una nueva pestaña
+            </Alert>
+            {console.log(searchResults)}
+            {
+
+              searchResults.map((aspirant) => (
+                <AspirantCard
+                  key={`Card${aspirant.names}`}
+                  aspirantId={`${aspirant.id}`}
+                  aspirantName={`${aspirant.names} ${aspirant.firstLastName}`}
+                  title={aspirant.title}
+                  education={aspirant.educationLevel}
+                  description={aspirant.biography}
+                  experience={aspirant.yearsOfExperience}
+                  abilitiesArray={aspirant.skills && aspirant.skills.map((skill) => skill.name)}
+                  location={`${aspirant.residenceCity}, ${aspirant.residenceState}`}
+                  pageURL={aspirant.pageURL}
+                />
+              ))
+            }
+          </>
         }
       </div>
     </main>
