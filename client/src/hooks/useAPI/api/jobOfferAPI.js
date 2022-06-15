@@ -32,10 +32,9 @@ class JobOfferAPI extends APIGateway {
     }
   }
 
-  async getByCompanyID(companyID) {
+  async getByCompanyID(companyID, page) {
     try {
-      console.log(companyID);
-      const response = await this._client.get(`job-offers/?companyId=${companyID}`);
+      const response = await this._client.get(`job-offers/?companyId=${companyID}&page=${page}`);
 
       return response.data;
     } catch (error) {
