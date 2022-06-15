@@ -31,6 +31,16 @@ class JobOfferAPI extends APIGateway {
       throw new Error(error.message);
     }
   }
+
+  async getByCompanyID(companyID, page) {
+    try {
+      const response = await this._client.get(`job-offers/?companyId=${companyID}&page=${page}`);
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 export default JobOfferAPI;

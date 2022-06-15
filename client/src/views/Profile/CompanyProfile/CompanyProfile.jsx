@@ -8,6 +8,7 @@ import {
   Typography,
   Box,
   Button,
+  Pagination,
 } from '@mui/material';
 
 import {
@@ -23,6 +24,8 @@ import './CompanyProfile.css'
 const CompanyProfile = () => {
   const [company, setCompany] = useState({});
   const [jobOffers, setJobOffers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState();
 
   const api = useAPI();
   const navigate = useNavigate();
@@ -38,18 +41,32 @@ const CompanyProfile = () => {
     }
   };
 
-  const getJobOffers = async () => {
+  const getJobOffers = async (companyID, page) => {
     try {
-      const response = await api.jobOffer.getByPage(1);
+      const response = await api.jobOffer.getByCompanyID(companyID, page);
       setJobOffers(response.offers);
     } catch (error) {
       navigate('/');
     }
   };
 
+  const getPageCount = async (companyID, page) => {
+    const response = await api.jobOffer.getByCompanyID(companyID, page);
+    setPageCount(Math.ceil(response.totalCount / 10));
+  }
+
+  const handlePageChange = (e, value) => {
+    setPage(value);
+    getJobOffers(company.id, value);
+    const target = document.getElementById("scroll-target");
+    console.log(target);
+    target.scrollIntoView({ behavior: "smooth" });
+  }
+
   useEffect(() => {
     getCompany(params.id);
-    getJobOffers();
+    getJobOffers(params.id, page);
+    getPageCount(params.id, page);
   }, []);
 
   return (
@@ -219,8 +236,9 @@ const CompanyProfile = () => {
         <Box className='company-job-offers'>
           <Grid container columnSpacing={2} className='company-job-offers-child' display='flex'>
 
-            <Grid item md={8} xs={12} order={{ xs: 2, md: 1 }}>
+            <Grid container item md={8} xs={12} order={{ xs: 2, md: 1 }}>
               <Button
+                id='scroll-target'
                 onClick={() => navigate('/post-job-offer')}
                 variant='contained'
                 fullWidth
@@ -240,6 +258,15 @@ const CompanyProfile = () => {
                   sxCard={{ boxShadow: '4', borderRadius: '12px' }}
                 />
               ))}
+
+              <div style={{ display: 'grid', placeItems: 'center', width: "100%" }}>
+                <Pagination
+                  count={pageCount}
+                  onChange={handlePageChange}
+                  color="primary"
+                  sx={{ paddingTop: "32px" }}
+                ></Pagination>
+              </div>
             </Grid>
 
             <Grid item md={4} xs={12} order={{ xs: 1 }}>
