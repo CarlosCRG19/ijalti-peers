@@ -13,7 +13,10 @@ class BaseUser extends BaseEntity{
 
     @Column({default: ''})
     email: string;
-     
+    
+    @Column({nullable: false})
+    role: string;
+
     @CreateDateColumn()
     createdAt: Date;
 }
