@@ -48,11 +48,11 @@ const AspirantFeed = () => {
     }
   };
 
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-    getJobOffers(pageNumber);
-    const header = document.getElementById("header");
-    header.scrollIntoView({ behavior: "smooth" });
+  const handlePageChange = (e, value) => {
+    setPage(value);
+    getJobOffers(value);
+    const target = document.getElementById("scroll-target");
+    target.scrollIntoView({ behavior: "smooth" });
   }
 
   useEffect(() => {
@@ -63,7 +63,7 @@ const AspirantFeed = () => {
 
 
   return (
-    <div className='main-feed-content' id="header">
+    <div className='main-feed-content' id="scroll-target">
       <Box
         sx={{
           width: "100%",
@@ -98,7 +98,7 @@ const AspirantFeed = () => {
       </Box>
       <Pagination
         count={pageCount}
-        onChange={(e) => handlePageChange(e.target.textContent)}
+        onChange={handlePageChange}
         color="primary"
         sx={{ paddingTop: "32px" }}
       ></Pagination>

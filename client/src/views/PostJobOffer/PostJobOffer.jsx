@@ -70,6 +70,7 @@ const PostJobOffer = () => {
     };
     try {
       await api.jobOffer.create(formattedJobOffer);
+      navigate('/');
     } catch (postError) {
       setError(postError.message);
     }

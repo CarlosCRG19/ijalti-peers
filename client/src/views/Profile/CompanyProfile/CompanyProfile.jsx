@@ -7,19 +7,25 @@ import {
   Grid,
   Typography,
   Box,
+  Button,
+  Pagination,
 } from '@mui/material';
 
 import {
   Email, LocalPhone, Work,
 } from '@mui/icons-material';
 
-import { JobOffer } from '../../../components';
+import { JobOfferCard } from '../../../components';
+
 
 import useAPI from '../../../hooks/useAPI/useAPI';
+import './CompanyProfile.css'
 
 const CompanyProfile = () => {
   const [company, setCompany] = useState({});
   const [jobOffers, setJobOffers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState();
 
   const api = useAPI();
   const navigate = useNavigate();
@@ -35,47 +41,48 @@ const CompanyProfile = () => {
     }
   };
 
-  const getJobOffers = async () => {
+  const getJobOffers = async (companyID, page) => {
     try {
-      const response = await api.jobOffer.getAll();
-      setJobOffers(response);
+      const response = await api.jobOffer.getByCompanyID(companyID, page);
+      setJobOffers(response.offers);
     } catch (error) {
       navigate('/');
     }
   };
 
+  const getPageCount = async (companyID, page) => {
+    const response = await api.jobOffer.getByCompanyID(companyID, page);
+    setPageCount(Math.ceil(response.totalCount / 10));
+  }
+
+  const handlePageChange = (e, value) => {
+    setPage(value);
+    getJobOffers(company.id, value);
+    const target = document.getElementById("scroll-target");
+    console.log(target);
+    target.scrollIntoView({ behavior: "smooth" });
+  }
+
   useEffect(() => {
     getCompany(params.id);
-    getJobOffers();
+    getJobOffers(params.id, page);
+    getPageCount(params.id, page);
   }, []);
 
   return (
     <Grid
       container
-      component="main"
-      display="flex"
-      flexDirection="start"
-      sx={{
-        height: '100vh',
-        background: palette.white,
-        '&:after': {
-          content: '""',
-          position: 'absolute',
-          width: '60vw',
-          height: '100vh',
-          right: '0',
-          background: palette.gray.B,
-          boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-          clipPath: 'polygon(70% 0, 100% 0, 100% 100%, 0% 100%)',
-        },
-      }}
+      component='main'
+      display='flex'
+      flexDirection='start'
+      sx={{ marginBottom: '64px' }}
     >
       <Grid
         item
         xs={12}
-        display="flex"
-        justifyContent="center"
-        alignItems="start"
+        display='flex'
+        justifyContent='center'
+        alignItems='start'
         sx={{ zIndex: 1, my: '16px' }}
       >
         <Card
@@ -87,12 +94,12 @@ const CompanyProfile = () => {
             borderRadius: '12px',
             display: 'flex',
             flexDirection: 'column',
+            boxShadow: '6',
           }}
         >
           <CardContent sx={{
             minHeight: '334px',
             display: 'flex',
-
           }}
           >
             <Grid
@@ -103,10 +110,10 @@ const CompanyProfile = () => {
                 item
                 xs={12}
                 md={3}
-                display="flex"
-                direction="column"
-                alignItems="center"
-                justifyContent="center"
+                display='flex'
+                direction='column'
+                alignItems='center'
+                justifyContent='center'
                 sx={{ zIndex: 1 }}
               >
                 <div style={{
@@ -121,23 +128,23 @@ const CompanyProfile = () => {
                 item
                 xs={12}
                 md={5}
-                display="flex"
-                direction="column"
-                alignItems="start"
-                justifyContent="center"
+                display='flex'
+                direction='column'
+                alignItems='start'
+                justifyContent='center'
                 sx={{ zIndex: 1 }}
               >
                 <Typography
-                  variant="h4"
-                  component="h1"
+                  variant='h4'
+                  component='h1'
                   sx={{ fontWeight: 500 }}
                 >
                   {company.name}
                 </Typography>
 
                 <Typography
-                  variant="h5"
-                  component="h2"
+                  variant='h5'
+                  component='h2'
                   sx={{
                     color: palette.gray.C,
                     mb: '8px',
@@ -147,8 +154,8 @@ const CompanyProfile = () => {
                 </Typography>
 
                 <Typography
-                  variant="h6"
-                  component="h2"
+                  variant='h6'
+                  component='h2'
                   sx={{
                     color: palette.blue.lightest,
                   }}
@@ -166,15 +173,15 @@ const CompanyProfile = () => {
                 item
                 xs={12}
                 md={4}
-                display="flex"
-                direction="column"
-                alignItems="start"
-                justifyContent="space-evenly"
+                display='flex'
+                direction='column'
+                alignItems='start'
+                justifyContent='space-evenly'
                 sx={{ zIndex: 1 }}
               >
                 <Typography
-                  variant="h6"
-                  component="h3"
+                  variant='h6'
+                  component='h3'
                   sx={{
                     color: palette.gray.C,
                     display: 'flex',
@@ -185,8 +192,8 @@ const CompanyProfile = () => {
                   {company.businessLine}
                 </Typography>
                 <Typography
-                  variant="h6"
-                  component="h3"
+                  variant='h6'
+                  component='h3'
                   sx={{
                     color: palette.gray.C,
                     display: 'flex',
@@ -199,8 +206,8 @@ const CompanyProfile = () => {
                   {company.phone2}
                 </Typography>
                 <Typography
-                  variant="h6"
-                  component="h3"
+                  variant='h6'
+                  component='h3'
                   sx={{
                     color: palette.gray.C,
                     display: 'flex',
@@ -215,54 +222,78 @@ const CompanyProfile = () => {
             </Grid>
           </CardContent>
         </Card>
+
       </Grid>
       <Grid
         item
+        container
         xs={12}
-        display="flex"
-        justifyContent="center"
-        alignItems="start"
+        display='flex'
+        justifyContent='center'
+        alignItems='start'
         sx={{ zIndex: 1, mt: '8px' }}
       >
-        <Box sx={{ width: '90%' }}>
-          <Grid container columnSpacing={2}>
-            <Grid item xs={8}>
-              {jobOffers.map((jobOffer) => (
-                <JobOffer
-                  title={jobOffer.title}
-                  city={jobOffer.city}
-                  salary={jobOffer.salary}
-                  description={jobOffer.description}
-                  id={jobOffer.id}
+        <Box className='company-job-offers'>
+          <Grid container columnSpacing={2} className='company-job-offers-child' display='flex'>
+
+            <Grid container item md={8} xs={12} order={{ xs: 2, md: 1 }}>
+              <Button
+                id='scroll-target'
+                onClick={() => navigate('/post-job-offer')}
+                variant='contained'
+                fullWidth
+                sx={{ height: '48px' }}
+              >NUEVA OFERTA +</Button>
+              {jobOffers && jobOffers.map((offer) => (
+                <JobOfferCard
+                  key={offer.id}
+                  position={offer.title}
+                  company={offer.company}
+                  description={offer.description}
+                  date={offer.createdAt}
+                  location={offer.city}
+                  salary={offer.salary}
+                  requiredSkills={offer.requiredSkills}
+                  preferredSkills={offer.preferredSkills}
+                  sxCard={{ boxShadow: '4', borderRadius: '12px' }}
                 />
               ))}
+
+              <div style={{ display: 'grid', placeItems: 'center', width: "100%" }}>
+                <Pagination
+                  count={pageCount}
+                  onChange={handlePageChange}
+                  color="primary"
+                  sx={{ paddingTop: "32px" }}
+                ></Pagination>
+              </div>
             </Grid>
-            <Grid item xs={4}>
+
+            <Grid item md={4} xs={12} order={{ xs: 1 }}>
               <Card
-                sx={{ borderRadius: '12px' }}
+                sx={{ borderRadius: '12px', marginBottom: '32px' }}
               >
                 <CardContent>
                   <Typography
-                    variant="h6"
-                    component="h3"
+                    variant='h6'
+                    component='h3'
                   >
                     Misión
                   </Typography>
                   <Typography
-                    variant="paragraph"
+                    variant='paragraph'
                   >
                     {company.mision}
                   </Typography>
                   <Typography
-                    variant="h6"
-                    component="h3"
+                    variant='h6'
+                    component='h3'
                     sx={{ mt: '16px' }}
                   >
                     Visión
                   </Typography>
                   <Typography
-                    variant="paragraph"
-
+                    variant='paragraph'
                   >
                     {company.vision}
                   </Typography>
@@ -271,8 +302,8 @@ const CompanyProfile = () => {
             </Grid>
           </Grid>
         </Box>
-      </Grid>
-    </Grid>
+      </Grid >
+    </Grid >
   );
 };
 
