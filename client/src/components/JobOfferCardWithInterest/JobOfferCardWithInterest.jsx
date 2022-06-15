@@ -41,8 +41,6 @@ const CardContentNoPadding = styled(CardContent)(
   `,
 );
 
-console.log('dfwdd');
-
 const JobOfferCard = ({
   position,
   company,
