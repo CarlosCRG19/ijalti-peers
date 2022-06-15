@@ -42,29 +42,20 @@ export const getOffersList = async (
             take: nOffers,
             skip: skipJobOffers
         });
-        /**
-         * {
-         *  id: asdd,
-         * title: asdd,
-         * company: {
-         *  sasod
-         * },
-         * intereseted: false
-         * }
-         * 
-         */
-        const user = await User.findOneBy({id: req.user_id});
+
+        const user = await User.findOneBy({firebaseId: req.user_id});
         
-        if(user?.role === 'ASPIRANT') {
+        if(user?.role === 'aspirant') {
             const aspirant = await Aspirant.findOneBy({user: {id: user.id}});
             if (!aspirant) throw new Error('Did not work');
-            offers.forEach((offer: any) => offer.interested = aspirant.id in offer.interestedAspirants);
-        }
+            offers.forEach((offer: any) => offer.interested = offer.interestedAspirants.some((element: any) => element.id === aspirant.id));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+        }                                                                                                                                                                                                       
+    
         return res.status(200).json({offers, totalCount});
     }catch (error) {
         console.log(error)
         
-        let {code : errorCode}: any = error;
+        let {code : errorCode}: any = error;    
         if (errorCode === "22P02"){
             return res.status(404).json({ message: "Not found!" });
         }
