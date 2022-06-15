@@ -240,20 +240,32 @@ const AspirantSearch = () => {
 
       <div className="cards">
         {
-          searchResults && searchResults.map((aspirant) => (
-            <AspirantCard
-              key={`Card${aspirant.names}`}
-              aspirantId={`${aspirant.id}`}
-              aspirantName={`${aspirant.names} ${aspirant.firstLastName}`}
-              title={aspirant.title}
-              education={aspirant.educationLevel}
-              description={aspirant.biography}
-              experience={aspirant.yearsOfExperience}
-              abilitiesArray={aspirant.skills && aspirant.skills.map((skill) => skill.name)}
-              location={`${aspirant.residenceCity}, ${aspirant.residenceState}`}
-              pageURL={aspirant.pageURL}
-            />
-          ))
+          searchResults.length != 0 &&
+          <>
+            <Alert
+            severity='info'
+            sx={{mt: '32px', boxShadow: 1}}
+            >Click en alguno de los aspirantes para ver su perfil en una nueva pestaña
+            </Alert>
+            {console.log(searchResults)}
+            {
+
+              searchResults.map((aspirant) => (
+                <AspirantCard
+                  key={`Card${aspirant.names}`}
+                  aspirantId={`${aspirant.id}`}
+                  aspirantName={`${aspirant.names} ${aspirant.firstLastName}`}
+                  title={aspirant.title}
+                  education={aspirant.educationLevel}
+                  description={aspirant.biography}
+                  experience={aspirant.yearsOfExperience}
+                  abilitiesArray={aspirant.skills && aspirant.skills.map((skill) => skill.name)}
+                  location={`${aspirant.residenceCity}, ${aspirant.residenceState}`}
+                  pageURL={aspirant.pageURL}
+                />
+              ))
+            }
+          </>
         }
       </div>
     </main>

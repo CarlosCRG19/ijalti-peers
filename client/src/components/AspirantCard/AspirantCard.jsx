@@ -57,7 +57,9 @@ const AspirantCard = ({
 
 
   return (
-    <CardActionArea sx={{ marginTop: "32px" }} onClick={() => navigate(`/profile/aspirant/${aspirantId}`)}>
+    <CardActionArea
+      sx={{ marginTop: "32px" }}
+      onClick={() => window.open(`/profile/aspirant/${aspirantId}`, '_blank')}>
       <Card className='card' elevation={3}>
         <div>
           <CardContent>
