@@ -16,6 +16,7 @@ import {
 } from '@mui/icons-material'
 
 import './AspirantCard.css';
+import { useNavigate } from 'react-router-dom';
 
 const educationLevelChoices = [
   { name: 'Preparatoria', id: 'HIGH_SCHOOL' },
@@ -25,8 +26,9 @@ const educationLevelChoices = [
 ];
 
 const AspirantCard = ({
-  aspirantName, education, description, experience, abilitiesArray, location, pageURL
+  aspirantId, aspirantName, education, description, experience, abilitiesArray, location
 }) => {
+  const navigate = useNavigate();
 
   //Limit to n habilities
   if (!abilitiesArray) {
@@ -55,7 +57,9 @@ const AspirantCard = ({
 
 
   return (
-    <CardActionArea sx={{ marginTop: "32px" }}>
+    <CardActionArea
+      sx={{ marginTop: "32px" }}
+      onClick={() => window.open(`/profile/aspirant/${aspirantId}`, '_blank')}>
       <Card className='card' elevation={3}>
         <div>
           <CardContent>

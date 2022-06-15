@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import axios from "axios";
+import axios, { Axios, AxiosRequestConfig } from "axios";
 import { numArr2ObjArr } from "../utils";
 import { Aspirant, JobOffer, User } from "../models";
 
@@ -113,47 +113,59 @@ export const removeAspirant = async (req: Request, res: Response): Promise<Respo
 
 export const signupAspirant = async (req: Request, res: Response): Promise<Response> => {
     const firebaseSignupURL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.FIREBASE_API_KEY}`;
-
-    try {
-        const { aspirant, email, password } = req.body;
-        const { username } = aspirant;
-        
-        const newAspirant: Aspirant = Aspirant.create({ 
-            ...aspirant,
-            skills: numArr2ObjArr(aspirant.skills)
-        }); 
-        await newAspirant.save();
-
-        const firebaseResponse = await axios({
-            method: "POST",
-            url: firebaseSignupURL,
-            data: { email, password, returnSecureToken: true }
-        });
+    
+    const { aspirant, email, password } = req.body;
+    const { username } = aspirant;
+    
+    const signupRequestConfig: AxiosRequestConfig = {
+        url: firebaseSignupURL, 
+        method: "POST",
+        data: {
+            email,
+            password,
+            returnSecureToken: true
+        }
+    }
+    
+    try {    
+        const signupResponse = await axios(signupRequestConfig);
         const {
             idToken,
             expiresIn,
             localId,
             refreshToken
-        } = firebaseResponse.data;
-
+        } = signupResponse.data;
+        
         const previousUser = await User.findOneBy({firebaseId: localId});
         if(previousUser) await previousUser.remove();
         
-        const newUser = User.create({ firebaseId: localId, username, email});
+        const newUser = User.create( { firebaseId: localId, username, email, role: 'aspirant' } );
         await newUser.save();
+        
+        const newAspirant: Aspirant = Aspirant.create({ 
+            ...aspirant,
+            skills: numArr2ObjArr(aspirant.skills)
+        }); 
 
         newAspirant.user = newUser;
         await newAspirant.save();
 
-        return res.status(201).json({
-            idToken,
+        const responseBody = {
+            user: newUser, 
+            role: 'aspirant', 
+            aspirant: {...newAspirant, user: undefined}, 
+            idToken, 
             expiresIn,
             refreshToken,
-            user: newUser,
-            role: "aspirant",
-            aspirant: {...newAspirant, user: undefined},
-        });
+        } 
+
+        return res.status(201).json(responseBody);
+
     } catch(error) {
+        const {code : codeError}: any = error
+        if(codeError === "ERR_BAD_REQUEST"){
+            return res.status(409).json( {message: "Conflict, email is already registered"} )
+        }
         console.log(error);
         return res.status(500).json({ message: "Something went wrong!" });
     }
@@ -165,36 +177,54 @@ export const loginAspirant = async (req: Request, res: Response): Promise<Respon
     try {
         const { email, password } = req.body;
 
-        const firebaseResponse = await axios({
-            method: "POST",
+        const logInRequestConfig: AxiosRequestConfig = {
             url: firebaseLoginURL,
-            data: { email, password, returnSecureToken: true }
-        });
+            method: "POST",
+            data: {
+                email,
+                password,
+                returnSecureToken: true
+            }
+        };
+
+        const loginResponse = await axios(logInRequestConfig);
+
         const {
-            idToken,
-            expiresIn,
             localId,
-            refreshToken
-        } = firebaseResponse.data;
-        const user = await User.findOneBy({ firebaseId: localId });
+            idToken,
+            refreshToken,
+            expiresIn
+        } = loginResponse.data;
+
+        const user = await User.findOneBy( { firebaseId: localId } );
         console.log({...user});
 
-        if(!user) return res.status(409).json({message: "Aspirant was not found!"});
+        if(!user) return res.status(404).json( { message: "Aspirant not found!" } );
 
-        const aspirant = await Aspirant.findOneBy({ user: { id: user.id } });
+        const aspirant = await Aspirant.findOneBy( { user: { id: user.id } } );
 
-        if (!aspirant) return res.status(409).json({ message: "Your user exists, but it has not been associated with an aspirant"});
+        if (!aspirant) return res.status(409).json( { message: "Your user exists, but it has not been associated with an aspirant"} );
 
-        return res.status(200).json({
-            aspirant: {...aspirant, user: undefined},
-            idToken,
-            expiresIn,
-            refreshToken,
-            user: user.id,
+        const responseBody = {
+            user: user.id, 
             role: "aspirant",
-        });
+            aspirant: aspirant,
+            idToken,
+            refreshToken,
+            expiresIn,
+        }
+    
+        return res.status(200).json(responseBody);
+
     } catch(error) {
-        return res.status(500).json({ message: "Something went wrong!" });
+        const {code : codeError}: any = error
+        
+        if(codeError === "ERR_BAD_REQUEST"){
+            return res.status(404).json( { message: "Aspirant  not found!" } )
+        }
+
+        console.log(error);
+        return res.status(500).json( { message: "Something went wrong!" } );
     }
 };
 
@@ -210,19 +240,18 @@ export const addInterest = async (req: Request, res: Response): Promise<Response
 
         if(req.params.id !== aspirant.id) throw new Error("Unauthorized");
         
-        const offer = await JobOffer.findOneBy({id: req.params.offerId});
+        const offer = await JobOffer.findOneBy( {id: req.params.offerId} );
         if(!offer) throw new Error("Job Offer not found");
 
         aspirant.interestedInOffers.push(offer)
         await aspirant.save();
 
-        return res.status(200).json({message: "Added a new interest", offer});
+        return res.status(200).json( { message: "Added a new interest", offer } );
 
     } catch (error) {
         console.log(error);
-        return res.status(500).json({message: "Something went wrong"})
+        return res.status(500).json( { message: "Something went wrong" } )
     }
-
 }
 
 export const removeInterest = async (req: Request, res: Response): Promise<Response> => {
@@ -245,10 +274,10 @@ export const removeInterest = async (req: Request, res: Response): Promise<Respo
         });
         await aspirant.save();
 
-        return res.status(200).json({message: "Removed interest", offer: fetchedOffer});
+        return res.status(200).json( { message: "Removed interest", offer: fetchedOffer } );
 
     } catch (error) {
         console.log(error);
-        return res.status(200).json({message: "Something went wrong!"});
+        return res.status(200).json( { message: "Something went wrong!" } );
     }
 }
