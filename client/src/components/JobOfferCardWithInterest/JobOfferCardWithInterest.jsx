@@ -18,6 +18,10 @@ import {
   Box,
   List,
   ListItemText,
+  Divider,
+  Modal,
+  useTheme,
+  Paper,
 } from '@mui/material';
 
 import {
@@ -27,6 +31,8 @@ import {
 import parseDateYYYYMMDD from '../../utils/parseDate';
 import './JobOfferCard.css';
 
+import AspirantCard from '../AspirantCard';
+
 const CardContentNoPadding = styled(CardContent)(
   `
   &:last-child{
@@ -34,6 +40,8 @@ const CardContentNoPadding = styled(CardContent)(
   }
   `,
 );
+
+console.log('dfwdd');
 
 const JobOfferCard = ({
   position,
@@ -50,6 +58,8 @@ const JobOfferCard = ({
   const [expand, setExpand] = useState(true);
   const [expandMsg, setExpandMsg] = useState('Ver más');
 
+  const { palette } = useTheme();
+
   const navigate = useNavigate();
   if (!profilePictureURL) {
     profilePictureURL = '#';
@@ -63,6 +73,10 @@ const JobOfferCard = ({
     expand ? setExpandMsg('Ver menos') : setExpandMsg('Ver más');
     return state;
   };
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <div className="job-offer-card">
@@ -81,13 +95,39 @@ const JobOfferCard = ({
               {company.name}
             </Link>
           )}
+          action={(
+            <Button onClick={handleOpen}>Interesado</Button>
+          )}
           subheader={parseDateYYYYMMDD(date)}
-        >
-          {' '}
-          <Button>Hola</Button>
-          {' '}
+        />
 
-        </CardHeader>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            background: palette.gray.B,
+            borderRadius: 2,
+            boxShadow: 24,
+            p: 4,
+          }}
+          >
+            <Typography variant="h3" textAlign="center">Aspirantes Interesados</Typography>
+            <Paper style={{ maxHeight: '70vh', overflow: 'auto' }}>
+              <List>
+                <AspirantCard />
+              </List>
+            </Paper>
+          </Box>
+        </Modal>
+
         <CardContentNoPadding>
           <div className="job-offer-header-info">
             <div>
@@ -101,6 +141,7 @@ const JobOfferCard = ({
           </div>
 
           <Collapse in={!expand} timeout="auto" unmountOnExit>
+            <Divider sx={{ mt: 1, background: palette.blue.lightest }} />
             <Box className="job-offer-body-info" sx={{ paddingBottom: '16px' }}>
               <div className="job-offer-abilities">
                 <div>

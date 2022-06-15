@@ -15,11 +15,10 @@ import {
   Email, LocalPhone, Work,
 } from '@mui/icons-material';
 
-import { JobOfferCard } from '../../../components';
-
+import { JobOfferCardWithInterest } from '../../../components';
 
 import useAPI from '../../../hooks/useAPI/useAPI';
-import './CompanyProfile.css'
+import './CompanyProfile.css';
 
 const CompanyProfile = () => {
   const [company, setCompany] = useState({});
@@ -53,15 +52,15 @@ const CompanyProfile = () => {
   const getPageCount = async (companyID, page) => {
     const response = await api.jobOffer.getByCompanyID(companyID, page);
     setPageCount(Math.ceil(response.totalCount / 10));
-  }
+  };
 
   const handlePageChange = (e, value) => {
     setPage(value);
     getJobOffers(company.id, value);
-    const target = document.getElementById("scroll-target");
+    const target = document.getElementById('scroll-target');
     console.log(target);
-    target.scrollIntoView({ behavior: "smooth" });
-  }
+    target.scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
     getCompany(params.id);
@@ -72,17 +71,17 @@ const CompanyProfile = () => {
   return (
     <Grid
       container
-      component='main'
-      display='flex'
-      flexDirection='start'
+      component="main"
+      display="flex"
+      flexDirection="start"
       sx={{ marginBottom: '64px' }}
     >
       <Grid
         item
         xs={12}
-        display='flex'
-        justifyContent='center'
-        alignItems='start'
+        display="flex"
+        justifyContent="center"
+        alignItems="start"
         sx={{ zIndex: 1, my: '16px' }}
       >
         <Card
@@ -110,10 +109,10 @@ const CompanyProfile = () => {
                 item
                 xs={12}
                 md={3}
-                display='flex'
-                direction='column'
-                alignItems='center'
-                justifyContent='center'
+                display="flex"
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
                 sx={{ zIndex: 1 }}
               >
                 <div style={{
@@ -128,23 +127,23 @@ const CompanyProfile = () => {
                 item
                 xs={12}
                 md={5}
-                display='flex'
-                direction='column'
-                alignItems='start'
-                justifyContent='center'
+                display="flex"
+                direction="column"
+                alignItems="start"
+                justifyContent="center"
                 sx={{ zIndex: 1 }}
               >
                 <Typography
-                  variant='h4'
-                  component='h1'
+                  variant="h4"
+                  component="h1"
                   sx={{ fontWeight: 500 }}
                 >
                   {company.name}
                 </Typography>
 
                 <Typography
-                  variant='h5'
-                  component='h2'
+                  variant="h5"
+                  component="h2"
                   sx={{
                     color: palette.gray.C,
                     mb: '8px',
@@ -154,8 +153,8 @@ const CompanyProfile = () => {
                 </Typography>
 
                 <Typography
-                  variant='h6'
-                  component='h2'
+                  variant="h6"
+                  component="h2"
                   sx={{
                     color: palette.blue.lightest,
                   }}
@@ -173,15 +172,15 @@ const CompanyProfile = () => {
                 item
                 xs={12}
                 md={4}
-                display='flex'
-                direction='column'
-                alignItems='start'
-                justifyContent='space-evenly'
+                display="flex"
+                direction="column"
+                alignItems="start"
+                justifyContent="space-evenly"
                 sx={{ zIndex: 1 }}
               >
                 <Typography
-                  variant='h6'
-                  component='h3'
+                  variant="h6"
+                  component="h3"
                   sx={{
                     color: palette.gray.C,
                     display: 'flex',
@@ -192,8 +191,8 @@ const CompanyProfile = () => {
                   {company.businessLine}
                 </Typography>
                 <Typography
-                  variant='h6'
-                  component='h3'
+                  variant="h6"
+                  component="h3"
                   sx={{
                     color: palette.gray.C,
                     display: 'flex',
@@ -206,8 +205,8 @@ const CompanyProfile = () => {
                   {company.phone2}
                 </Typography>
                 <Typography
-                  variant='h6'
-                  component='h3'
+                  variant="h6"
+                  component="h3"
                   sx={{
                     color: palette.gray.C,
                     display: 'flex',
@@ -228,24 +227,27 @@ const CompanyProfile = () => {
         item
         container
         xs={12}
-        display='flex'
-        justifyContent='center'
-        alignItems='start'
+        display="flex"
+        justifyContent="center"
+        alignItems="start"
         sx={{ zIndex: 1, mt: '8px' }}
       >
-        <Box className='company-job-offers'>
-          <Grid container columnSpacing={2} className='company-job-offers-child' display='flex'>
+        <Box className="company-job-offers">
+          <Grid container columnSpacing={2} className="company-job-offers-child" display="flex">
 
             <Grid container item md={8} xs={12} order={{ xs: 2, md: 1 }}>
               <Button
-                id='scroll-target'
+                id="scroll-target"
                 onClick={() => navigate('/post-job-offer')}
-                variant='contained'
+                variant="contained"
                 fullWidth
                 sx={{ height: '48px' }}
-              >NUEVA OFERTA +</Button>
+              >
+                NUEVA OFERTA +
+
+              </Button>
               {jobOffers && jobOffers.map((offer) => (
-                <JobOfferCard
+                <JobOfferCardWithInterest
                   key={offer.id}
                   position={offer.title}
                   company={offer.company}
@@ -259,13 +261,13 @@ const CompanyProfile = () => {
                 />
               ))}
 
-              <div style={{ display: 'grid', placeItems: 'center', width: "100%" }}>
+              <div style={{ display: 'grid', placeItems: 'center', width: '100%' }}>
                 <Pagination
                   count={pageCount}
                   onChange={handlePageChange}
                   color="primary"
-                  sx={{ paddingTop: "32px" }}
-                ></Pagination>
+                  sx={{ paddingTop: '32px' }}
+                />
               </div>
             </Grid>
 
@@ -275,25 +277,25 @@ const CompanyProfile = () => {
               >
                 <CardContent>
                   <Typography
-                    variant='h6'
-                    component='h3'
+                    variant="h6"
+                    component="h3"
                   >
                     Misión
                   </Typography>
                   <Typography
-                    variant='paragraph'
+                    variant="paragraph"
                   >
                     {company.mision}
                   </Typography>
                   <Typography
-                    variant='h6'
-                    component='h3'
+                    variant="h6"
+                    component="h3"
                     sx={{ mt: '16px' }}
                   >
                     Visión
                   </Typography>
                   <Typography
-                    variant='paragraph'
+                    variant="paragraph"
                   >
                     {company.vision}
                   </Typography>
@@ -302,8 +304,8 @@ const CompanyProfile = () => {
             </Grid>
           </Grid>
         </Box>
-      </Grid >
-    </Grid >
+      </Grid>
+    </Grid>
   );
 };
 
