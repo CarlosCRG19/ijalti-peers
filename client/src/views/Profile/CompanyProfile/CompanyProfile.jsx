@@ -38,9 +38,9 @@ const CompanyProfile = () => {
     }
   };
 
-  const getJobOffers = async () => {
+  const getJobOffers = async (companyID) => {
     try {
-      const response = await api.jobOffer.getByPage(1);
+      const response = await api.jobOffer.getByCompanyID(companyID);
       setJobOffers(response.offers);
     } catch (error) {
       navigate('/');
@@ -49,7 +49,7 @@ const CompanyProfile = () => {
 
   useEffect(() => {
     getCompany(params.id);
-    getJobOffers();
+    getJobOffers(params.id);
   }, []);
 
   return (

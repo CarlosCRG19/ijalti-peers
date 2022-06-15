@@ -6,7 +6,6 @@ import { useAuth } from '../contexts/auth';
 const CompanyRoutes = () => {
   const { idToken, user } = useAuth();
 
-  console.log(idToken, user);
   if (!idToken || user.role !== 'company') {
     return null;
   }
