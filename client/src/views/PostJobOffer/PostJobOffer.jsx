@@ -215,7 +215,7 @@ const PostJobOffer = () => {
               sx={{ pt: "16px" }}
             >
               <Grid item xs={8}>
-                <Button variant="text" onClick={() => navigate("/")}>Regresar</Button>
+                <Button variant="text" onClick={() => navigate("/")}>Cancelar</Button>
               </Grid>
               <Grid item xs={2}>
                 <Button variant="text" onClick={() => setJobOffer(INITIAL_JOB_OFFER)}>Borrar</Button>

@@ -208,7 +208,7 @@ const AspirantSearch = () => {
             sx={{ pt: "16px" }}
           >
             <Grid item xs={8}>
-              <Button variant="text" onClick={() => navigate("/")}>Regresar</Button>
+              <Button variant="text" onClick={() => navigate("/")}>Cancelar</Button>
             </Grid>
             <Grid item xs={2}>
               <Button variant="text" onClick={clearSearch}>Limpiar</Button>
