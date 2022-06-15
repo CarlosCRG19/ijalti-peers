@@ -10,6 +10,8 @@ import SelectWithLabel from './SelectWithLabel';
 import CompanySearchbar from './CompanySearchbar';
 import TagsInputWithLabel from './TagsInputWithLabel';
 import TextFieldWithLabel from './TextFieldWithLabel';
+import JobOfferCardWithInterest from './JobOfferCardWithInterest';
+import AspirantCard from './AspirantCard';
 
 export {
   Form,
@@ -24,4 +26,6 @@ export {
   CompanySearchbar,
   TagsInputWithLabel,
   TextFieldWithLabel,
+  JobOfferCardWithInterest,
+  AspirantCard,
 };
