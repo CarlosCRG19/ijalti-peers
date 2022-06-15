@@ -30,8 +30,9 @@ const CompanySearchbar = () => {
     <Autocomplete
       freeSolo
       options={queryResult}
+      fullWidth
       getOptionLabel={(option) => option.name}
-      sx={{ width: 300, ml: 4 }}
+      sx={{ ml: 4 }}
       renderOption={(props, option) => (
         <Link to={`/profile/company/${option.id}`} style={{ textDecoration: 'none', color: 'black' }}>
           <MenuItem>
