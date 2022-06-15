@@ -4,11 +4,9 @@ import { React, useState } from 'react'
 
 const UploadPicture = ({ label, onchange }) => {
 
-  const [picture, setPicture] = useState(null);
   const [picturePreview, setPicturePreview] = useState(null);
   const [alert, setAlert] = useState(null);
 
-  let base64Picture = '';
   const handlePictureUpload = (e) => {
     const pictureInfo = e.target.files[0];
 
@@ -22,12 +20,13 @@ const UploadPicture = ({ label, onchange }) => {
     }
 
     setAlert(null);
-    setPicturePreview(URL.createObjectURL(pictureInfo));
-    setPicture(generateBase64(pictureInfo));
+    generateBase64(pictureInfo);
   };
 
   const onLoad = pictureString => {
+    setPicturePreview(pictureString);
     onchange('profilePicture', pictureString);
+    return pictureString
   }
 
   const generateBase64 = (inputPicture) => {
@@ -64,7 +63,7 @@ const UploadPicture = ({ label, onchange }) => {
           />
         </div>
         :
-        <div style={{
+        <div className='imagePlaceHolder' style={{
           width: '150px',
           height: '150px',
           backgroundColor: 'gray',

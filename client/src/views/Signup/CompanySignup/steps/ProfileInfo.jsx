@@ -22,13 +22,12 @@ const ProfileInfo = ({ onPrevious }) => {
   const handleChange = (event) => {
     const { name, value } = event.target;
     const newProfileInfo = { ...profileInfo, [name]: value };
-    console.log(newProfileInfo);
+    
     updateCompanySignup({ type: 'setProfileInfo', payload: newProfileInfo });
   };
 
   const handleChangePicture = (name, picture) => {
     const newProfileInfo = { ...profileInfo, [name]: picture };
-    console.log(  );
 
     updateCompanySignup({ type: 'setProfileInfo', payload: newProfileInfo });
   };

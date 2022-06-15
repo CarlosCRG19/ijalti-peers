@@ -59,7 +59,6 @@ const CompanyProfile = () => {
     setPage(value);
     getJobOffers(company.id, value);
     const target = document.getElementById("scroll-target");
-    console.log(target);
     target.scrollIntoView({ behavior: "smooth" });
   }
 
