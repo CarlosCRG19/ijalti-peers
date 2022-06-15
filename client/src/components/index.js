@@ -10,7 +10,7 @@ import SelectWithLabel from './SelectWithLabel';
 import CompanySearchbar from './CompanySearchbar';
 import TagsInputWithLabel from './TagsInputWithLabel';
 import TextFieldWithLabel from './TextFieldWithLabel';
-
+import UploadPicture from './UploadPicture'
 export {
   Form,
   Navbar,
@@ -24,4 +24,5 @@ export {
   CompanySearchbar,
   TagsInputWithLabel,
   TextFieldWithLabel,
+  UploadPicture,
 };
