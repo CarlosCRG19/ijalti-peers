@@ -44,28 +44,31 @@ const Navbar = () => {
       sx={{ background: 'white', py: 1 }}
     >
       <Grid
-        xs={3}
+        xs={2}
+        lg={4}
         item
         display="flex"
       >
         <Box
           component="img"
-          sx={{ zIndex: '1', mx: 2 }}
+          sx={{ zIndex: '1', mx: 2, cursor: 'pointer' }}
           alt="The house from the offer."
           src="https://www.ijalti.org.mx/wp-content/uploads/2019/05/favicon.png"
+          onClick={() => navigate('/')}
         />
 
         <Link to="/" style={{ textDecoration: 'none' }}>
-          <MuiLink variant="h3" underline="none">IJALTI PEERS</MuiLink>
+          <MuiLink variant="h3" underline="none" display={{ xs: 'none', lg: 'flex' }}>IJALTI PEERS</MuiLink>
         </Link>
       </Grid>
-      <Grid
+      {/* <Grid
         xs={1}
-        item
-        display="flex"
-      />
+        sm={2}
+        display={{ md: 'none' }}
+      /> */}
       <Grid
-        xs={6}
+        xs={8}
+        lg={4}
         item
         display="flex"
       >
@@ -80,11 +83,15 @@ const Navbar = () => {
           )
           : <CompanySearchbar />}
       </Grid>
-      <Grid xs={1} />
+      <Grid
+        xs={1}
+        lg={3}
+      />
       <Grid
         xs={1}
         item
         display="flex"
+        justifyContent="end"
       >
         <Button
           sx={{ justifySelf: 'end' }}
@@ -94,7 +101,10 @@ const Navbar = () => {
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
         >
-          Opciones
+          <Box sx={{
+            width: '100%', height: '100%', background: 'gray', borderRadius: '100%',
+          }}
+          />
         </Button>
         <Menu
           id="fade-menu"
