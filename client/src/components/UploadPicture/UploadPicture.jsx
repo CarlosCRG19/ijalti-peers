@@ -9,7 +9,7 @@ const UploadPicture = ({ label, onchange }) => {
 
   const handlePictureUpload = (e) => {
     const pictureInfo = e.target.files[0];
-
+    setAlert('');
     if (!pictureInfo) {
       return;
     }
@@ -19,7 +19,11 @@ const UploadPicture = ({ label, onchange }) => {
       return;
     }
 
-    setAlert(null);
+    if (pictureInfo.size > 50000){
+      setAlert("El archivo debe de tener un tamaño menor a 50KB.");
+      return;
+    }
+
     generateBase64(pictureInfo);
   };
 
