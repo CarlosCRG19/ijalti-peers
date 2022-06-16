@@ -173,8 +173,20 @@ const AspirantProfile = () => {
                     mb: '8px',
                   }}
                 >
-                  Username
+                  {aspirant.username}
                 </Typography>
+
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{
+                    color: palette.gray.C,
+                    mb: '8px',
+                  }}
+                >
+                  {aspirant.email}
+                </Typography>
+
                 <Typography
                   variant="paragraph"
                   sx={{ color: palette.gray.C, mb: '8px' }}

@@ -49,6 +49,24 @@ class AspirantAPI extends APIGateway {
       throw new Error(error.message);
     }
   }
+
+  async setInterested(idAspirant, idJobOffer) {
+    try {
+      const response = await this._client.post(`/aspirants/${idAspirant}/interests/${idJobOffer}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async setUninterested(idAspirant, idJobOffer) {
+    try {
+      const response = await this._client.delete(`/aspirants/${idAspirant}/interests/${idJobOffer}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 export default AspirantAPI;

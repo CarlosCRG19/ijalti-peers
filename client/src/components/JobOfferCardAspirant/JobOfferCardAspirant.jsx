@@ -1,9 +1,10 @@
 import {
   React,
   useState,
+  useEffect,
 } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import {
   Avatar,
@@ -13,12 +14,16 @@ import {
   CardContent,
   CardHeader,
   Collapse,
-  Link,
   Typography,
   Box,
   List,
   ListItemText,
+  useTheme,
 } from '@mui/material';
+
+import {
+  CheckBox, CheckBoxOutlineBlank,
+} from '@mui/icons-material';
 
 import {
   styled,
@@ -26,6 +31,8 @@ import {
 
 import parseDateYYYYMMDD from '../../utils/parseDate';
 import './JobOfferCard.css';
+import { useAPI } from '../../hooks';
+import { useAuth } from '../../contexts/auth';
 
 const CardContentNoPadding = styled(CardContent)(
   `
@@ -35,7 +42,8 @@ const CardContentNoPadding = styled(CardContent)(
   `,
 );
 
-const JobOfferCard = ({
+const JobOfferCardAspirant = ({
+  id,
   position,
   company,
   description,
@@ -45,12 +53,17 @@ const JobOfferCard = ({
   salary,
   requiredSkills,
   preferredSkills,
+  isInterested,
+  onSuccess,
   sxCard,
 }) => {
   const [expand, setExpand] = useState(true);
   const [expandMsg, setExpandMsg] = useState('Ver más');
 
-  const navigate = useNavigate();
+  const { palette } = useTheme();
+  const api = useAPI();
+  const { user } = useAuth();
+
   if (!profilePictureURL) {
     profilePictureURL = '#';
   }
@@ -58,10 +71,24 @@ const JobOfferCard = ({
   if (salary) {
     salary = `$${salary}`;
   }
+
   const handleExpand = (state) => {
     setExpand(!expand);
     expand ? setExpandMsg('Ver menos') : setExpandMsg('Ver más');
     return state;
+  };
+
+  const handleInterest = async (currentInterested) => {
+    try {
+      if (currentInterested) {
+        await api.aspirant.setUninterested(user.userId, id);
+      } else {
+        await api.aspirant.setInterested(user.userId, id);
+      }
+      onSuccess();
+    } catch (error) {
+      throw new Error(error.message);
+    }
   };
 
   return (
@@ -73,13 +100,32 @@ const JobOfferCard = ({
           }
           title={(
             <Link
-              sx={{ cursor: 'pointer' }}
-              underline="hover"
+              style={{ textDecoration: 'none', fontSize: 20 }}
               variant="h6"
               to={`/profile/company/${company.id}`}
             >
               {company.name}
             </Link>
+          )}
+          action={(
+            <Typography
+              color={palette.blue.regular}
+              sx={{ display: 'flex', cursor: 'pointer' }}
+              onClick={() => handleInterest(isInterested)}
+            >
+              {isInterested ? (
+                <>
+                  <CheckBox />
+                  Interesado
+                </>
+              ) : (
+                <>
+                  <CheckBoxOutlineBlank />
+                  Interesado
+                </>
+              )}
+
+            </Typography>
           )}
           subheader={parseDateYYYYMMDD(date)}
         />
@@ -149,4 +195,4 @@ const JobOfferCard = ({
   );
 };
 
-export default JobOfferCard;
+export default JobOfferCardAspirant;
