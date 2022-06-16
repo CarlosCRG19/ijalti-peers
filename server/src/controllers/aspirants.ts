@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import axios, { Axios, AxiosRequestConfig } from "axios";
-import { numArr2ObjArr } from "../utils";
-import { Aspirant, JobOffer, User } from "../models";
+import { numArr2ObjArr, getIdsFromNewObjArr, createNewObjArr } from "../utils";
+import { Aspirant, JobOffer, User, WorkExperience } from "../models";
 
 export const getAspirantList = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -61,7 +61,7 @@ export const createAspirant = async (req: Request, res: Response): Promise<Respo
 export const getAspirant = async (req: Request, res: Response): Promise<Response> => {
     try {
         const aspirant: Aspirant | null = await Aspirant.findOne({
-            where: {id: req.params.id}, relations: ['skills', 'interestedInOffers', 'user']
+            where: {id: req.params.id}, relations: ['skills', 'interestedInOffers', 'user', 'workExperiences']
         })
         if (!aspirant) return res.status(409).json({ message: "Aspirant not found" });
 
@@ -141,10 +141,13 @@ export const signupAspirant = async (req: Request, res: Response): Promise<Respo
         
         const newUser = User.create( { firebaseId: localId, username, email, role: 'aspirant' } );
         await newUser.save();
+
+        let workExperiences = (!aspirant.workExperiences) ? [] : await getIdsFromNewObjArr(aspirant.workExperiences, WorkExperience);
         
         const newAspirant: Aspirant = Aspirant.create({ 
             ...aspirant,
-            skills: numArr2ObjArr(aspirant.skills)
+            skills: numArr2ObjArr(aspirant.skills),
+            workExperiences: workExperiences
         }); 
 
         newAspirant.user = newUser;
@@ -269,12 +272,63 @@ export const removeInterest = async (req: Request, res: Response): Promise<Respo
         if(!fetchedOffer) throw new Error("Job Offer not found");
 
         aspirant.interestedInOffers = aspirant.interestedInOffers.filter(offer => {
-            console.log(offer.id !== req.params.offerId);
             return offer.id !== req.params.offerId;
         });
         await aspirant.save();
 
         return res.status(200).json( { message: "Removed interest", offer: fetchedOffer } );
+
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json( { message: "Something went wrong!" } );
+    }
+}
+
+export const addWorkExperience = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const aspirant = await Aspirant.findOne({
+            where: {user: {firebaseId: req.user_id}},
+            relations: ["workExperiences"]
+        });
+
+        if(!aspirant) throw new Error("Aspirant not found");
+
+        if(req.params.id !== aspirant.id) throw new Error("Unauthorized");
+        
+        const newWorkExperience = WorkExperience.create(req.body)
+        await newWorkExperience.save();
+
+        aspirant.workExperiences.push(newWorkExperience)
+        await aspirant.save();
+
+        return res.status(200).json( { message: "Added a new work experience", newWorkExperience } );
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json( { message: "Something went wrong" } )
+    }
+}
+
+export const removeWorkExperience = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const aspirant = await Aspirant.findOne({
+            where: {user: {firebaseId: req.user_id}},
+            relations: ["workExperiences"]
+        })
+
+        if(!aspirant) throw new Error("Aspirant not found");
+
+        if(req.params.id !== aspirant.id) throw new Error("Unauthorized");
+        
+        const fetchedworkExperienceId = await WorkExperience.findOneBy({id: req.params.workExperienceId});
+        if(!fetchedworkExperienceId) throw new Error("WorkExperience not found");
+
+        aspirant.workExperiences = aspirant.workExperiences.filter(workExperience => {
+            return workExperience.id !== req.params.workExperienceId;
+        });
+        await aspirant.save();
+
+        return res.status(200).json( { message: "Removed workExperience", workExperience: fetchedworkExperienceId } );
 
     } catch (error) {
         console.log(error);
