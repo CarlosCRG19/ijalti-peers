@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 import {
   Card,
@@ -8,12 +8,12 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Typography
+  Typography,
 } from '@mui/material';
 
 import {
-  LocationOn
-} from '@mui/icons-material'
+  LocationOn,
+} from '@mui/icons-material';
 
 import './AspirantCard.css';
 import { useNavigate } from 'react-router-dom';
@@ -26,57 +26,56 @@ const educationLevelChoices = [
 ];
 
 const AspirantCard = ({
-  aspirantId, aspirantName, education, description, experience, abilitiesArray, location
+  aspirantId, aspirantName, education, description, experience, abilitiesArray, location,
 }) => {
   const navigate = useNavigate();
-
-  //Limit to n habilities
+  // Limit to n habilities
   if (!abilitiesArray) {
-    abilitiesArray = ["Hubo un error al cargar las habilidades de este aspirante"]
+    abilitiesArray = [''];
   } else {
     const maxHabilities = 3;
     abilitiesArray = abilitiesArray.slice(0, maxHabilities);
   }
 
-  //Handle years of experience
-  let experienceMessage = `${experience} años de experiencia`
+  // Handle years of experience
+  let experienceMessage = `${experience} años de experiencia`;
   if (experience == 1) {
-    experienceMessage = `${experience} año de experiencia`
-  } else if (experience === 0 || experience == "0") {
-    experienceMessage = "Primera oportunidad de trabajo"
+    experienceMessage = `${experience} año de experiencia`;
+  } else if (experience === 0 || experience == '0') {
+    experienceMessage = 'Primera oportunidad de trabajo';
   }
 
-  //Convert experience from id to name
+  // Convert experience from id to name
   const convertEducation = () => {
     for (let i = 0; i < educationLevelChoices.length; i++) {
       if (educationLevelChoices[i].id == education) {
         return educationLevelChoices[i].name;
       }
     }
-  }
-
+  };
 
   return (
     <CardActionArea
-      sx={{ marginTop: "32px" }}
-      onClick={() => window.open(`/profile/aspirant/${aspirantId}`, '_blank')}>
-      <Card className='card' elevation={3}>
+      sx={{ marginTop: '32px' }}
+      onClick={() => window.open(`/profile/aspirant/${aspirantId}`, '_blank')}
+    >
+      <Card className="card" elevation={3}>
         <div>
           <CardContent>
             <Typography
               color="text.secondary"
-              variant='subtitle1'
+              variant="subtitle1"
             >
               {convertEducation()}
             </Typography>
-            <Typography variant="h5" >
+            <Typography variant="h5">
               {aspirantName}
             </Typography>
             <Typography
               color="text.secondary"
               variant="caption"
               display="block"
-              sx={{ paddingBottom: "12px" }}
+              sx={{ paddingBottom: '12px' }}
             >
               {experienceMessage}
             </Typography>
@@ -86,22 +85,23 @@ const AspirantCard = ({
           </CardContent>
         </div>
 
-
         <div>
           <List
-            sx={{ paddingBottom: "0px" }}
+            sx={{ paddingBottom: '0px' }}
           >
             {
-              abilitiesArray.map(item => (
+              abilitiesArray.map((item) => (
                 <ListItem
                   key={item}
-                  sx={{ paddingBottom: "0px" }}>
+                  sx={{ paddingBottom: '0px' }}
+                >
                   <ListItemText secondary={item} />
                 </ListItem>
               ))
             }
-            <ListItem >
-              <ListItemIcon><LocationOn />
+            <ListItem>
+              <ListItemIcon>
+                <LocationOn />
                 <ListItemText primary={location} />
               </ListItemIcon>
             </ListItem>
@@ -113,7 +113,4 @@ const AspirantCard = ({
   );
 };
 
-
 export default AspirantCard;
-
-

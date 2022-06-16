@@ -81,7 +81,6 @@ const AspirantSearch = () => {
     } catch (error) {
       console.log(error);
     }
-
   };
 
   const handleChangeNumber = (event) => {
@@ -204,11 +203,14 @@ const AspirantSearch = () => {
               ),
             }}
           />
-          <Grid container item xs={12}
-            sx={{ pt: "16px" }}
+          <Grid
+            container
+            item
+            xs={12}
+            sx={{ pt: '16px' }}
           >
             <Grid item xs={8}>
-              <Button variant="text" onClick={() => navigate("/")}>Cancelar</Button>
+              <Button variant="text" onClick={() => navigate('/')}>Cancelar</Button>
             </Grid>
             <Grid item xs={2}>
               <Button variant="text" onClick={clearSearch}>Limpiar</Button>
@@ -218,9 +220,6 @@ const AspirantSearch = () => {
             </Grid>
           </Grid>
         </Grid>
-
-
-
 
         {alert && (
           <Grid item xs={12}>
@@ -240,12 +239,14 @@ const AspirantSearch = () => {
 
       <div className="cards">
         {
-          searchResults.length != 0 &&
+          searchResults.length != 0
+          && (
           <>
             <Alert
-            severity='info'
-            sx={{mt: '32px', boxShadow: 1}}
-            >Click en alguno de los aspirantes para ver su perfil en una nueva pestaña
+              severity="info"
+              sx={{ mt: '32px', boxShadow: 1 }}
+            >
+              Click en alguno de los aspirantes para ver su perfil en una nueva pestaña
             </Alert>
             {console.log(searchResults)}
             {
@@ -266,6 +267,7 @@ const AspirantSearch = () => {
               ))
             }
           </>
+          )
         }
       </div>
     </main>

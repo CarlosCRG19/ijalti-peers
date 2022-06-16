@@ -1,6 +1,8 @@
+/* eslint-disable react/prop-types */
 import {
   React,
   useState,
+  useEffect,
 } from 'react';
 
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +20,10 @@ import {
   Box,
   List,
   ListItemText,
+  Divider,
+  Modal,
+  useTheme,
+  Paper,
 } from '@mui/material';
 
 import {
@@ -27,6 +33,9 @@ import {
 import parseDateYYYYMMDD from '../../utils/parseDate';
 import './JobOfferCard.css';
 
+import AspirantCard from '../AspirantCard';
+import { useAPI } from '../../hooks';
+
 const CardContentNoPadding = styled(CardContent)(
   `
   &:last-child{
@@ -35,7 +44,8 @@ const CardContentNoPadding = styled(CardContent)(
   `,
 );
 
-const JobOfferCard = ({
+const JobOfferCardCompany = ({
+  id,
   position,
   company,
   description,
@@ -49,8 +59,11 @@ const JobOfferCard = ({
 }) => {
   const [expand, setExpand] = useState(true);
   const [expandMsg, setExpandMsg] = useState('Ver más');
+  const [interestedAspirants, setInterestedAspirants] = useState([]);
+  const api = useAPI();
 
-  const navigate = useNavigate();
+  const { palette } = useTheme();
+
   if (!profilePictureURL) {
     profilePictureURL = '#';
   }
@@ -63,6 +76,24 @@ const JobOfferCard = ({
     expand ? setExpandMsg('Ver menos') : setExpandMsg('Ver más');
     return state;
   };
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const getInterestedAspirants = async (jobOfferId) => {
+    try {
+      const response = await api.jobOffer.getInterestedAspirants(jobOfferId);
+      console.log(response);
+      setInterestedAspirants(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getInterestedAspirants(id);
+  }, []);
 
   return (
     <div className="job-offer-card">
@@ -81,8 +112,52 @@ const JobOfferCard = ({
               {company.name}
             </Link>
           )}
+          action={(
+            <Button onClick={handleOpen}>Aspirantes Interesados</Button>
+          )}
           subheader={parseDateYYYYMMDD(date)}
         />
+
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            background: palette.gray.B,
+            borderRadius: 2,
+            boxShadow: 24,
+            p: 4,
+            width: '60vw',
+          }}
+          >
+            <Typography variant="h3" textAlign="center">Aspirantes Interesados</Typography>
+            <Box sx={{ maxHeight: '70vh', overflow: 'auto', px: 2 }}>
+              <List>
+                {interestedAspirants.map((aspirant) => (
+                  <AspirantCard
+                    key={`Card${aspirant.names}`}
+                    aspirantId={`${aspirant.id}`}
+                    aspirantName={`${aspirant.names} ${aspirant.firstLastName}`}
+                    title={aspirant.title}
+                    education={aspirant.educationLevel}
+                    description={aspirant.biography}
+                    experience={aspirant.yearsOfExperience}
+                    abilitiesArray={aspirant.skills && aspirant.skills.map((skill) => skill.name)}
+                    location={`${aspirant.residenceCity}, ${aspirant.residenceState}`}
+                    pageURL={aspirant.pageURL}
+                  />
+                ))}
+              </List>
+            </Box>
+          </Box>
+        </Modal>
+
         <CardContentNoPadding>
           <div className="job-offer-header-info">
             <div>
@@ -96,6 +171,7 @@ const JobOfferCard = ({
           </div>
 
           <Collapse in={!expand} timeout="auto" unmountOnExit>
+            <Divider sx={{ mt: 1, background: palette.blue.lightest }} />
             <Box className="job-offer-body-info" sx={{ paddingBottom: '16px' }}>
               <div className="job-offer-abilities">
                 <div>
@@ -149,4 +225,4 @@ const JobOfferCard = ({
   );
 };
 
-export default JobOfferCard;
+export default JobOfferCardCompany;

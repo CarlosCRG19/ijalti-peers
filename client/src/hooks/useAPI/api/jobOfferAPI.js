@@ -21,7 +21,6 @@ class JobOfferAPI extends APIGateway {
     }
   }
 
-
   async getByPage(page) {
     try {
       const response = await this._client.get(`job-offers/?page=${page}`);
@@ -36,6 +35,15 @@ class JobOfferAPI extends APIGateway {
     try {
       const response = await this._client.get(`job-offers/?companyId=${companyID}&page=${page}`);
 
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getInterestedAspirants(jobOfferId) {
+    try {
+      const response = await this._client.get(`/job-offers/${jobOfferId}/interested-aspirants`);
       return response.data;
     } catch (error) {
       throw new Error(error.message);
