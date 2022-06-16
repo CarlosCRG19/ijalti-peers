@@ -45,6 +45,8 @@ class Company extends BaseEntity{
     @Column({type: "int"})
     numEmployees: number;
 
+    @Column( { type: "text", nullable: true} )
+    profilePicture: string;
 
     @OneToMany(() => JobOffer, (jobOffer) => jobOffer.company)
     jobOffers : JobOffer[];

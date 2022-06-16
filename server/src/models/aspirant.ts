@@ -69,6 +69,9 @@ class Aspirant extends BaseEntity {
     @Column({length: 150})
     biography: string;
 
+    @Column( { type: "text", nullable: true} )
+    profilePicture: string;
+
     @OneToMany(() => WorkExperience, (workExperiences) => workExperiences.aspirant)
     workExperiences: WorkExperience[];
 
