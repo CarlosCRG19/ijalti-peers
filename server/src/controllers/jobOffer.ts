@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Company, User } from "../models";
+import { Aspirant, Company, User } from "../models";
 import JobOffer from "../models/jobOffer";
 import { numArr2ObjArr } from "../utils";
 
@@ -29,7 +29,7 @@ export const getOffersList = async (
 
         const skipJobOffers = nOffers * (page - 1)
 
-        const [offers, totalCount] = await JobOffer.findAndCount({
+        const [offers, totalCount]: any = await JobOffer.findAndCount({
             where: company ? { company: {id: company.id} } : {},
             relations: ['preferredSkills', 'requiredSkills', 'interestedAspirants', 'company'],
             select: {
@@ -42,11 +42,20 @@ export const getOffersList = async (
             take: nOffers,
             skip: skipJobOffers
         });
+
+        const user = await User.findOneBy({firebaseId: req.user_id});
+        
+        if(user?.role === 'aspirant') {
+            const aspirant = await Aspirant.findOneBy({user: {id: user.id}});
+            if (!aspirant) throw new Error('Did not work');
+            offers.forEach((offer: any) => offer.interested = offer.interestedAspirants.some((element: any) => element.id === aspirant.id));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+        }                                                                                                                                                                                                       
+    
         return res.status(200).json({offers, totalCount});
     }catch (error) {
         console.log(error)
         
-        let {code : errorCode}: any = error;
+        let {code : errorCode}: any = error;    
         if (errorCode === "22P02"){
             return res.status(404).json({ message: "Not found!" });
         }
