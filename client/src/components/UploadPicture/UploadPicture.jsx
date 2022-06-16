@@ -1,5 +1,5 @@
 import { AddPhotoAlternate } from '@mui/icons-material';
-import { Alert, Button, Fab, InputLabel, Typography } from '@mui/material';
+import { Alert, Button, InputLabel} from '@mui/material';
 import { React, useState } from 'react'
 
 const UploadPicture = ({ label, onchange }) => {
