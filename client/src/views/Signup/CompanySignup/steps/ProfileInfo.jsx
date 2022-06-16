@@ -49,7 +49,7 @@ const ProfileInfo = ({ onPrevious }) => {
     const { idToken, company: { id, name } } = await api.company.signup(email, password, company);
 
     storeCredentials('company', idToken, id, name);
-    navigate('/post-job-offer');
+    navigate('/');
   };
 
   return (

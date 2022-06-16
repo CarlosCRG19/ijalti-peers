@@ -62,7 +62,6 @@ const AspirantProfile = () => {
 
   useEffect(() => {
     getAspirant(params.id);
-    console.log(aspirant);
   }, []);
 
   return (
