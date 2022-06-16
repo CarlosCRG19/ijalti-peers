@@ -1,5 +1,5 @@
 import { AddPhotoAlternate } from '@mui/icons-material';
-import { Alert, Fab, Typography } from '@mui/material';
+import { Alert, Button, Fab, InputLabel, Typography } from '@mui/material';
 import { React, useState } from 'react'
 
 const UploadPicture = ({ label, onchange }) => {
@@ -39,38 +39,51 @@ const UploadPicture = ({ label, onchange }) => {
 
   return (
     <div>
-      <Typography variant='subtitle' sx={{ marginRight: '32px' }}>{label}</Typography>
-      <input
-        accept='image/*'
-        id='upload-image'
-        type='file'
-        multiple
-        onChange={handlePictureUpload}
-        style={{ display: 'none' }}
-      />
-      <label htmlFor='upload-image'>
-        <Fab component='span' color='primary'>
-          <AddPhotoAlternate />
-        </Fab>
-      </label>
-      {alert &&
-        <Alert severity='warning' sx={{ margin: '16px' }}>{alert}</Alert>}
-      {picturePreview ?
-        <div>
-          <img
-            src={picturePreview}
-            style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '100%' }}
+      <InputLabel sx={{ color: '#000' }}>Foto de perfil</InputLabel>
+      <div style={{ display: 'grid', placeItems: 'center' }}>
+        {alert &&
+          <Alert severity='warning' sx={{ margin: '16px' }}>{alert}</Alert>}
+        {picturePreview ?
+          <div>
+            <img
+              src={picturePreview}
+              style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '100%' }}
+            />
+          </div>
+          :
+          <div className='imagePlaceHolder' style={{
+            width: '150px',
+            height: '150px',
+            backgroundColor: 'gray',
+            borderRadius: '100%',
+          }}
           />
-        </div>
-        :
-        <div className='imagePlaceHolder' style={{
-          width: '150px',
-          height: '150px',
-          backgroundColor: 'gray',
-          borderRadius: '100%',
-        }}
+        }
+        <input
+          accept='image/*'
+          id='upload-image'
+          type='file'
+          multiple
+          onChange={handlePictureUpload}
+          style={{ display: 'none' }}
         />
-      }
+        <Button
+          component='label'
+          variant='contained'
+          sx={{ mt: 1 }}
+          startIcon={<AddPhotoAlternate />}
+        >
+          Subir imagen
+          <input
+            accept='image/*'
+            id='upload-image'
+            type='file'
+            multiple
+            onChange={handlePictureUpload}
+            style={{ display: 'none' }}
+          />
+        </Button>
+      </div>
     </div>
   )
 };

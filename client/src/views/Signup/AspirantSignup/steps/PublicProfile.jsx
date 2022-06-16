@@ -28,9 +28,9 @@ const PublicProfile = ({ onPrevious }) => {
   };
 
   const handleChangePicture = (name, picture) => {
-    const newProfileInfo = { ...profileInfo, [name]: picture };
+    const newPublicProfile = { ...publicProfile, [name]: picture };
 
-    updateCompanySignup({ type: 'setProfileInfo', payload: newProfileInfo });
+    updateAspirantSignup({ type: 'setPublicProfile', payload: newPublicProfile });
   };
 
   const handleSubmit = async () => {
@@ -62,13 +62,13 @@ const PublicProfile = ({ onPrevious }) => {
       description="¡Casi terminamos! La siguiente será la información con la que los demás te conocerán."
       onSubmit={handleSubmit}
     >
-      <Grid item xs={6}>
+      <Grid item xs={12}>
         <UploadPicture
           onchange={handleChangePicture}
           label='Foto de perfil'
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12}>
         <TextFieldWithLabel
           fullWidth
           label="Nombre de perfil"
