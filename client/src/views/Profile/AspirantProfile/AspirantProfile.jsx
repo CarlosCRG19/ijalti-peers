@@ -124,14 +124,24 @@ const AspirantProfile = () => {
                 justifyContent="center"
                 sx={{ zIndex: 1 }}
               >
-                <div style={{
-                  width: '200px',
-                  height: '200px',
-                  backgroundColor: 'gray',
-                  borderRadius: '100%',
-
-                }}
-                />
+                {aspirant.profilePicture ?
+                  <img 
+                  src={aspirant.profilePicture}
+                  style={{
+                    width: '200px',
+                    height: '200px',
+                    objectFit: 'cover',
+                    borderRadius: '100%'
+                  }} />
+                  :
+                  <div style={{
+                    width: '200px',
+                    height: '200px',
+                    backgroundColor: 'gray',
+                    borderRadius: '100%',
+                  }}
+                  />
+                }
                 <Chip
                   label={translateWorkingStatus[aspirant.workingStatus]}
                   sx={{

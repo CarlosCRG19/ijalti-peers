@@ -69,7 +69,7 @@ const AspirantFeed = () => {
           maxWidth: '720px',
         }}
       >
-        <Card>
+        <Card sx={{marginBottom: '48px'}}>
           <CardContent>
             <Typography variant="h4">
               Bienvenido de vuelta,

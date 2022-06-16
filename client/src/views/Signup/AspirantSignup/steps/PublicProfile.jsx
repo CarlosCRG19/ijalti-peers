@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Grid } from '@mui/material';
 
 import { useAPI } from '../../../../hooks';
-import { Form, TextFieldWithLabel } from '../../../../components';
+import { Form, TextFieldWithLabel, UploadPicture } from '../../../../components';
 import { useAuth } from '../../../../contexts/auth';
 import { useAspirantSignup } from '../../../../contexts/aspirant-signup';
 
@@ -27,6 +27,12 @@ const PublicProfile = ({ onPrevious }) => {
     updateAspirantSignup({ type: 'setPublicProfile', payload: newPublicProfile });
   };
 
+  const handleChangePicture = (name, picture) => {
+    const newPublicProfile = { ...publicProfile, [name]: picture };
+
+    updateAspirantSignup({ type: 'setPublicProfile', payload: newPublicProfile });
+  };
+
   const handleSubmit = async () => {
     const { email, password } = credentials;
     const aspirant = {
@@ -34,6 +40,7 @@ const PublicProfile = ({ onPrevious }) => {
       ...professionalExperience,
       ...publicProfile,
     };
+
 
     // TODO: clean this filtering of properties
     aspirant.yearsOfExperience = +aspirant.yearsOfExperience;
@@ -55,6 +62,12 @@ const PublicProfile = ({ onPrevious }) => {
       description="¡Casi terminamos! La siguiente será la información con la que los demás te conocerán."
       onSubmit={handleSubmit}
     >
+      <Grid item xs={12}>
+        <UploadPicture
+          onchange={handleChangePicture}
+          label='Foto de perfil'
+        />
+      </Grid>
       <Grid item xs={12}>
         <TextFieldWithLabel
           fullWidth
@@ -104,7 +117,7 @@ PublicProfile.propTypes = {
 };
 
 PublicProfile.defaultProps = {
-  onPrevious: () => {},
+  onPrevious: () => { },
 };
 
 export default PublicProfile;

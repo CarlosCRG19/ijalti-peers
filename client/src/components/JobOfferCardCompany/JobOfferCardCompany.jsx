@@ -84,7 +84,6 @@ const JobOfferCardCompany = ({
   const getInterestedAspirants = async (jobOfferId) => {
     try {
       const response = await api.jobOffer.getInterestedAspirants(jobOfferId);
-      console.log(response);
       setInterestedAspirants(response);
     } catch (error) {
       console.log(error);

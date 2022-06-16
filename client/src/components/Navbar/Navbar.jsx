@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Grid,
   Box,
@@ -12,18 +12,49 @@ import {
 
 import { Search } from '@mui/icons-material';
 
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 
 import CompanySearchbar from '../CompanySearchbar';
 
 import { useAuth } from '../../contexts/auth';
 import './Navbar.css';
+import { useAPI } from '../../hooks';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
-
+  const api = useAPI();
+  const params = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [userInfo, setUserInfo] = useState();
+
+  const getAspirant = async (idAspirant) => {
+    try {
+      const response = await api.aspirant.getAspirant(idAspirant);
+      setUserInfo(response.aspirant);
+    } catch (error) {
+      console.log(error);
+      navigate('/');
+    }
+  };
+
+  const getCompany = async (idCompany) => {
+    try {
+      const response = await api.company.getById(idCompany);
+      setUserInfo(response.company);
+    } catch (error) {
+      console.log(error);
+      navigate('/');
+    }
+  };
+
+  const getUserInfo = async () => {
+    if (user.role === "company") {
+      await getCompany(user.userId);
+    } else if (user.role === "aspirant") {
+      await getAspirant(user.userId);
+    }
+  }
 
   const open = Boolean(anchorEl);
 
@@ -34,6 +65,11 @@ const Navbar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    getUserInfo();
+  }, [])
+
 
   return (
     <Grid
@@ -61,11 +97,6 @@ const Navbar = () => {
           <MuiLink variant="h3" underline="none" display={{ xs: 'none', lg: 'flex' }}>IJALTI PEERS</MuiLink>
         </Link>
       </Grid>
-      {/* <Grid
-        xs={1}
-        sm={2}
-        display={{ md: 'none' }}
-      /> */}
       <Grid
         xs={8}
         lg={4}
@@ -101,10 +132,19 @@ const Navbar = () => {
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
         >
-          <Box sx={{
-            width: '100%', height: '100%', background: 'gray', borderRadius: '100%',
-          }}
-          />
+          { userInfo && userInfo.profilePicture ?
+            <img
+              src={userInfo.profilePicture}
+              style={{
+                width: '50px', height: '50px', borderRadius: '100%',
+              }} />
+            :
+            <Box
+              sx={{
+                width: '50px', height: '50px', background: 'gray', borderRadius: '100%',
+              }}
+            />
+            }
         </Button>
         <Menu
           id="fade-menu"
@@ -116,7 +156,7 @@ const Navbar = () => {
           onClose={handleClose}
           TransitionComponent={Fade}
         >
-          {user.role === 'aspirant' && <MenuItem onClick={() => navigate(`profile/aspirant/${user.userId}`)}>Mi perfil</MenuItem>}
+          <MenuItem onClick={() => navigate(`profile/aspirant/${user.userId}`)}>Mi perfil</MenuItem>
           <MenuItem onClick={() => logout()} sx={{ justifySelf: 'end' }}>Cerrar sesión</MenuItem>
         </Menu>
       </Grid>

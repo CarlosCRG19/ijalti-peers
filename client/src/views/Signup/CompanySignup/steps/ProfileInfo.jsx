@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Grid, Button } from '@mui/material';
 
 import { useAPI } from '../../../../hooks';
-import { Form, TextFieldWithLabel } from '../../../../components';
+import { Form, TextFieldWithLabel, UploadPicture } from '../../../../components';
 import { useAuth } from '../../../../contexts/auth';
 import { useCompanySignupContext } from '../../../../contexts/company-signup';
 
@@ -22,6 +22,12 @@ const ProfileInfo = ({ onPrevious }) => {
   const handleChange = (event) => {
     const { name, value } = event.target;
     const newProfileInfo = { ...profileInfo, [name]: value };
+    
+    updateCompanySignup({ type: 'setProfileInfo', payload: newProfileInfo });
+  };
+
+  const handleChangePicture = (name, picture) => {
+    const newProfileInfo = { ...profileInfo, [name]: picture };
 
     updateCompanySignup({ type: 'setProfileInfo', payload: newProfileInfo });
   };
@@ -52,6 +58,12 @@ const ProfileInfo = ({ onPrevious }) => {
       onSubmit={handleSubmit}
       description="¡Casi terminamos! La siguiente será la información con la que los demás te conocerán."
     >
+      <Grid item xs={12}>
+        <UploadPicture
+          onchange={handleChangePicture}
+          label='Foto de perfil'
+        />
+      </Grid>
       <Grid item xs={12}>
         <TextFieldWithLabel
           label="Nombre de perfil"

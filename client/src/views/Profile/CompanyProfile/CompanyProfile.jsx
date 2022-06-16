@@ -60,9 +60,9 @@ const CompanyProfile = () => {
   const handlePageChange = (e, value) => {
     setPage(value);
     getJobOffers(company.id, value);
-    const target = document.getElementById('scroll-target');
-    target.scrollIntoView({ behavior: 'smooth' });
-  };
+    const target = document.getElementById("scroll-target");
+    target.scrollIntoView({ behavior: "smooth" });
+  }
 
   useEffect(() => {
     getCompany(params.id);
@@ -117,13 +117,24 @@ const CompanyProfile = () => {
                 justifyContent="center"
                 sx={{ zIndex: 1 }}
               >
-                <div style={{
-                  width: '200px',
-                  height: '200px',
-                  backgroundColor: 'gray',
-                  borderRadius: '100%',
-                }}
-                />
+                {company.profilePicture ?
+                  <img 
+                  src={company.profilePicture}
+                  style={{
+                    width: '200px',
+                    height: '200px',
+                    objectFit: 'cover',
+                    borderRadius: '100%'
+                  }} />
+                  :
+                  <div style={{
+                    width: '200px',
+                    height: '200px',
+                    backgroundColor: 'gray',
+                    borderRadius: '100%',
+                  }}
+                  />
+                }
               </Grid>
               <Grid
                 item
@@ -263,6 +274,7 @@ const CompanyProfile = () => {
                   requiredSkills={offer.requiredSkills}
                   preferredSkills={offer.preferredSkills}
                   interestedAspirants={offer.interestedAspirants}
+                  profilePictureURL={company.profilePicture}
                   sxCard={{ boxShadow: '4', borderRadius: '12px' }}
                 />
               )) : jobOffers && jobOffers.map((offer) => (

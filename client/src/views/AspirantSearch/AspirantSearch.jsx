@@ -248,9 +248,7 @@ const AspirantSearch = () => {
             >
               Click en alguno de los aspirantes para ver su perfil en una nueva pestaña
             </Alert>
-            {console.log(searchResults)}
             {
-
               searchResults.map((aspirant) => (
                 <AspirantCard
                   key={`Card${aspirant.names}`}
