@@ -61,11 +61,6 @@ const Navbar = () => {
           <MuiLink variant="h3" underline="none" display={{ xs: 'none', lg: 'flex' }}>IJALTI PEERS</MuiLink>
         </Link>
       </Grid>
-      {/* <Grid
-        xs={1}
-        sm={2}
-        display={{ md: 'none' }}
-      /> */}
       <Grid
         xs={8}
         lg={4}
@@ -101,10 +96,12 @@ const Navbar = () => {
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
         >
-          <Box sx={{
-            width: '100%', height: '100%', background: 'gray', borderRadius: '100%',
-          }}
-          />
+          {
+            <Box sx={{
+              width: '100%', height: '100%', background: 'gray', borderRadius: '100%',
+            }}
+            />
+          }
         </Button>
         <Menu
           id="fade-menu"
@@ -116,7 +113,7 @@ const Navbar = () => {
           onClose={handleClose}
           TransitionComponent={Fade}
         >
-          {user.role === 'aspirant' && <MenuItem onClick={() => navigate(`profile/aspirant/${user.userId}`)}>Mi perfil</MenuItem>}
+          <MenuItem onClick={() => navigate(`profile/aspirant/${user.userId}`)}>Mi perfil</MenuItem>
           <MenuItem onClick={() => logout()} sx={{ justifySelf: 'end' }}>Cerrar sesión</MenuItem>
         </Menu>
       </Grid>

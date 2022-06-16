@@ -115,13 +115,24 @@ const CompanyProfile = () => {
                 justifyContent='center'
                 sx={{ zIndex: 1 }}
               >
-                <div style={{
-                  width: '200px',
-                  height: '200px',
-                  backgroundColor: 'gray',
-                  borderRadius: '100%',
-                }}
-                />
+                {company.profilePicture ?
+                  <img 
+                  src={company.profilePicture}
+                  style={{
+                    width: '200px',
+                    height: '200px',
+                    objectFit: 'cover',
+                    borderRadius: '100%'
+                  }} />
+                  :
+                  <div style={{
+                    width: '200px',
+                    height: '200px',
+                    backgroundColor: 'gray',
+                    borderRadius: '100%',
+                  }}
+                  />
+                }
               </Grid>
               <Grid
                 item
