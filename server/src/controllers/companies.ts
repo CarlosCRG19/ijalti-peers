@@ -122,10 +122,10 @@ export const signupCompany = async (req: Request, res: Response): Promise<Respon
         const newUser = User.create( { firebaseId: localId, username, email, role: 'company' } ); 
         await newUser.save();
         
-        const newCompany: Company = Company.create({...company}); 
-        
+        const newCompany: Company = Company.create(company); 
+
         newCompany.user = newUser;
-        newCompany.save();
+        await newCompany.save();
 
         const responseBody = {
             user: newUser, 
