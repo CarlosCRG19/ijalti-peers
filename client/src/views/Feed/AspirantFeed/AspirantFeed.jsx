@@ -25,9 +25,9 @@ const AspirantFeed = () => {
   const api = useAPI();
   const { user } = useAuth();
 
-  const getJobOffers = async (page) => {
+  const getJobOffers = async (currentPage) => {
     try {
-      const response = await api.jobOffer.getByPage(page);
+      const response = await api.jobOffer.getByPage(currentPage);
       setOffers(response);
     } catch (error) {
       throw new Error(error.message);
@@ -53,19 +53,6 @@ const AspirantFeed = () => {
     getJobOffers(value);
     const target = document.getElementById('scroll-target');
     target.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleInterest = async (isInterested, idJobOffer) => {
-    try {
-      if (isInterested) {
-        await api.aspirant.setUninterested(user.userId, idJobOffer);
-      } else {
-        await api.aspirant.setInterested(user.userId, idJobOffer);
-      }
-      getJobOffers(page);
-    } catch (error) {
-      throw new Error(error.message);
-    }
   };
 
   useEffect(() => {
@@ -106,7 +93,7 @@ const AspirantFeed = () => {
               salary={offer.salary}
               requiredSkills={offer.requiredSkills}
               preferredSkills={offer.preferredSkills}
-              onClick={handleInterest}
+              onSuccess={() => getJobOffers(page)}
               isInterested={offer.interested}
             />
           ))

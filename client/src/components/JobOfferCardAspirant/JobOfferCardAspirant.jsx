@@ -1,6 +1,7 @@
 import {
   React,
   useState,
+  useEffect,
 } from 'react';
 
 import { useNavigate, Link } from 'react-router-dom';
@@ -30,6 +31,8 @@ import {
 
 import parseDateYYYYMMDD from '../../utils/parseDate';
 import './JobOfferCard.css';
+import { useAPI } from '../../hooks';
+import { useAuth } from '../../contexts/auth';
 
 const CardContentNoPadding = styled(CardContent)(
   `
@@ -50,14 +53,17 @@ const JobOfferCardAspirant = ({
   salary,
   requiredSkills,
   preferredSkills,
-  onClick,
   isInterested,
+  onSuccess,
   sxCard,
 }) => {
   const [expand, setExpand] = useState(true);
   const [expandMsg, setExpandMsg] = useState('Ver más');
 
-  const navigate = useNavigate();
+  const { palette } = useTheme();
+  const api = useAPI();
+  const { user } = useAuth();
+
   if (!profilePictureURL) {
     profilePictureURL = '#';
   }
@@ -65,13 +71,25 @@ const JobOfferCardAspirant = ({
   if (salary) {
     salary = `$${salary}`;
   }
+
   const handleExpand = (state) => {
     setExpand(!expand);
     expand ? setExpandMsg('Ver menos') : setExpandMsg('Ver más');
     return state;
   };
 
-  const { palette } = useTheme();
+  const handleInterest = async (currentInterested) => {
+    try {
+      if (currentInterested) {
+        await api.aspirant.setUninterested(user.userId, id);
+      } else {
+        await api.aspirant.setInterested(user.userId, id);
+      }
+      onSuccess();
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
 
   return (
     <div className="job-offer-card">
@@ -93,7 +111,7 @@ const JobOfferCardAspirant = ({
             <Typography
               color={palette.blue.regular}
               sx={{ display: 'flex', cursor: 'pointer' }}
-              onClick={() => onClick(isInterested, id)}
+              onClick={() => handleInterest(isInterested)}
             >
               {isInterested ? (
                 <>

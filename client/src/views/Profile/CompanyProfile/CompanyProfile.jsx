@@ -43,10 +43,9 @@ const CompanyProfile = () => {
     }
   };
 
-  const getJobOffers = async (companyID, page) => {
+  const getJobOffers = async (companyID, currentPage) => {
     try {
-      const response = await api.jobOffer.getByCompanyID(companyID, page);
-      console.log(response.offers);
+      const response = await api.jobOffer.getByCompanyID(companyID, currentPage);
       setJobOffers(response.offers);
     } catch (error) {
       navigate('/');
@@ -70,8 +69,6 @@ const CompanyProfile = () => {
     getJobOffers(params.id, page);
     getPageCount(params.id, page);
   }, []);
-
-  console.log(jobOffers);
 
   return (
     <Grid
@@ -241,19 +238,22 @@ const CompanyProfile = () => {
           <Grid container columnSpacing={2} className="company-job-offers-child" display="flex">
 
             <Grid container item md={8} xs={12} order={{ xs: 2, md: 1 }}>
+              {user.userId === params.id && (
               <Button
                 id="scroll-target"
                 onClick={() => navigate('/post-job-offer')}
                 variant="contained"
                 fullWidth
-                sx={{ height: '48px' }}
+                sx={{ height: '48px', mb: '32px' }}
               >
                 NUEVA OFERTA +
 
               </Button>
+              )}
               {user.userId === params.id ? jobOffers && jobOffers.map((offer) => (
                 <JobOfferCardCompany
                   key={offer.id}
+                  id={offer.id}
                   position={offer.title}
                   company={offer.company}
                   description={offer.description}
@@ -268,6 +268,7 @@ const CompanyProfile = () => {
               )) : jobOffers && jobOffers.map((offer) => (
                 <JobOfferCardAspirant
                   key={offer.id}
+                  id={offer.id}
                   position={offer.title}
                   company={offer.company}
                   description={offer.description}
@@ -276,6 +277,8 @@ const CompanyProfile = () => {
                   salary={offer.salary}
                   requiredSkills={offer.requiredSkills}
                   preferredSkills={offer.preferredSkills}
+                  onSuccess={() => getJobOffers(params.id, page)}
+                  isInterested={offer.interested}
                   sxCard={{ boxShadow: '4', borderRadius: '12px' }}
                 />
               )) }

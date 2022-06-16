@@ -2,6 +2,7 @@
 import {
   React,
   useState,
+  useEffect,
 } from 'react';
 
 import { useNavigate } from 'react-router-dom';
@@ -33,6 +34,7 @@ import parseDateYYYYMMDD from '../../utils/parseDate';
 import './JobOfferCard.css';
 
 import AspirantCard from '../AspirantCard';
+import { useAPI } from '../../hooks';
 
 const CardContentNoPadding = styled(CardContent)(
   `
@@ -43,6 +45,7 @@ const CardContentNoPadding = styled(CardContent)(
 );
 
 const JobOfferCardCompany = ({
+  id,
   position,
   company,
   description,
@@ -52,11 +55,12 @@ const JobOfferCardCompany = ({
   salary,
   requiredSkills,
   preferredSkills,
-  interestedAspirants,
   sxCard,
 }) => {
   const [expand, setExpand] = useState(true);
   const [expandMsg, setExpandMsg] = useState('Ver más');
+  const [interestedAspirants, setInterestedAspirants] = useState([]);
+  const api = useAPI();
 
   const { palette } = useTheme();
 
@@ -76,6 +80,20 @@ const JobOfferCardCompany = ({
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const getInterestedAspirants = async (jobOfferId) => {
+    try {
+      const response = await api.jobOffer.getInterestedAspirants(jobOfferId);
+      console.log(response);
+      setInterestedAspirants(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getInterestedAspirants(id);
+  }, []);
 
   return (
     <div className="job-offer-card">
@@ -115,10 +133,11 @@ const JobOfferCardCompany = ({
             borderRadius: 2,
             boxShadow: 24,
             p: 4,
+            width: '60vw',
           }}
           >
             <Typography variant="h3" textAlign="center">Aspirantes Interesados</Typography>
-            <Paper style={{ maxHeight: '70vh', overflow: 'auto' }}>
+            <Box sx={{ maxHeight: '70vh', overflow: 'auto', px: 2 }}>
               <List>
                 {interestedAspirants.map((aspirant) => (
                   <AspirantCard
@@ -135,7 +154,7 @@ const JobOfferCardCompany = ({
                   />
                 ))}
               </List>
-            </Paper>
+            </Box>
           </Box>
         </Modal>
 

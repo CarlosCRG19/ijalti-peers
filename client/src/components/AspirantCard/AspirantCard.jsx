@@ -31,7 +31,7 @@ const AspirantCard = ({
   const navigate = useNavigate();
   // Limit to n habilities
   if (!abilitiesArray) {
-    abilitiesArray = ['Hubo un error al cargar las habilidades de este aspirante'];
+    abilitiesArray = [''];
   } else {
     const maxHabilities = 3;
     abilitiesArray = abilitiesArray.slice(0, maxHabilities);
