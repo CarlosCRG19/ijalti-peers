@@ -4,14 +4,15 @@ import JobOffer from './JobOffer';
 import JobOfferCard from './JobOfferCard';
 import TagsInput from './TagsInput';
 import DatePicker from './DatePicker';
+import AspirantCard from './AspirantCard';
 import PasswordField from './PasswordField';
 import VerticalStepper from './VerticalStepper';
 import SelectWithLabel from './SelectWithLabel';
 import CompanySearchbar from './CompanySearchbar';
 import TagsInputWithLabel from './TagsInputWithLabel';
 import TextFieldWithLabel from './TextFieldWithLabel';
-import JobOfferCardWithInterest from './JobOfferCardWithInterest';
-import AspirantCard from './AspirantCard';
+import JobOfferCardCompany from './JobOfferCardCompany';
+import JobOfferCardAspirant from './JobOfferCardAspirant';
 
 export {
   Form,
@@ -20,12 +21,13 @@ export {
   JobOfferCard,
   TagsInput,
   DatePicker,
+  AspirantCard,
   PasswordField,
   VerticalStepper,
   SelectWithLabel,
   CompanySearchbar,
   TagsInputWithLabel,
   TextFieldWithLabel,
-  JobOfferCardWithInterest,
-  AspirantCard,
+  JobOfferCardCompany,
+  JobOfferCardAspirant,
 };

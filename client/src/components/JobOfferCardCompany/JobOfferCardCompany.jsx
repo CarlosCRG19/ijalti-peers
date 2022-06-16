@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   React,
   useState,
@@ -41,7 +42,7 @@ const CardContentNoPadding = styled(CardContent)(
   `,
 );
 
-const JobOfferCard = ({
+const JobOfferCardCompany = ({
   position,
   company,
   description,
@@ -51,6 +52,7 @@ const JobOfferCard = ({
   salary,
   requiredSkills,
   preferredSkills,
+  interestedAspirants,
   sxCard,
 }) => {
   const [expand, setExpand] = useState(true);
@@ -58,7 +60,6 @@ const JobOfferCard = ({
 
   const { palette } = useTheme();
 
-  const navigate = useNavigate();
   if (!profilePictureURL) {
     profilePictureURL = '#';
   }
@@ -94,7 +95,7 @@ const JobOfferCard = ({
             </Link>
           )}
           action={(
-            <Button onClick={handleOpen}>Interesado</Button>
+            <Button onClick={handleOpen}>Aspirantes Interesados</Button>
           )}
           subheader={parseDateYYYYMMDD(date)}
         />
@@ -110,7 +111,6 @@ const JobOfferCard = ({
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 400,
             background: palette.gray.B,
             borderRadius: 2,
             boxShadow: 24,
@@ -120,7 +120,20 @@ const JobOfferCard = ({
             <Typography variant="h3" textAlign="center">Aspirantes Interesados</Typography>
             <Paper style={{ maxHeight: '70vh', overflow: 'auto' }}>
               <List>
-                <AspirantCard />
+                {interestedAspirants.map((aspirant) => (
+                  <AspirantCard
+                    key={`Card${aspirant.names}`}
+                    aspirantId={`${aspirant.id}`}
+                    aspirantName={`${aspirant.names} ${aspirant.firstLastName}`}
+                    title={aspirant.title}
+                    education={aspirant.educationLevel}
+                    description={aspirant.biography}
+                    experience={aspirant.yearsOfExperience}
+                    abilitiesArray={aspirant.skills && aspirant.skills.map((skill) => skill.name)}
+                    location={`${aspirant.residenceCity}, ${aspirant.residenceState}`}
+                    pageURL={aspirant.pageURL}
+                  />
+                ))}
               </List>
             </Paper>
           </Box>
@@ -193,4 +206,4 @@ const JobOfferCard = ({
   );
 };
 
-export default JobOfferCard;
+export default JobOfferCardCompany;

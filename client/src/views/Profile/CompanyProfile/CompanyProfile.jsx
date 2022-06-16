@@ -15,10 +15,11 @@ import {
   Email, LocalPhone, Work,
 } from '@mui/icons-material';
 
-import { JobOfferCardWithInterest } from '../../../components';
+import { JobOfferCardAspirant, JobOfferCardCompany } from '../../../components';
 
 import useAPI from '../../../hooks/useAPI/useAPI';
 import './CompanyProfile.css';
+import { useAuth } from '../../../contexts/auth';
 
 const CompanyProfile = () => {
   const [company, setCompany] = useState({});
@@ -30,6 +31,8 @@ const CompanyProfile = () => {
   const navigate = useNavigate();
   const params = useParams();
   const { palette } = useTheme();
+
+  const { user } = useAuth();
 
   const getCompany = async (idcompany) => {
     try {
@@ -43,6 +46,7 @@ const CompanyProfile = () => {
   const getJobOffers = async (companyID, page) => {
     try {
       const response = await api.jobOffer.getByCompanyID(companyID, page);
+      console.log(response.offers);
       setJobOffers(response.offers);
     } catch (error) {
       navigate('/');
@@ -58,7 +62,6 @@ const CompanyProfile = () => {
     setPage(value);
     getJobOffers(company.id, value);
     const target = document.getElementById('scroll-target');
-    console.log(target);
     target.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -67,6 +70,8 @@ const CompanyProfile = () => {
     getJobOffers(params.id, page);
     getPageCount(params.id, page);
   }, []);
+
+  console.log(jobOffers);
 
   return (
     <Grid
@@ -246,8 +251,22 @@ const CompanyProfile = () => {
                 NUEVA OFERTA +
 
               </Button>
-              {jobOffers && jobOffers.map((offer) => (
-                <JobOfferCardWithInterest
+              {user.userId === params.id ? jobOffers && jobOffers.map((offer) => (
+                <JobOfferCardCompany
+                  key={offer.id}
+                  position={offer.title}
+                  company={offer.company}
+                  description={offer.description}
+                  date={offer.createdAt}
+                  location={offer.city}
+                  salary={offer.salary}
+                  requiredSkills={offer.requiredSkills}
+                  preferredSkills={offer.preferredSkills}
+                  interestedAspirants={offer.interestedAspirants}
+                  sxCard={{ boxShadow: '4', borderRadius: '12px' }}
+                />
+              )) : jobOffers && jobOffers.map((offer) => (
+                <JobOfferCardAspirant
                   key={offer.id}
                   position={offer.title}
                   company={offer.company}
@@ -259,7 +278,7 @@ const CompanyProfile = () => {
                   preferredSkills={offer.preferredSkills}
                   sxCard={{ boxShadow: '4', borderRadius: '12px' }}
                 />
-              ))}
+              )) }
 
               <div style={{ display: 'grid', placeItems: 'center', width: '100%' }}>
                 <Pagination

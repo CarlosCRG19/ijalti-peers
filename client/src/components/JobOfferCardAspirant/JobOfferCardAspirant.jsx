@@ -3,7 +3,7 @@ import {
   useState,
 } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import {
   Avatar,
@@ -13,12 +13,16 @@ import {
   CardContent,
   CardHeader,
   Collapse,
-  Link,
   Typography,
   Box,
   List,
   ListItemText,
+  useTheme,
 } from '@mui/material';
+
+import {
+  CheckBox, CheckBoxOutlineBlank,
+} from '@mui/icons-material';
 
 import {
   styled,
@@ -35,7 +39,8 @@ const CardContentNoPadding = styled(CardContent)(
   `,
 );
 
-const JobOfferCard = ({
+const JobOfferCardAspirant = ({
+  id,
   position,
   company,
   description,
@@ -45,6 +50,8 @@ const JobOfferCard = ({
   salary,
   requiredSkills,
   preferredSkills,
+  onClick,
+  isInterested,
   sxCard,
 }) => {
   const [expand, setExpand] = useState(true);
@@ -64,6 +71,8 @@ const JobOfferCard = ({
     return state;
   };
 
+  const { palette } = useTheme();
+
   return (
     <div className="job-offer-card">
       <Card props sx={sxCard}>
@@ -73,13 +82,32 @@ const JobOfferCard = ({
           }
           title={(
             <Link
-              sx={{ cursor: 'pointer' }}
-              underline="hover"
+              style={{ textDecoration: 'none', fontSize: 20 }}
               variant="h6"
               to={`/profile/company/${company.id}`}
             >
               {company.name}
             </Link>
+          )}
+          action={(
+            <Typography
+              color={palette.blue.regular}
+              sx={{ display: 'flex', cursor: 'pointer' }}
+              onClick={() => onClick(isInterested, id)}
+            >
+              {isInterested ? (
+                <>
+                  <CheckBox />
+                  Interesado
+                </>
+              ) : (
+                <>
+                  <CheckBoxOutlineBlank />
+                  Interesado
+                </>
+              )}
+
+            </Typography>
           )}
           subheader={parseDateYYYYMMDD(date)}
         />
@@ -149,4 +177,4 @@ const JobOfferCard = ({
   );
 };
 
-export default JobOfferCard;
+export default JobOfferCardAspirant;
