@@ -7,10 +7,10 @@ import {
     updateAspirant,
     removeAspirant,
     addInterest,
-    removeInterest
+    removeInterest,
+    addWorkExperience,
+    removeWorkExperience
 } from "../controllers";
-
-import { firebaseMiddleware } from "../middlewares/auth";
 
 const aspirantRouter = Router();
 
@@ -25,5 +25,8 @@ aspirantDetail.delete(removeAspirant);
 
 aspirantRouter.post("/aspirants/:id/interests/:offerId", addInterest);
 aspirantRouter.delete("/aspirants/:id/interests/:offerId", removeInterest);
+
+aspirantRouter.post("/aspirants/:id/work-experiences/", addWorkExperience);
+aspirantRouter.delete("/aspirants/:id/work-experiences/:workExperienceId", removeWorkExperience);
 
 export default aspirantRouter;
