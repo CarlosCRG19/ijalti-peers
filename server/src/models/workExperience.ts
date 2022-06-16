@@ -1,17 +1,13 @@
-import { BaseEntity, Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import {Aspirant, Company} from "./";
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Aspirant } from "./";
 
 @Entity()
-class WorkExperience extends BaseEntity {
-    
+class WorkExperience extends BaseEntity {  
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
-    @ManyToOne(() => Aspirant, aspirant => aspirant.workExperiences)
+    @ManyToOne(() => Aspirant, aspirant => aspirant.workExperiences,{nullable: true})
     aspirant: Aspirant;
-
-    @ManyToOne(() => Company, company => company.workExperiences, {nullable: true})
-    company: Company;
 
     @Column()
     title: string;

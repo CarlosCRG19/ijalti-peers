@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, BaseEntity, OneToOne, JoinColumn } from "typeorm";
-import {User, JobOffer, WorkExperience} from "./"
+import { User, JobOffer } from "./"
 
 @Entity()
 class Company extends BaseEntity{
@@ -48,9 +48,6 @@ class Company extends BaseEntity{
 
     @OneToMany(() => JobOffer, (jobOffer) => jobOffer.company)
     jobOffers : JobOffer[];
-
-    @OneToMany(() => WorkExperience, workExperience => workExperience.company)
-    workExperiences: WorkExperience[];
 
     @OneToOne(() => User)
     @JoinColumn()
