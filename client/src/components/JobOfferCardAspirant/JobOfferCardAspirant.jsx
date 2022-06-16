@@ -59,7 +59,7 @@ const JobOfferCardAspirant = ({
 }) => {
   const [expand, setExpand] = useState(true);
   const [expandMsg, setExpandMsg] = useState('Ver más');
-
+  const [profilePicture, setProfilePicture] = useState();
   const { palette } = useTheme();
   const api = useAPI();
   const { user } = useAuth();
@@ -70,6 +70,15 @@ const JobOfferCardAspirant = ({
 
   if (salary) {
     salary = `$${salary}`;
+  }
+
+  const getCompany = async (idCompany) => {
+    try {
+      const response = await api.company.getById(idCompany);
+      setProfilePicture(response.company.profilePicture);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const handleExpand = (state) => {
@@ -91,12 +100,17 @@ const JobOfferCardAspirant = ({
     }
   };
 
+  useEffect(() => {
+    getCompany(company.id);
+  }, [])
+  
+
   return (
     <div className="job-offer-card">
       <Card props sx={sxCard}>
         <CardHeader
           avatar={
-            <Avatar alt={company.name} src={profilePictureURL} />
+            <Avatar alt={company.name} src={profilePicture} />
           }
           title={(
             <Link

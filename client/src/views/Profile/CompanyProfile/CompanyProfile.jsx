@@ -274,6 +274,7 @@ const CompanyProfile = () => {
                   requiredSkills={offer.requiredSkills}
                   preferredSkills={offer.preferredSkills}
                   interestedAspirants={offer.interestedAspirants}
+                  profilePictureURL={company.profilePicture}
                   sxCard={{ boxShadow: '4', borderRadius: '12px' }}
                 />
               )) : jobOffers && jobOffers.map((offer) => (
