@@ -31,7 +31,7 @@ export const getOffersList = async (
 
         const [offers, totalCount]: any = await JobOffer.findAndCount({
             where: company ? { company: {id: company.id} } : {},
-            relations: ['preferredSkills', 'requiredSkills', 'interestedAspirants', 'company'],
+            relations: ['preferredSkills', 'requiredSkills', 'company'],
             select: {
                 company: {
                     id: true,
@@ -46,9 +46,13 @@ export const getOffersList = async (
         const user = await User.findOneBy({firebaseId: req.user_id});
         
         if(user?.role === 'aspirant') {
-            const aspirant = await Aspirant.findOneBy({user: {id: user.id}});
+            const aspirant = await Aspirant.findOne({
+                where: { user: {id: user.id} },
+                relations: ['interestedInOffers']
+            });
             if (!aspirant) throw new Error('Did not work');
-            offers.forEach((offer: any) => offer.interested = offer.interestedAspirants.some((element: any) => element.id === aspirant.id));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+
+            offers.forEach((offer: any) => offer.interested = aspirant.interestedInOffers.some((element: any) => element.id === offer.id));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
         }                                                                                                                                                                                                       
     
         return res.status(200).json({offers, totalCount});
@@ -112,7 +116,7 @@ export const getOffer = async (
     try {
         const offer = await JobOffer.findOne({
             where: {id: req.params.id},
-            relations: ['preferredSkills', 'requiredSkills', 'interestedAspirants']
+            relations: ['preferredSkills', 'requiredSkills']
         });
         return res.status(200).json(offer);
     } catch (error) {
@@ -144,3 +148,30 @@ export const updateOffer = async (
         return res.status(500).json({ message: "Something went wrong!" });
     }
 };
+
+export const getInterestedAspirants = async (
+    req: Request,
+    res: Response
+): Promise<Response> => {
+    try{
+        const requestCompany = await Company.findOneBy({user: {firebaseId: req.user_id}})
+        if(!requestCompany){
+            return res.status(409).json( { message: "Company not found" } )
+        }
+
+        const {company, interestedAspirants}: any= await JobOffer.findOne({
+            where: {id: req.params.id},
+            relations: ["interestedAspirants", "company"],
+        })
+        
+        if( requestCompany.id !== company.id){
+            return res.status(403).json( { message: "Forbidden" } )
+        }
+
+        return res.status(200).json(interestedAspirants);
+
+    }catch (error){
+        console.log(error)
+        return res.status(500).json({ message: "Something went wrong!" });
+    }
+}
