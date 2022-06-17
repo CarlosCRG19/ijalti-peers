@@ -57,7 +57,7 @@ const Generalnfo = ({ onNext }) => {
       <Grid item xs={4}>
         <TextFieldWithLabel
           required
-          label="N° de emplados"
+          label="N° de empleados"
           placeholder="Ingresa un número"
           type="number"
           variant="filled"
