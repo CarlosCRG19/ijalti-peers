@@ -49,6 +49,16 @@ class JobOfferAPI extends APIGateway {
       throw new Error(error.message);
     }
   }
+
+  async delete(jobOfferId) {
+    try {
+      const response = await this._client.delete(`/job-offers/${jobOfferId}`);
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 export default JobOfferAPI;
