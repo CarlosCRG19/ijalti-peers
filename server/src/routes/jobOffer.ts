@@ -5,6 +5,7 @@ import {
     removeJobOffer,
     getOffer,
     updateOffer,
+    getInterestedAspirants
 } from "../controllers";
 
 const jobOfferRouter = Router();
@@ -17,5 +18,7 @@ jobOfferList.post(createOffer);
 jobOfferDetail.delete(removeJobOffer);
 jobOfferDetail.get(getOffer);
 jobOfferDetail.put(updateOffer);
+
+jobOfferRouter.get("/job-offers/:id/interested-aspirants", getInterestedAspirants)
 
 export default jobOfferRouter;

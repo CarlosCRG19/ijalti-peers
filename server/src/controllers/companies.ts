@@ -1,9 +1,18 @@
 import { Request, Response } from "express";
 import axios, { Axios, AxiosRequestConfig } from "axios";
 import { Company, User } from "../models";
+import { Like } from "typeorm";
 
 export const getCompaniesList = async (req: Request, res: Response): Promise<Response> => {
     try{
+        if ('name' in req.query) {
+            const { name }: any = req.query;
+            const companies = await Company.createQueryBuilder()
+                .where("LOWER(name) LIKE :name", { name: `${ name.toLowerCase() }%` })
+                .take(10)
+                .getMany();
+            return res.status(200).json(companies);
+        }
         const companies  = await Company.find();
         return res.status(200).json(companies);
     }catch(error){
@@ -74,6 +83,7 @@ export const signupCompany = async (req: Request, res: Response): Promise<Respon
     const firebaseSignupURL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.FIREBASE_API_KEY}`
     
     const {email, password, company} = req.body;
+    const { username } = company;
     
     
     const signupRequestConfig: AxiosRequestConfig = {
@@ -87,17 +97,35 @@ export const signupCompany = async (req: Request, res: Response): Promise<Respon
     }
     
     try{
-        const newCompany: Company = Company.create({...company}); 
-        await newCompany.save()
+        const existingCompanies = await Company.find({
+            where: [
+                {name: company.name},
+                {socialReason: company.socialReason}
+            ]
+        })
 
+        if(existingCompanies.length > 0){
+            return res.status(409).json({message : "Conflict"})
+        }
+        
         const signupResponse = await axios(signupRequestConfig);
-        const {localId, idToken, refreshToken, expiresIn} = signupResponse.data;
-
-        const newUser = User.create({firebaseId: localId}); 
+        const {
+            localId, 
+            idToken, 
+            refreshToken, 
+            expiresIn
+        } = signupResponse.data;
+        
+        const previousUser = await User.findOneBy({firebaseId: localId});
+        if(previousUser) await previousUser.remove();
+        
+        const newUser = User.create( { firebaseId: localId, username, email, role: 'company' } ); 
         await newUser.save();
+        
+        const newCompany: Company = Company.create(company); 
 
         newCompany.user = newUser;
-        newCompany.save();
+        await newCompany.save();
 
         const responseBody = {
             user: newUser, 
@@ -111,8 +139,12 @@ export const signupCompany = async (req: Request, res: Response): Promise<Respon
         return res.status(201).json(responseBody);
 
     } catch(error) {
-        console.log("Exception handling pending");
-        return res.status(500).json({message: "Something went wrong!"})
+        const {code : codeError}: any = error
+        if(codeError === "ERR_BAD_REQUEST"){
+            return res.status(409).json( {message: "Conflict, email is already registered"} )
+        }
+        console.log(error);
+        return res.status(500).json( {message: "Something went wrong!"} )
     }
 
 }
@@ -136,14 +168,19 @@ export const loginCompany = async (req: Request, res: Response) => {
 
         const loginResponse = await axios(logInRequestConfig);
         
-        const {localId, idToken, refreshToken, expiresIn} = loginResponse.data;
+        const {
+            localId,
+            idToken, 
+            refreshToken, 
+            expiresIn
+        } = loginResponse.data;
 
-        const user = await User.findOneBy({firebaseId: localId});
-        if(!user) return res.status(409).json({message: "Company was not found!"})
+        const user = await User.findOneBy( {firebaseId: localId} );
+        if(!user) return res.status(404).json( {message: "Company not found!"} )
         
         const company = await Company.findOneBy({user: {id: user.id}});
         
-        if(company === null) return res.status(409).json({messaage: "Your user exists, but the company does not!"})
+        if(!company) return res.status(409).json( {messaage: "Your user exists, but the company does not!"} )
 
         const responseBody = {
             user: user.id, 
@@ -158,8 +195,13 @@ export const loginCompany = async (req: Request, res: Response) => {
         return res.status(200).json(responseBody);
 
     } catch(error) {
-        console.log("Exception handling pending");
+        const {code : codeError}: any = error
+        
+        if(codeError === "ERR_BAD_REQUEST"){
+            return res.status(404).json( {message: "Company  not found!"} )
+        }
+
         console.log(error);
-        return res.status(500).json({message: "Something went wrong!"});
+        return res.status(500).json( {message: "Something went wrong!"} );
     }
 }

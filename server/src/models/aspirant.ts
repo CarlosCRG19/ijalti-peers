@@ -3,15 +3,14 @@ import {
     Column,
     PrimaryGeneratedColumn,
     BaseEntity,
-    CreateDateColumn,
     OneToOne,
     JoinColumn,
     ManyToMany,
-    JoinTable
+    JoinTable,
+    OneToMany
 } from "typeorm";
-import Skill from "./skill";
 
-import User from "./user";
+import {Skill, User, WorkExperience, JobOffer} from "./"
 
 enum WorkingStatusChoices {
     Employed = "EMPLOYED",
@@ -39,7 +38,7 @@ class Aspirant extends BaseEntity {
     @Column()
     firstLastName: string; 
     
-    @Column()
+    @Column({ nullable: true })
     secondLastName: string; 
 
     @Column()
@@ -69,9 +68,18 @@ class Aspirant extends BaseEntity {
     @Column({length: 150})
     biography: string;
 
+    @Column( { type: "text", nullable: true} )
+    profilePicture: string;
+
+    @OneToMany(() => WorkExperience, (workExperiences) => workExperiences.aspirant)
+    workExperiences: WorkExperience[];
+
     @ManyToMany(() => Skill)
     @JoinTable() 
     skills: Skill[];
+    
+    @ManyToMany(type => JobOffer, jobOffer => jobOffer.interestedAspirants)
+    interestedInOffers: JobOffer[];
 
     @OneToOne(() => User)
     @JoinColumn()

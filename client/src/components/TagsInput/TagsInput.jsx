@@ -23,6 +23,7 @@ const TagsInput = (props) => {
     name,
     value,
     label,
+    ...inputProps
   } = props;
 
   return (
@@ -31,13 +32,14 @@ const TagsInput = (props) => {
       options={tags}
       getOptionLabel={(option) => option.name}
       value={value}
-      onChange={(event, newValue) => onChange(name, newValue)}
+      onChange={(_, newValue) => onChange(name, newValue)}
       renderInput={(params) => (
         <TextField
-          {...params}
           label={label}
-          variant="filled"
-          sx={{ backgroundColor: '#E7EDF3' }}
+          name={name}
+          {...params}
+          {...inputProps}
+          required={inputProps.required ? value.length === 0 : false}
           InputProps={{
             ...params.InputProps,
             startAdornment: [StartAdornment, params.InputProps.startAdornment],

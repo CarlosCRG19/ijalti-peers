@@ -1,0 +1,9 @@
+.search-bar {
+  overflow: visible;
+}
+.menu-item {
+  text-decoration: none;
+  overflow: visible;
+  color: black;
+  padding: 0;
+}

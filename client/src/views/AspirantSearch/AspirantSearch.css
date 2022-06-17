@@ -1,0 +1,42 @@
+form-overwrite {
+  max-width: 100%;
+  margin: 0px;
+  max-width: 720px;
+}
+
+.main-content-overwrite {
+  display: grid;
+  place-items: start center ;
+  grid-template-rows: auto 80%;
+  flex-grow: 1;
+  padding: 38px;
+  min-width: 350px;
+  background-color: #E7EDF3;
+}
+
+@media (max-width: 426px){
+  .main-content-overwrite{
+    padding: 8px;
+  }
+}
+
+.cards{
+  width: 100%;
+  max-width: 720px;
+}
+
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #E7EDF3;
+}
+
+.buttons {
+  margin: 0;
+  margin-top: 24px;
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
