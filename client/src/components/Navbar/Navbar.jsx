@@ -136,7 +136,7 @@ const Navbar = () => {
             <img
               src={userInfo.profilePicture}
               style={{
-                width: '50px', height: '50px', borderRadius: '100%',
+                width: '50px', height: '50px', borderRadius: '100%', objectFit: 'cover'
               }} />
             :
             <Box
