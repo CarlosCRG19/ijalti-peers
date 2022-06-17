@@ -77,7 +77,7 @@ const AspirantFeed = () => {
               {aspirant ? aspirant.names : ' '}
               👋.
             </Typography>
-            <Typography variant="h5">Estas son las ofertas más de trabajo más recientes.</Typography>
+            <Typography variant="h5">Estas son las ofertas de trabajo más recientes.</Typography>
           </CardContent>
         </Card>
         {
