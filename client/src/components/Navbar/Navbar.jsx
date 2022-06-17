@@ -131,22 +131,21 @@ const Navbar = () => {
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
         >
-          { userInfo && userInfo.profilePicture
-            ? (
-              <img
-                src={userInfo.profilePicture}
-                style={{
-                  width: '50px', height: '50px', borderRadius: '100%',
-                }}
-              />
-            )
-            : (
-              <Box
-                sx={{
-                  width: '50px', height: '50px', background: 'gray', borderRadius: '100%',
-                }}
-              />
-            )}
+
+          { userInfo && userInfo.profilePicture ?
+            <img
+              src={userInfo.profilePicture}
+              style={{
+                width: '50px', height: '50px', borderRadius: '100%', objectFit: 'cover'
+              }} />
+            :
+            <Box
+              sx={{
+                width: '50px', height: '50px', background: 'gray', borderRadius: '100%',
+              }}
+            />
+            }
+            
         </Button>
         <Menu
           id="fade-menu"
