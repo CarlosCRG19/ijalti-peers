@@ -87,7 +87,7 @@ const JobOfferCardCompany = ({
       const response = await api.jobOffer.getInterestedAspirants(jobOfferId);
       setInterestedAspirants(response);
     } catch (error) {
-      console.log(error);
+      throw new Error(error.message);
     }
   };
 
@@ -116,7 +116,7 @@ const JobOfferCardCompany = ({
             <>
               <Button onClick={handleOpen}>Aspirantes Interesados</Button>
               <Box display="flex" justifyContent="end">
-                <Button variant="text" color='error' onClick={() => onDelete(id)}>Eliminar</Button>
+                <Button variant="text" color="error" onClick={() => onDelete(id)}>Eliminar</Button>
               </Box>
             </>
           )}

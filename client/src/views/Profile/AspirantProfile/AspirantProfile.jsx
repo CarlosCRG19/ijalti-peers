@@ -97,8 +97,6 @@ const AspirantProfile = () => {
     getAspirant(params.id);
   }, []);
 
-  console.log(aspirant);
-
   return (
     <Grid
       container

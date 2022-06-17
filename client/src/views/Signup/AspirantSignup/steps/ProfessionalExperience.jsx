@@ -108,8 +108,6 @@ const ProfessionalExperience = ({ onPrevious, onNext }) => {
       payload: newProfessionalExperience,
     });
 
-    console.log(newProfessionalExperience);
-
     setWorkExperience(INITIAL_WORK_EXPERIENCE);
   };
 

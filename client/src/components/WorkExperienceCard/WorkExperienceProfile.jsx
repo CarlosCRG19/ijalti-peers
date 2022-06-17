@@ -24,8 +24,6 @@ const WorkExperienceProfile = ({
     11: 'Diciembre',
   };
 
-  console.log(startDate);
-
   return (
 
     <Card

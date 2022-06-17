@@ -33,7 +33,7 @@ const Navbar = () => {
       const response = await api.aspirant.getAspirant(idAspirant);
       setUserInfo(response.aspirant);
     } catch (error) {
-      console.log(error);
+      throw new Error(error.message);
       navigate('/');
     }
   };
@@ -49,12 +49,12 @@ const Navbar = () => {
   };
 
   const getUserInfo = async () => {
-    if (user.role === "company") {
+    if (user.role === 'company') {
       await getCompany(user.userId);
-    } else if (user.role === "aspirant") {
+    } else if (user.role === 'aspirant') {
       await getAspirant(user.userId);
     }
-  }
+  };
 
   const open = Boolean(anchorEl);
 
@@ -68,8 +68,7 @@ const Navbar = () => {
 
   useEffect(() => {
     getUserInfo();
-  }, [])
-
+  }, []);
 
   return (
     <Grid
@@ -132,19 +131,22 @@ const Navbar = () => {
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
         >
-          { userInfo && userInfo.profilePicture ?
-            <img
-              src={userInfo.profilePicture}
-              style={{
-                width: '50px', height: '50px', borderRadius: '100%',
-              }} />
-            :
-            <Box
-              sx={{
-                width: '50px', height: '50px', background: 'gray', borderRadius: '100%',
-              }}
-            />
-            }
+          { userInfo && userInfo.profilePicture
+            ? (
+              <img
+                src={userInfo.profilePicture}
+                style={{
+                  width: '50px', height: '50px', borderRadius: '100%',
+                }}
+              />
+            )
+            : (
+              <Box
+                sx={{
+                  width: '50px', height: '50px', background: 'gray', borderRadius: '100%',
+                }}
+              />
+            )}
         </Button>
         <Menu
           id="fade-menu"

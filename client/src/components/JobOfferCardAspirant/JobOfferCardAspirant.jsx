@@ -77,9 +77,9 @@ const JobOfferCardAspirant = ({
       const response = await api.company.getById(idCompany);
       setProfilePicture(response.company.profilePicture);
     } catch (error) {
-      console.log(error);
+      throw new Error(error.message);
     }
-  }
+  };
 
   const handleExpand = (state) => {
     setExpand(!expand);
@@ -102,8 +102,7 @@ const JobOfferCardAspirant = ({
 
   useEffect(() => {
     getCompany(company.id);
-  }, [])
-  
+  }, []);
 
   return (
     <div className="job-offer-card">
