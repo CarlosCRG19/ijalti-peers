@@ -7,31 +7,21 @@ import {
   Grid,
   Typography,
   Chip,
+  Button,
 } from '@mui/material';
 
 import {
   Cake, Work, School, Handyman,
 } from '@mui/icons-material';
 
+import { WorkExperienceProfile, AddWorkExperience } from '../../../components';
+
 import useAPI from '../../../hooks/useAPI/useAPI';
 
+import { useAuth } from '../../../contexts/auth';
+
 const AspirantProfile = () => {
-  const [aspirant, setAspirant] = useState({
-    biography: '',
-    birthDate: '',
-    educationLevel: '',
-    firstLastName: '',
-    id: '',
-    names: '',
-    nationality: '',
-    residenceCity: '',
-    residenceCountry: '',
-    residenceState: '',
-    secondLastName: '',
-    skills: [],
-    workingStatus: '',
-    yearsOfExperience: 0,
-  });
+  const [aspirant, setAspirant] = useState({});
 
   const translateEducation = {
     HIGH_SCHOOL: 'Preparatoria',
@@ -47,6 +37,7 @@ const AspirantProfile = () => {
   };
 
   const api = useAPI();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const params = useParams();
   const { palette } = useTheme();
@@ -60,6 +51,48 @@ const AspirantProfile = () => {
     }
   };
 
+  const handleDeleteWorkExperience = async (id) => {
+    if (!confirm('¿Eliminar experiencia?')) return;
+    try {
+      await api.aspirant.deleteWorkExperience(user.userId, id);
+
+      getAspirant(params.id);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  const handleAddWorkExperience = async (newWorkExperience) => {
+    try {
+      const formattedWorkExperience = {
+        ...newWorkExperience,
+        startDate: newWorkExperience.startDate.toISOString().slice(0, 10),
+        endDate: newWorkExperience.endDate
+          ? newWorkExperience.endDate.toISOString().slice(0, 10)
+          : null,
+        is: !!newWorkExperience.endDate,
+      };
+      await api.aspirant.addWorkExperience(user.userId, formattedWorkExperience);
+
+      getAspirant(params.id);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  const displayWorkExperience = () => aspirant.workExperiences.map((experience) => (
+    <WorkExperienceProfile
+      title={experience.title}
+      at={experience.at}
+      startDate={experience.startDate}
+      endDate={experience.endDate}
+      id={experience.id}
+      onDelete={handleDeleteWorkExperience}
+      key={(experience.id)}
+      canDelete={user.userId === params.id}
+    />
+  ));
+
   useEffect(() => {
     getAspirant(params.id);
   }, []);
@@ -70,7 +103,7 @@ const AspirantProfile = () => {
       component="main"
       display="flex"
       sx={{
-        height: '100vh',
+        // height: '100vh',
         background: palette.white,
         '&:after': {
           content: '""',
@@ -90,7 +123,7 @@ const AspirantProfile = () => {
         display="flex"
         justifyContent="center"
         alignItems="start"
-        sx={{ zIndex: 1, mt: '8px' }}
+        sx={{ zIndex: 1, maxHeight: '400px' }}
       >
         <Card
           sx={{
@@ -101,6 +134,7 @@ const AspirantProfile = () => {
             borderRadius: '12px',
             display: 'flex',
             flexDirection: 'column',
+            mt: '16px',
           }}
         >
           <CardContent sx={{
@@ -124,24 +158,28 @@ const AspirantProfile = () => {
                 justifyContent="center"
                 sx={{ zIndex: 1 }}
               >
-                {aspirant.profilePicture ?
-                  <img 
-                  src={aspirant.profilePicture}
-                  style={{
-                    width: '200px',
-                    height: '200px',
-                    objectFit: 'cover',
-                    borderRadius: '100%'
-                  }} />
-                  :
-                  <div style={{
-                    width: '200px',
-                    height: '200px',
-                    backgroundColor: 'gray',
-                    borderRadius: '100%',
-                  }}
-                  />
-                }
+                {aspirant.profilePicture
+                  ? (
+                    <img
+                      src={aspirant.profilePicture}
+                      style={{
+                        width: '200px',
+                        height: '200px',
+                        objectFit: 'cover',
+                        borderRadius: '100%',
+                      }}
+                      alt="Profile"
+                    />
+                  )
+                  : (
+                    <div style={{
+                      width: '200px',
+                      height: '200px',
+                      backgroundColor: 'gray',
+                      borderRadius: '100%',
+                    }}
+                    />
+                  )}
                 <Chip
                   label={translateWorkingStatus[aspirant.workingStatus]}
                   sx={{
@@ -238,7 +276,7 @@ const AspirantProfile = () => {
                   }}
                 >
                   <Cake sx={{ mr: '12px' }} />
-                  {aspirant.birthDate.slice(0, 10)}
+                  {aspirant.birthDate && aspirant.birthDate.slice(0, 10)}
                 </Typography>
                 <Typography
                   variant="h6"
@@ -277,15 +315,52 @@ const AspirantProfile = () => {
                   }}
                 >
                   <Handyman sx={{ mr: '12px' }} />
-                  {aspirant.skills.map((skill) => skill.name).join(', ')}
+                  {aspirant.skills && aspirant.skills.map((skill) => skill.name).join(', ')}
 
                 </Typography>
 
               </Grid>
             </Grid>
           </CardContent>
-
         </Card>
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+        sx={{ zIndex: 1 }}
+      >
+        <Typography variant="h3" color={palette.blue.regular} sx={{ my: '32px' }}>Experiencias Laborales</Typography>
+        {user.userId === params.id
+        && (
+        <Card
+          sx={{
+            width: '90%',
+            // padding: '32px',
+            maxWidth: '1373px',
+            // overflow: 'auto',
+            borderRadius: '12px',
+            display: 'flex',
+            flexDirection: 'column',
+            my: '32px',
+            // height: '100px',
+          }}
+        >
+
+          <CardContent sx={{
+            height: 'auto',
+            // minHeight: '334px',
+          }}
+          >
+            <AddWorkExperience onSubmit={handleAddWorkExperience} />
+          </CardContent>
+        </Card>
+        )}
+        {aspirant.workExperiences && displayWorkExperience()}
+
       </Grid>
     </Grid>
   );

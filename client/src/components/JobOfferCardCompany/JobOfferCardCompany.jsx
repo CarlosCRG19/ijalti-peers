@@ -56,6 +56,7 @@ const JobOfferCardCompany = ({
   requiredSkills,
   preferredSkills,
   sxCard,
+  onDelete,
 }) => {
   const [expand, setExpand] = useState(true);
   const [expandMsg, setExpandMsg] = useState('Ver más');
@@ -86,7 +87,7 @@ const JobOfferCardCompany = ({
       const response = await api.jobOffer.getInterestedAspirants(jobOfferId);
       setInterestedAspirants(response);
     } catch (error) {
-      console.log(error);
+      throw new Error(error.message);
     }
   };
 
@@ -112,7 +113,12 @@ const JobOfferCardCompany = ({
             </Link>
           )}
           action={(
-            <Button onClick={handleOpen}>Aspirantes Interesados</Button>
+            <>
+              <Button onClick={handleOpen}>Aspirantes Interesados</Button>
+              <Box display="flex" justifyContent="end">
+                <Button variant="text" color="error" onClick={() => onDelete(id)}>Eliminar</Button>
+              </Box>
+            </>
           )}
           subheader={parseDateYYYYMMDD(date)}
         />

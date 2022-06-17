@@ -52,6 +52,17 @@ const CompanyProfile = () => {
     }
   };
 
+  const handleDeleteJobOffer = async (id) => {
+    if (!confirm('¿Eliminar esta oferta de trabajo?')) return;
+
+    try {
+      const response = await api.jobOffer.delete(id);
+      getJobOffers(params.id, page);
+    } catch (error) {
+      navigate('/')
+    }
+  };
+
   const getPageCount = async (companyID, page) => {
     const response = await api.jobOffer.getByCompanyID(companyID, page);
     setPageCount(Math.ceil(response.totalCount / 10));
@@ -118,14 +129,14 @@ const CompanyProfile = () => {
                 sx={{ zIndex: 1 }}
               >
                 {company.profilePicture ?
-                  <img 
-                  src={company.profilePicture}
-                  style={{
-                    width: '200px',
-                    height: '200px',
-                    objectFit: 'cover',
-                    borderRadius: '100%'
-                  }} />
+                  <img
+                    src={company.profilePicture}
+                    style={{
+                      width: '200px',
+                      height: '200px',
+                      objectFit: 'cover',
+                      borderRadius: '100%'
+                    }} />
                   :
                   <div style={{
                     width: '200px',
@@ -250,16 +261,16 @@ const CompanyProfile = () => {
 
             <Grid container item md={8} xs={12} order={{ xs: 2, md: 1 }}>
               {user.userId === params.id && (
-              <Button
-                id="scroll-target"
-                onClick={() => navigate('/post-job-offer')}
-                variant="contained"
-                fullWidth
-                sx={{ height: '48px', mb: '32px' }}
-              >
-                NUEVA OFERTA +
+                <Button
+                  id="scroll-target"
+                  onClick={() => navigate('/post-job-offer')}
+                  variant="contained"
+                  fullWidth
+                  sx={{ height: '48px', mb: '32px' }}
+                >
+                  NUEVA OFERTA +
 
-              </Button>
+                </Button>
               )}
               {user.userId === params.id ? jobOffers && jobOffers.map((offer) => (
                 <JobOfferCardCompany
@@ -276,6 +287,7 @@ const CompanyProfile = () => {
                   interestedAspirants={offer.interestedAspirants}
                   profilePictureURL={company.profilePicture}
                   sxCard={{ boxShadow: '4', borderRadius: '12px' }}
+                  onDelete={handleDeleteJobOffer}
                 />
               )) : jobOffers && jobOffers.map((offer) => (
                 <JobOfferCardAspirant
@@ -293,7 +305,7 @@ const CompanyProfile = () => {
                   isInterested={offer.interested}
                   sxCard={{ boxShadow: '4', borderRadius: '12px' }}
                 />
-              )) }
+              ))}
 
               <div style={{ display: 'grid', placeItems: 'center', width: '100%' }}>
                 <Pagination
