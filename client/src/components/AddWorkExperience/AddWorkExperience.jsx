@@ -33,11 +33,18 @@ const AddWorkExperience = ({ onSubmit }) => {
     ));
   };
 
+  const handleSubmit = () => {
+    setExpanded(false);
+    setWorkExperience(INITIAL_WORK_EXPERIENCE);
+    onSubmit(workExperience);
+  };
+
   return (
-    <Grid container spacing={3} padding="16px">
+    <Grid container padding="16px">
 
       <Button
-        variant="contained"
+        variant={expanded ? 'outlined' : 'contained'}
+        color={expanded ? 'error' : 'primary'}
         sx={{ height: '48px', width: '1373px' }}
         onClick={handleExpandClick}
       >
@@ -48,7 +55,7 @@ const AddWorkExperience = ({ onSubmit }) => {
         in={expanded}
         timeout="auto"
         unmountOnExit
-        sx={{ width: '100%' }}
+        sx={{ width: '100%', mt: '16px' }}
       >
         <Grid container spacing={3}>
 
@@ -111,7 +118,7 @@ const AddWorkExperience = ({ onSubmit }) => {
                 sx={{
                   height: '60px', width: '60px', borderRadius: '50%', fontSize: '24px',
                 }}
-                onClick={() => onSubmit(workExperience)}
+                onClick={handleSubmit}
                 disabled={!Object.values({ ...workExperience, endDate: true }).every((value) => value)}
               >
                 +

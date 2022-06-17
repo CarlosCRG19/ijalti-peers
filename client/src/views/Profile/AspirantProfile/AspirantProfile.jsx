@@ -89,6 +89,7 @@ const AspirantProfile = () => {
       id={experience.id}
       onDelete={handleDeleteWorkExperience}
       key={(experience.id)}
+      canDelete={user.userId === params.id}
     />
   ));
 
@@ -104,7 +105,7 @@ const AspirantProfile = () => {
       component="main"
       display="flex"
       sx={{
-        height: '100vh',
+        // height: '100vh',
         background: palette.white,
         '&:after': {
           content: '""',
@@ -135,6 +136,7 @@ const AspirantProfile = () => {
             borderRadius: '12px',
             display: 'flex',
             flexDirection: 'column',
+            mt: '16px',
           }}
         >
           <CardContent sx={{
@@ -333,6 +335,7 @@ const AspirantProfile = () => {
         flexDirection="column"
         sx={{ zIndex: 1 }}
       >
+        <Typography variant="h3" color={palette.blue.regular} sx={{ my: '32px' }}>Experiencias Laborales</Typography>
         {user.userId === params.id
         && (
         <Card
@@ -344,7 +347,7 @@ const AspirantProfile = () => {
             borderRadius: '12px',
             display: 'flex',
             flexDirection: 'column',
-            mt: '32px',
+            my: '32px',
             // height: '100px',
           }}
         >

@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 
 const WorkExperienceProfile = ({
-  title, at, startDate, endDate, id, onDelete,
+  title, at, startDate, endDate, id, onDelete, canDelete,
 }) => {
   const { palette } = useTheme();
 
@@ -37,7 +37,7 @@ const WorkExperienceProfile = ({
         borderRadius: '12px',
         display: 'flex',
         flexDirection: 'column',
-        mt: '32px',
+        mb: '32px',
       }}
     >
       <CardContent>
@@ -62,9 +62,11 @@ const WorkExperienceProfile = ({
             {endDate && endDate.slice(0, 4)}
           </Typography>
         </Box>
+        {canDelete && (
         <Box display="flex" justifyContent="end">
           <Button variant="text" onClick={() => onDelete(id)}>Eliminar</Button>
         </Box>
+        )}
       </CardContent>
     </Card>
   );
