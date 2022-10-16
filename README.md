@@ -1,3 +1,2 @@
 # IJALTI Peers
-TC2005B Team 2 repository
-Luis David López Magaña
+The project is live at https://ijalti-prod.web.app/!
